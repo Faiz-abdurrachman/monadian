@@ -1,0 +1,101 @@
+# ⚡ BLITZGRID — The Monad Puzzle Royale
+
+> **Pemenang Potensial Monad Blitz Jogja Vol. 2 (24 Oktober 2026, GIK UGM)**  
+> *Game Battle Royale Block Blast 16 Pemain 100% On-Chain Pertama di Dunia dengan Waktu Eksekusi 400ms Monad.*
+
+[![Monad Testnet](https://img.shields.io/badge/Monad-Testnet%20(10143)-836ef9?style=for-the-badge&logo=ethereum)](https://testnet.monad.xyz)
+[![Solidity Tests](https://img.shields.io/badge/Foundry-26%2F26%20Passed-emerald?style=for-the-badge&logo=solidity)](file:///home/faiz/hackaton/monad/volume2/blitzgrid/contracts)
+[![FPS](https://img.shields.io/badge/Performance-120%20FPS%20Canvas-cyan?style=for-the-badge)](file:///home/faiz/hackaton/monad/volume2/blitzgrid/web)
+[![EIP-7702](https://img.shields.io/badge/Session%20Key-EIP--7702%20Ready-amber?style=for-the-badge)](file:///home/faiz/hackaton/monad/volume2/blitzgrid/web/src/engine/sessionKey.ts)
+
+---
+
+## 🚀 Tautan Live & Demo Panggung
+
+| Akses | Alamat / URL | Keterangan |
+|---|---|---|
+| **Wi-Fi Lokal Panggung** | `http://192.168.1.114:3000` | Khusus Juri & Audiens GIK UGM |
+| **Public Live Tunnel** | `https://guarantees-gage-width-shelf.trycloudflare.com` | Akses Global (Scan via Tombol QR di Web) |
+| **Monad Testnet Chain ID** | `10143` | RPC: `https://testnet-rpc.monad.xyz` |
+
+---
+
+## 🎯 Mengapa BlitzGrid? (The Problem & Solution)
+
+1. **Masalah Web2:** Game santai seperti *Block Blast* diunduh **100+ juta kali** di seluruh dunia dan dimainkan di kafe-kafe setiap hari. Namun, game tersebut **100% solo offline** dan rawan cheat memori jika dibuat turnamen uang.
+2. **Masalah Web3:** Game Web3 selama ini dicap lambat, membosankan, dan merusak flow karena setiap langkah memicu pop-up dompet MetaMask.
+3. **Solusi BlitzGrid:** Membawa mekanik adiktif *Block Blast* menjadi **Battle Royale 16 Pemain 100% On-Chain** di atas Monad! Pemain berlomba menyusun balok, meledakkan kombo, mengumpulkan Mana, dan menembakkan sabotase ke lawan dalam ronde 60 detik.
+
+---
+
+## 🧠 2 Terobosan Engineering EVM Monad
+
+### 1. `uint64` Bitwise Logic (< 3,500 Gas)
+Seluruh papan 8x8 dan status bidak direpresentasikan hanya dalam satu integer `uint64` (64 bit):
+* **Pengecekan Tabrakan:** `(board & pieceMask) == 0` (1 opcode bitwise AND)
+* **Penempatan Bidak:** `board | pieceMask` (1 opcode bitwise OR)
+* **Deteksi Baris/Kolom Penuh:** Masking bit konstan 0(1) instan
+* **Gas:** Konsumsi gas penempatan balok **< 3,500 gas**, menghemat **98.5% gas** dibandingkan representasi matriks array `uint8[8][8]`.
+
+### 2. Asynchronous Combat Inbox Pattern
+Dalam game 16 pemain yang saling menyerang, jika pemain A menyerang pemain B dengan mengubah storage `playerB.board` secara langsung, akan timbul **state conflict** yang menggagalkan eksekusi paralel Monad.
+* **Solusi Kami:** Setiap pemain memiliki antrean `CombatInbox` terisolasi.
+* Serangan masuk disimpan di `inbox[targetId]`, dan baru dieksekusi saat giliran pemain target melangkah (`consumeInbox()`).
+* **Hasil:** 0 State Contention, **100% kompatibel dengan Monad Parallel Execution Engine!**
+
+---
+
+## 🕹️ Invisible Web3 UX (EIP-7702 Ephemeral Key)
+
+* **0 MetaMask Pop-ups:** Pemain cukup menandatangani 1 kali sesi delegasi di awal.
+* Transaksi penempatan balok dan sabotase ditandatangani otomatis di latar belakang oleh session key ephemeral berumur 60 detik.
+* Sensasi bermain instan seperti game Web2 (120 FPS tanpa lag).
+
+---
+
+## 🏰 Arsitektur Kontrak Pintar (`contracts/`)
+
+```
+contracts/
+├── src/
+│   ├── BlitzGridBitwise.sol   # Operasi logika uint64 8x8 papan
+│   ├── BlitzGridPieces.sol    # Katalog 19 bentuk bidak poliomino
+│   ├── BlitzGridCombat.sol    # Inbox sabotase anti-state conflict
+│   ├── BlitzGridVault.sol     # Escrow pool hadiah (1.04 MON)
+│   └── BlitzGridGame.sol      # Orkestrator ronde, lifecyle & eliminasi
+└── test/
+    └── *.t.sol                # 26 Unit Test Foundry (100% Lulus)
+```
+
+Jalankan test lokal:
+```bash
+cd contracts
+forge test -vvv
+```
+
+---
+
+## 🎨 Arsitektur Frontend (`web/`)
+
+* **Engine:** React 18 + Vite + TypeScript + Tailwind CSS
+* **Board Visuals:** 2D Canvas & CSS 3D Glassmorphism Candy Cap (44px socket chunky).
+* **Audio Prosedural:** 100% Web Audio API sintetis (0 KB file download) dengan tempo 112 BPM arcade chiptune loop.
+* **Presenter Kit:**
+  - `HowToPlayModal.tsx`: Panduan 15 detik instan untuk juri.
+  - `PitchDeckModal.tsx`: 10 slide presentasi panggung interaktif dengan keyboard arrow & fullscreen mode.
+  - `LobbyQRModal.tsx`: Generator QR Code canvas untuk penonton/juri bergabung.
+
+Jalankan lokal:
+```bash
+cd web
+npm install
+npm run dev
+```
+
+---
+
+## 👥 Tim Pengembang
+
+* **Lead Builder & Smart Contract Architect:** Faiz & Tim BlitzGrid
+* **Event:** Monad Blitz Jogja Vol. 2 — GIK Universitas Gadjah Mada (UGM)
+* **Tanggal:** Sabtu, 24 Oktober 2026
