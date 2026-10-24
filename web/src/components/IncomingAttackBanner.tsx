@@ -17,6 +17,13 @@ export const IncomingAttackBanner: React.FC<IncomingAttackBannerProps> = ({
 
   const getAttackInfo = () => {
     switch (latest.type) {
+      case 'blossom':
+        return {
+          icon: <span className="text-sm animate-bounce">🌸</span>,
+          title: `BLOSSOM STRIKE: ${latest.senderName}`,
+          desc: `Diserang ${latest.senderName}! Blok sabotase tertanam!`,
+          bg: 'bg-[#FFF0F4] border-2 border-[#FF758F] text-[#881337] shadow-[0_4px_15px_rgba(255,92,122,0.25)]',
+        };
       case 'toxic':
         return {
           icon: <Skull className="w-3.5 h-3.5 text-rose-500 animate-bounce" />,

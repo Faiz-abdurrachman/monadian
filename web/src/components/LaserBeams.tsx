@@ -53,18 +53,29 @@ export const LaserBeams: React.FC<LaserBeamsProps> = ({ beams, onBeamComplete })
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
+        <filter id="glow-blossom" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="6" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
       </defs>
 
       {beams.map((b) => {
         const filterId =
-          b.type === 'toxic'
+          b.type === 'blossom'
+            ? 'url(#glow-blossom)'
+            : b.type === 'toxic'
             ? 'url(#glow-emerald)'
             : b.type === 'frost'
             ? 'url(#glow-frost)'
             : 'url(#glow-cyan)';
 
         const strokeColor =
-          b.type === 'toxic'
+          b.type === 'blossom'
+            ? '#FF3366'
+            : b.type === 'toxic'
             ? '#10b981'
             : b.type === 'frost'
             ? '#67e8f9'

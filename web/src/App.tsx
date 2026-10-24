@@ -72,6 +72,7 @@ export function App() {
   const [rank, setRank] = useState<number>(1);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
+  const [isAttackedFlash, setIsAttackedFlash] = useState<boolean>(false);
 
   // Combat Inbox & Visual FX State
   const [pendingAttacks, setPendingAttacks] = useState<CombatAttack[]>([]);
@@ -323,8 +324,12 @@ export function App() {
             // Bot melancarkan serangan ke Combat Inbox pemain!
             setPendingAttacks((p) => [...p, attack]);
             sounds.playSabotage();
+            setIsShaking(true);
+            setTimeout(() => setIsShaking(false), 450);
+            setIsAttackedFlash(true);
+            setTimeout(() => setIsAttackedFlash(false), 500);
             if (typeof navigator !== 'undefined' && navigator.vibrate) {
-              navigator.vibrate([40, 50, 40]);
+              navigator.vibrate([60, 50, 60]);
             }
           },
           (attack) => {
@@ -512,6 +517,7 @@ export function App() {
     } else {
       setComboStreak(0);
       setScore((s) => s + 25);
+      setMana((m) => Math.min(100, m + 10));
       setBoard(placedBoard);
       setCellColors(nextCellColors);
       setSabotageMask(currentSabotage & placedBoard);
@@ -610,6 +616,15 @@ export function App() {
     };
   }, [isDragging, draggedSlot, hoverCoords, isGhostValid, board, pieces, used]);
 
+  // Helper to calculate player's board fill %
+  const getPlayerFillPercent = (b: bigint): number => {
+    let count = 0;
+    for (let i = 0; i < 64; i++) {
+      if ((b & (1n << BigInt(i))) !== 0n) count++;
+    }
+    return Math.min(100, Math.round((count / 64) * 100));
+  };
+
   // Visual Projectile Laser Beam Trigger
   const triggerLaserBeam = (type: WeaponType, targetId: string) => {
     let startX = window.innerWidth / 2;
@@ -617,7 +632,9 @@ export function App() {
     let endX = window.innerWidth / 2;
     let endY = 80;
 
-    const dockEl = document.querySelector(`[data-weapon-type="${type}"]`);
+    const dockEl =
+      document.querySelector('[data-single-attack-btn]') ||
+      document.querySelector(`[data-weapon-type="${type}"]`);
     const targetEl = document.querySelector(`[data-opponent-id="${targetId}"]`);
 
     if (dockEl) {
@@ -638,66 +655,55 @@ export function App() {
       endX,
       endY,
       type,
-      color: type === 'toxic' ? '#10b981' : type === 'frost' ? '#67e8f9' : '#38bdf8',
+      color: type === 'blossom' ? '#FF3366' : type === 'toxic' ? '#10b981' : type === 'frost' ? '#67e8f9' : '#38bdf8',
     };
 
     setActiveBeams((prev) => [...prev, newBeam]);
   };
 
-  // Sabotage Weapon 1: Glitch Stone (30 Mana)
-  const handleFireGlitchStone = () => {
-    if (mana < 30 || !selectedTargetId) return;
-    setMana((m) => m - 30);
+  // 1-SKILL UNIFIED COMBAT: BLOSSOM STRIKE (30 Mana)
+  const handleSingleAttack = () => {
+    if (mana < 30) return;
+
+    // Resolve target: selected or first alive opponent
+    let target = opponents.find((o) => o.id === selectedTargetId && o.isAlive);
+    if (!target) {
+      target = opponents.find((o) => o.isAlive);
+      if (target) setSelectedTargetId(target.id);
+    }
+    if (!target) return;
+
+    setMana((m) => Math.max(0, m - 30));
     sounds.playSabotage();
-    triggerLaserBeam('glitch', selectedTargetId);
+    triggerLaserBeam('blossom', target.id);
     setSabotageSentCount((c) => c + 1);
+
+    const targetId = target.id;
+    const targetName = target.name || 'Opponent';
 
     setOpponents((prev) =>
       prev.map((opp) => {
-        if (opp.id === selectedTargetId) {
-          const newFill = Math.min(94, opp.boardFillPercent + 15);
-          return { ...opp, boardFillPercent: newFill, sabotaged: true };
+        if (opp.id === targetId) {
+          const newFill = Math.min(100, opp.boardFillPercent + 16);
+          const isAlive = newFill < 95;
+          return {
+            ...opp,
+            boardFillPercent: newFill,
+            isAlive,
+            sabotaged: true,
+          };
         }
         return opp;
       })
     );
-  };
 
-  // Sabotage Weapon 2: Toxic Hand (60 Mana)
-  const handleFireToxicHand = () => {
-    if (mana < 60 || !selectedTargetId) return;
-    setMana((m) => m - 60);
-    sounds.playSabotage();
-    triggerLaserBeam('toxic', selectedTargetId);
-    setSabotageSentCount((c) => c + 1);
-
-    setOpponents((prev) =>
-      prev.map((opp) => {
-        if (opp.id === selectedTargetId) {
-          const newFill = Math.min(94, opp.boardFillPercent + 25);
-          return { ...opp, boardFillPercent: newFill, sabotaged: true };
-        }
-        return opp;
-      })
+    // Dynamic Monad feedback toast
+    setTxNotice(
+      language === 'id'
+        ? `🌸 BLOSSOM STRIKE dikirim ke ${targetName}! (+16% beban board) • 0.4s Finality`
+        : `🌸 BLOSSOM STRIKE fired to ${targetName}! (+16% pressure) • 0.4s Finality`
     );
-  };
-
-  // Sabotage Weapon 3: Frost Lock (90 Mana)
-  const handleFireFrostLock = () => {
-    if (mana < 90 || !selectedTargetId) return;
-    setMana((m) => m - 90);
-    sounds.playSabotage();
-    triggerLaserBeam('frost', selectedTargetId);
-    setSabotageSentCount((c) => c + 1);
-
-    setOpponents((prev) =>
-      prev.map((opp) => {
-        if (opp.id === selectedTargetId) {
-          return { ...opp, sabotaged: true, boardFillPercent: Math.min(94, opp.boardFillPercent + 35) };
-        }
-        return opp;
-      })
-    );
+    setTimeout(() => setTxNotice(null), 3200);
   };
 
   // End Game Lifecycle
@@ -1006,43 +1012,96 @@ export function App() {
                   </div>
                 </div>
               ) : (
-                /* PVP BATTLE MODE: Horizontal Player Chips (Figma Node 1225-995: P1, P2 [Active], P3, P4...) */
-                <div className="flex-shrink-0 w-full overflow-x-auto scrollbar-none py-1 px-1 mb-1.5 sm:mb-2">
-                  <div className="flex items-center gap-2 w-max mx-auto px-1">
-                    {/* P1 (Me / Host) */}
-                    <div
-                      className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-comfortaa font-bold text-xs sm:text-[13px] flex-shrink-0 bg-white border-2 border-[#FFAEC0] text-[#E11D48] shadow-xs select-none"
-                      title={playerName || 'Pemain_1 (Anda)'}
-                    >
-                      P1
-                    </div>
+                /* PVP BATTLE MODE: Horizontal Player Chips (Figma Node 1225-995: P1, P2 [Active], P3, P4...) + 1-Skill Attack */
+                <div className="flex-shrink-0 w-full flex flex-col items-center mb-1 sm:mb-1.5">
+                  {/* Player Chips Carousel with Live Progress % */}
+                  <div className="w-full overflow-x-auto scrollbar-none py-1 px-1">
+                    <div className="flex items-center gap-1.5 sm:gap-2 w-max mx-auto px-1">
+                      {/* P1 (Me / Host) */}
+                      <div
+                        className="min-w-[44px] px-2 py-1 rounded-[16px] flex flex-col items-center justify-center font-comfortaa flex-shrink-0 bg-white border-2 border-[#FFAEC0] text-[#E11D48] shadow-xs select-none"
+                        title={playerName || 'Pemain_1 (Anda)'}
+                      >
+                        <span className="font-bold text-[11px] sm:text-xs leading-none">P1</span>
+                        <span className="text-[9px] font-extrabold text-emerald-600 leading-none mt-0.5">
+                          {getPlayerFillPercent(board)}%
+                        </span>
+                      </div>
 
-                    {/* Opponents P2, P3, P4... */}
-                    {opponents.slice(0, currentMaxPlayers - 1).map((opp, idx) => {
-                      const isSelected = selectedTargetId === opp.id;
-                      const isAlive = opp.isAlive;
-                      return (
-                        <button
-                          key={opp.id}
-                          type="button"
-                          onClick={() => {
-                            setSelectedTargetId(opp.id);
-                            sounds.playPickup();
-                            if (mana >= 90) handleFireFrostLock();
-                            else if (mana >= 60) handleFireToxicHand();
-                            else if (mana >= 30) handleFireGlitchStone();
-                          }}
-                          className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-comfortaa font-bold text-xs sm:text-[13px] flex-shrink-0 cursor-pointer transition-all ${
-                            isSelected
-                              ? 'bg-white border-2 border-[#FF3366] ring-2 ring-[#FF3366] text-[#FF3366] font-extrabold scale-105 shadow-sm'
-                              : 'bg-white border-2 border-[#FFAEC0] text-[#E11D48] shadow-xs hover:border-[#FF5C7A]'
-                          } ${!isAlive ? 'opacity-35 line-through' : ''}`}
-                          title={`${opp.name || `P${idx + 2}`} (${opp.boardFillPercent}% isi)`}
-                        >
-                          P{idx + 2}
-                        </button>
-                      );
-                    })}
+                      {/* Opponents P2, P3, P4... */}
+                      {opponents.slice(0, currentMaxPlayers - 1).map((opp, idx) => {
+                        const isSelected = selectedTargetId === opp.id;
+                        const isAlive = opp.isAlive;
+                        return (
+                          <button
+                            key={opp.id}
+                            data-opponent-id={opp.id}
+                            type="button"
+                            onClick={() => {
+                              setSelectedTargetId(opp.id);
+                              sounds.playPickup();
+                            }}
+                            className={`min-w-[44px] px-2 py-1 rounded-[16px] flex flex-col items-center justify-center font-comfortaa flex-shrink-0 cursor-pointer transition-all ${
+                              isSelected
+                                ? 'bg-pink-50 border-2 border-[#FF3366] ring-2 ring-[#FF3366] text-[#FF3366] font-extrabold scale-105 shadow-sm'
+                                : 'bg-white border-2 border-[#FFAEC0] text-[#E11D48] shadow-xs hover:border-[#FF5C7A]'
+                            } ${!isAlive ? 'opacity-35 line-through bg-gray-50' : ''}`}
+                            title={`${opp.name || `P${idx + 2}`} (${opp.boardFillPercent}% isi)`}
+                          >
+                            <span className="font-bold text-[11px] sm:text-xs leading-none">
+                              P{idx + 2}
+                            </span>
+                            <span
+                              className={`text-[9px] font-extrabold leading-none mt-0.5 ${
+                                !isAlive
+                                  ? 'text-gray-400'
+                                  : opp.boardFillPercent >= 80
+                                  ? 'text-rose-600 animate-pulse font-black'
+                                  : 'text-[#795B6B]'
+                              }`}
+                            >
+                              {isAlive ? `${opp.boardFillPercent}%` : '💀 KO'}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* 1-Skill Attack Action Button / Mana Energy Bar */}
+                  <div className="w-full px-2 mt-0.5 flex items-center justify-center">
+                    {mana >= 30 ? (
+                      <button
+                        data-single-attack-btn
+                        type="button"
+                        onClick={handleSingleAttack}
+                        className="w-full max-w-[340px] h-9 sm:h-10 rounded-[18px] bg-[#FF5C7A] text-white border-b-[4px] border-[#D81B60] shadow-[0_4px_16px_rgba(255,92,122,0.38)] hover:brightness-105 active:translate-y-0.5 active:border-b-[1px] transition-all flex items-center justify-center gap-2 cursor-pointer font-comfortaa font-black text-xs sm:text-sm tracking-wider uppercase select-none animate-bounce"
+                      >
+                        <span className="text-base">🌸</span>
+                        <span>
+                          {language === 'id'
+                            ? `SERANG [${opponents.find((o) => o.id === selectedTargetId)?.name || 'P2'}] ⚡ (30 MANA)`
+                            : `STRIKE [${opponents.find((o) => o.id === selectedTargetId)?.name || 'P2'}] ⚡ (30 MANA)`}
+                        </span>
+                      </button>
+                    ) : (
+                      <div className="w-full max-w-[340px] h-8 sm:h-9 rounded-[16px] bg-white border border-[#FFD8E3] shadow-xs px-3 flex items-center justify-between relative overflow-hidden select-none">
+                        {/* Background Energy Fill Bar */}
+                        <div
+                          className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-pink-200/50 to-pink-300/40 transition-all duration-300"
+                          style={{ width: `${Math.min(100, (mana / 30) * 100)}%` }}
+                        />
+                        <span className="relative z-10 font-comfortaa font-bold text-[10.5px] sm:text-[11px] text-[#795B6B] flex items-center gap-1.5">
+                          <span>⚡</span>
+                          <span>
+                            {language === 'id' ? `MANA: ${mana} / 30` : `MANA: ${mana} / 30`}
+                          </span>
+                        </span>
+                        <span className="relative z-10 font-comfortaa font-medium text-[9.5px] text-[#FF5C7A]">
+                          {language === 'id' ? 'Pasang balok untuk isi mana' : 'Place blocks to charge'}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -1146,6 +1205,11 @@ export function App() {
         beams={activeBeams}
         onBeamComplete={(id) => setActiveBeams((prev) => prev.filter((b) => b.id !== id))}
       />
+
+      {/* Screen Red Flash Vignette on Incoming Sabotage Hit */}
+      {isAttackedFlash && (
+        <div className="fixed inset-0 pointer-events-none z-50 border-[8px] border-rose-500/70 bg-rose-500/15 animate-ping transition-all" />
+      )}
 
       {/* Stage Presentation QR Code Modal */}
       <LobbyQRModal

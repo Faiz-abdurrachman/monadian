@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { RotateCcw, Share2, Home } from 'lucide-react';
+import { RotateCcw, Home, Share2 } from 'lucide-react';
 import { useLanguage } from '../locales/LanguageContext';
-import { MonaBunnyMascot } from './MonaBunnyMascot';
 
 interface GameOverModalProps {
   isWinner: boolean;
@@ -29,7 +28,7 @@ export const GameOverModal: React.FC<GameOverModalProps> = ({
   onRestart,
   onBackToLobby,
 }) => {
-  const { t } = useLanguage();
+  const { language } = useLanguage();
 
   useEffect(() => {
     if (isWinner) {
@@ -37,120 +36,123 @@ export const GameOverModal: React.FC<GameOverModalProps> = ({
         particleCount: 160,
         spread: 100,
         origin: { y: 0.55 },
-        colors: ['#FF4D6D', '#FCD34D', '#2DD4BF', '#38BDF8', '#C084FC'],
+        colors: ['#FF5C7A', '#FCD34D', '#2DD4BF', '#38BDF8', '#C084FC'],
       });
     }
   }, [isWinner]);
 
-  const tweetText = encodeURIComponent(
-    t.gameOver.shareText(score.toLocaleString(), rank, prizeMon > 0 ? `+${prizeMon.toFixed(2)} MON` : '0 MON')
-  );
-  const twitterUrl = `https://twitter.com/intent/tweet?text=${tweetText}`;
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+    `Saya baru saja mencetak skor ${score.toLocaleString()} di Monadian - 100% On-Chain Puzzle Royale di Monad! ⚡🌸 #Monad #Monadian`
+  )}`;
 
   return (
-    // Foreground Game Over Modal Viewport (Kawaii Pink Bunny Blossom Theme) (Figma #1169:327)
-    <div className="fixed inset-0 z-50 bg-[#2F121A]/50 backdrop-blur-md flex items-center justify-center p-3 animate-fadeIn font-quicksand select-none">
-      <div className="relative w-full max-w-sm rounded-[32px] p-5 bg-white border border-pink-200 shadow-2xl flex flex-col items-center text-center text-[#2F121A]">
+    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-[2px] flex items-center justify-center p-4 animate-fadeIn font-quicksand select-none">
+      <div className="relative w-full max-w-[340px] sm:max-w-[365px] bg-white border-2 border-[#FFD8E3] rounded-[38px] sm:rounded-[42px] pt-8 pb-7 px-6 sm:pt-9 sm:pb-8 sm:px-7 shadow-[0_22px_65px_rgba(255,160,185,0.45)] flex flex-col items-center text-center text-[#241022]">
+        {/* ================================================================ */}
+        {/* TOP BUNNY EARS (Figma Exact Match)                                */}
+        {/* ================================================================ */}
+        <div className="absolute -top-6 left-0 right-0 flex items-center justify-center gap-5 pointer-events-none z-0">
+          <div className="w-7 h-10 rounded-t-full bg-white border-2 border-b-0 border-[#FF758F] shadow-xs flex items-center justify-center pt-2">
+            <div className="w-3.5 h-6 rounded-t-full bg-[#FF8DA1]/50" />
+          </div>
+          <div className="w-7 h-10 rounded-t-full bg-white border-2 border-b-0 border-[#FF758F] shadow-xs flex items-center justify-center pt-2">
+            <div className="w-3.5 h-6 rounded-t-full bg-[#FF8DA1]/50" />
+          </div>
+        </div>
 
-        {/* Kawaii Mascot Expression */}
-        <MonaBunnyMascot mood={isWinner ? 'victory' : 'sad'} size={76} className="mb-2" />
-
-        {/* Title & Subtitle */}
-        <h2 className="font-comfortaa font-bold text-xl tracking-tight text-[#2F121A] mb-0.5">
-          {isWinner ? t.gameOver.victoryTitle : t.blossom.noMoreMoves}
+        {/* Header Title */}
+        <h2 className="font-comfortaa font-bold text-[24px] sm:text-[27px] text-[#241022] tracking-tight uppercase leading-none mb-1">
+          {isWinner
+            ? (language === 'id' ? 'VICTORY ROYALE!' : 'VICTORY ROYALE!')
+            : (language === 'id' ? 'GAME OVER' : 'GAME OVER')}
         </h2>
-        <p className="text-xs font-bold text-[#574144] mb-3.5 flex items-center justify-center gap-1.5 flex-wrap">
-          {playerName && (
-            <span className="text-[#FF4D6D] font-comfortaa font-bold px-2 py-0.5 rounded-full bg-pink-100 border border-pink-200">
-              🌸 {playerName}
-            </span>
-          )}
-          <span>
-            {isWinner
-              ? t.gameOver.victorySubtitle
-              : `${t.radars.playerPrefix} #${rank} / ${maxPlayers}`}
-          </span>
+        <p className="text-xs font-bold text-[#795B6B] mb-3.5">
+          {isWinner
+            ? '🏆 Juara 1 Turnamen on-chain Monad!'
+            : `${playerName || 'Pemain'} • Peringkat #${rank} / ${maxPlayers}`}
         </p>
 
-        {/* Kawaii Stats Bento Grid (Pastel Pink & Soft Peach Pills) (Figma #1169:327) */}
-        <div className="w-full grid grid-cols-2 gap-2 mb-3.5 text-left">
-          {/* Stat 1: Final Score */}
-          <div className="p-2.5 bg-white rounded-2xl border border-pink-200 shadow-xs">
-            <span className="text-[9px] font-comfortaa font-bold text-[#574144] block flex items-center gap-1">
-              🌸 {t.gameOver.finalScore}
+        {/* Stats Pill Row (SCORE & PRIZE / BEST) */}
+        <div className="flex items-center justify-center gap-2 sm:gap-2.5 w-full mb-3.5">
+          {/* Current Score Pill */}
+          <div className="flex-1 bg-[#FFEBF1] border border-[#FCD2DF] rounded-full py-1.5 px-3 flex items-center justify-center gap-1.5 shadow-xs">
+            <span className="text-[10px] sm:text-[11px] font-comfortaa font-bold uppercase tracking-wider text-[#795B6B]">
+              SCORE
             </span>
-            <span className="font-comfortaa font-bold text-base text-[#2F121A] mt-0.5 block">
+            <span className="font-comfortaa font-extrabold text-sm sm:text-base text-[#FF3366] tracking-tight">
               {score.toLocaleString()}
             </span>
           </div>
 
-          {/* Stat 2: Prize MON / Escrow */}
-          <div className="p-2.5 bg-pink-50 rounded-2xl border border-pink-200 shadow-xs">
-            <span className="text-[9px] font-comfortaa font-bold text-[#FF4D6D] block flex items-center gap-1">
-              🥕 {t.gameOver.escrowPrize}
+          {/* Prize / Escrow Pill */}
+          <div className="flex-1 bg-[#FEF9C3] border border-[#FDE047] rounded-full py-1.5 px-3 flex items-center justify-center gap-1.5 shadow-xs">
+            <span className="text-[10px] sm:text-[11px] font-comfortaa font-bold uppercase tracking-wider text-[#B45309] flex items-center gap-0.5">
+              <span>🥕</span>
+              <span>HADIAH</span>
             </span>
-            <span className="font-comfortaa font-bold text-base text-[#FF4D6D] mt-0.5 block">
+            <span className="font-comfortaa font-extrabold text-xs sm:text-sm text-[#241022] tracking-tight truncate">
               {prizeMon > 0 ? `+${prizeMon.toFixed(2)} MON` : '0 MON'}
             </span>
           </div>
+        </div>
 
-          {/* Stat 3: Max Streak / Combo */}
-          <div className="p-2.5 bg-white rounded-2xl border border-pink-200 shadow-xs">
-            <span className="text-[9px] font-comfortaa font-bold text-[#574144] block flex items-center gap-1">
-              💖 {t.gameOver.maxCombo}
+        {/* Secondary Stats Grid */}
+        <div className="w-full grid grid-cols-2 gap-2 mb-3 text-left">
+          <div className="p-2.5 bg-[#FFF5F8] rounded-[18px] border border-[#FEDCE6]">
+            <span className="text-[10px] font-comfortaa font-bold text-[#795B6B] block">
+              💖 Kombo Terbaik
             </span>
-            <span className="font-comfortaa font-bold text-sm text-[#2F121A] mt-0.5 block">
+            <span className="font-comfortaa font-extrabold text-sm text-[#241022] mt-0.5 block">
               {maxCombo}x Combo
             </span>
           </div>
-
-          {/* Stat 4: Sabotages Fired */}
-          <div className="p-2.5 bg-white rounded-2xl border border-pink-200 shadow-xs">
-            <span className="text-[9px] font-comfortaa font-bold text-[#574144] block flex items-center gap-1">
-              🐾 {t.gameOver.sabotagesFired}
+          <div className="p-2.5 bg-[#FFF5F8] rounded-[18px] border border-[#FEDCE6]">
+            <span className="text-[10px] font-comfortaa font-bold text-[#795B6B] block">
+              ⚡ Sabotase Keluar
             </span>
-            <span className="font-comfortaa font-bold text-sm text-[#2F121A] mt-0.5 block">
-              {sabotageCount} Fired
+            <span className="font-comfortaa font-extrabold text-sm text-[#241022] mt-0.5 block">
+              {sabotageCount} Serangan
             </span>
           </div>
         </div>
 
-        {/* Monad Gas Efficiency Stamp */}
-        <div className="w-full py-1.5 px-3 rounded-2xl bg-pink-50 border border-pink-200 flex items-center justify-between text-[9px] font-comfortaa font-bold text-[#574144] mb-3.5">
-          <span>⚡ {t.gameOver.gasMetricLabel}</span>
-          <span className="text-[#FF4D6D]">0.4s FINALITY</span>
+        {/* Monad Finality Badge */}
+        <div className="w-full py-1 px-3 rounded-full bg-pink-50 border border-pink-200 flex items-center justify-between text-[10px] font-comfortaa font-bold text-[#795B6B] mb-4">
+          <span>⚡ Monad Sub-Second Finality</span>
+          <span className="text-[#FF4D6D]">0.4s BLOCK</span>
         </div>
 
-        {/* Action Buttons: KEMBALI KE LOBI vs MAIN LAGI (Figma 1190:1928 Tactile Mochi Buttons) */}
-        <div className="w-full flex items-center gap-2.5">
-          {onBackToLobby && (
-            <button
-              onClick={onBackToLobby}
-              className="flex-1 py-3 px-3 rounded-full bg-white border-2 border-[#FCE7F3] shadow-[0_3px_0_0_#FDB2C5] hover:bg-pink-50 active:translate-y-1 active:shadow-none text-[#A8334E] font-comfortaa font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-            >
-              <Home className="w-3.5 h-3.5 text-[#FF4D6D]" />
-              <span>{t.blossom.backToLobby}</span>
-            </button>
-          )}
+        {/* Button 1: RETRY RUN (Juicy 3D Button) */}
+        <button
+          type="button"
+          onClick={onRestart}
+          className="w-full h-14 sm:h-[58px] rounded-[22px] sm:rounded-[24px] bg-[#FF5C7A] text-white border-b-[6px] border-[#D81B60] shadow-[0_12px_28px_rgba(255,92,122,0.38)] hover:brightness-105 active:translate-y-1 active:border-b-[2px] transition-all flex items-center justify-center gap-2 cursor-pointer font-comfortaa font-black text-lg sm:text-xl tracking-wider uppercase mb-3 select-none"
+        >
+          <RotateCcw className="w-5 h-5 stroke-[2.5]" />
+          <span>{language === 'id' ? 'RETRY RUN' : 'RETRY RUN'}</span>
+        </button>
 
+        {/* Button 2: HOP TO MENU (Clean Text Link) */}
+        {onBackToLobby && (
           <button
-            onClick={onRestart}
-            className="flex-1 py-3 px-3 rounded-full bg-gradient-to-b from-[#FF758F] via-[#FA436C] to-[#E61E4F] text-white shadow-[0_4px_0_0_#A81B3F,0_10px_20px_rgba(230,30,79,0.35)] hover:brightness-105 active:translate-y-1 active:shadow-none font-comfortaa font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+            type="button"
+            onClick={onBackToLobby}
+            className="text-[#4A2E3B] hover:text-[#FF4D6D] font-comfortaa font-bold text-xs sm:text-sm tracking-wider uppercase flex items-center justify-center gap-1.5 transition-all cursor-pointer select-none py-1 mb-1"
           >
-            <RotateCcw className="w-3.5 h-3.5 text-white" />
-            <span>{t.blossom.playAgain}</span>
+            <Home className="w-4 h-4 stroke-[2.2]" />
+            <span>{language === 'id' ? 'HOP TO MENU' : 'HOP TO MENU'}</span>
           </button>
-        </div>
+        )}
 
-        {/* Share Score to X / Community */}
+        {/* Share to X */}
         <a
           href={twitterUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-2 text-[9.5px] font-comfortaa font-bold text-[#FF4D6D] hover:underline flex items-center gap-1"
+          className="text-[10px] font-comfortaa font-bold text-[#FF5C7A] hover:underline flex items-center gap-1 mt-1 cursor-pointer"
         >
-          <Share2 className="w-3 h-3 text-[#FF4D6D]" />
-          <span>{t.gameOver.shareBtn}</span>
+          <Share2 className="w-3 h-3 text-[#FF5C7A]" />
+          <span>Bagikan ke X (Twitter)</span>
         </a>
       </div>
     </div>

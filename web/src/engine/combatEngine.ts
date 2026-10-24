@@ -5,7 +5,7 @@
 
 import { isBitSet } from './bitwise';
 
-export type WeaponType = 'glitch' | 'toxic' | 'frost';
+export type WeaponType = 'glitch' | 'toxic' | 'frost' | 'blossom';
 
 export interface CombatAttack {
   id: string;
@@ -84,7 +84,7 @@ export function consumePlayerInbox(
   let addedStonesCount = 0;
 
   for (const attack of pendingAttacks) {
-    if (attack.type === 'glitch') {
+    if (attack.type === 'blossom' || attack.type === 'glitch') {
       const emptySlot = findRandomEmptyCell(newBoard, newSabotageMask);
       if (emptySlot !== null) {
         const bit = 1n << BigInt(emptySlot);

@@ -303,6 +303,7 @@ export const Board3D = forwardRef<Board3DHandle, Board3DProps>(({
             return (
               <div
                 key={idx}
+                data-cell-index={idx}
                 onClick={() => onCellClick?.(col, row)}
                 className="relative w-full h-full rounded-full bg-[#FFF0F4] border border-[#FED7E2] shadow-[inset_0_2px_4px_rgba(255,182,193,0.3)] transition-colors cursor-pointer hover:bg-[#FFE6F0]"
               />

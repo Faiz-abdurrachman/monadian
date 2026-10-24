@@ -8,6 +8,7 @@ import {
   Users,
   Home,
   Bot,
+  ShieldCheck,
 } from 'lucide-react';
 import { useLanguage } from '../locales/LanguageContext';
 import { LanguageToggle } from './LanguageToggle';
@@ -51,10 +52,10 @@ export const HostArenaView: React.FC<HostArenaViewProps> = ({
       canvasRef.current,
       shareUrl,
       {
-        width: 200,
+        width: 190,
         margin: 1.5,
         color: {
-          dark: '#2F121A',
+          dark: '#241022',
           light: '#ffffff',
         },
       },
@@ -83,51 +84,52 @@ export const HostArenaView: React.FC<HostArenaViewProps> = ({
   };
 
   return (
-    <div className="flex-1 min-h-0 w-full flex flex-col justify-between items-center text-center select-none font-quicksand bg-[#FFF8F7] text-[#2F121A] p-3 sm:p-4 overflow-y-auto scrollbar-none relative z-10">
+    <div className="flex-1 min-h-0 w-full flex flex-col justify-between items-center text-center select-none font-quicksand bg-gradient-to-b from-[#FFF5F7] via-[#FFF0F4] to-[#FFE4EC] text-[#241022] p-3 sm:p-5 overflow-y-auto scrollbar-none relative z-10">
       {/* 1. TOP HEADER (Back to Lobby & Language) */}
       <header className="w-full flex items-center justify-between gap-2 flex-shrink-0 pt-0.5">
         <button
           type="button"
           onClick={onBackToLobby}
-          className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white hover:bg-pink-50 border border-pink-200 text-[10px] font-comfortaa font-bold text-[#FF4D6D] transition-all shadow-xs active:scale-95 cursor-pointer"
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-pink-50/60 border-2 border-[#FFD8E3] text-xs font-comfortaa font-bold text-[#E11D48] transition-all shadow-xs active:scale-95 cursor-pointer"
         >
-          <Home className="w-3.5 h-3.5 text-[#FF4D6D]" />
+          <Home className="w-4 h-4 text-[#FF3366]" />
           <span>{language === 'id' ? 'Lobi Utama' : 'Main Lobby'}</span>
         </button>
 
         <LanguageToggle />
       </header>
 
-      {/* 2. ARENA HERO IDENTITY (Unified Clean Title & Status Pill) */}
-      <div className="w-full flex flex-col items-center flex-shrink-0 my-1">
-        <h1 className="font-comfortaa font-bold text-base sm:text-lg text-[#2F121A] leading-tight">
+      {/* 2. ARENA HERO IDENTITY & POT CARD */}
+      <div className="w-full max-w-[365px] flex flex-col items-center flex-shrink-0 my-1.5">
+        <h1 className="font-comfortaa font-bold text-lg sm:text-xl text-[#241022] leading-tight">
           {config.roomName}
         </h1>
 
-        {/* 1-Line Status Capsule */}
-        <div className="flex items-center gap-2 mt-1 px-3 py-1 rounded-full bg-pink-100/80 border border-pink-200 text-[10px] font-comfortaa font-bold text-[#2F121A] shadow-xs">
-          <span className="text-amber-800 flex items-center gap-1">
-            <Crown className="w-3 h-3 text-amber-500 fill-amber-400" />
+        {/* Status Capsule */}
+        <div className="flex items-center justify-center gap-2 mt-1.5 px-3.5 py-1 rounded-full bg-white border border-[#FFD8E3] text-[11px] font-comfortaa font-bold text-[#241022] shadow-xs flex-wrap">
+          <span className="text-[#B45309] flex items-center gap-1">
+            <Crown className="w-3.5 h-3.5 text-[#F59E0B] fill-[#F59E0B]" />
             <span>#{config.roomCode}</span>
           </span>
           <span className="text-pink-300">•</span>
-          <span className="text-[#FF4D6D]">
+          <span className="text-[#FF3366] font-extrabold">
             🎁 {totalPotFormatted}
           </span>
           <span className="text-pink-300">•</span>
-          <span className="text-emerald-700">
-            {config.poolType === 'sponsored' ? 'GRATIS' : 'P2P BUY-IN'}
+          <span className="text-emerald-700 flex items-center gap-1">
+            <ShieldCheck className="w-3 h-3 text-emerald-600" />
+            <span>{config.poolType === 'sponsored' ? 'GRATIS' : 'P2P BUY-IN'}</span>
           </span>
         </div>
       </div>
 
       {/* 3. BIG STAGE QR CODE (Soft Rounded Bento Card) */}
-      <div className="flex flex-col items-center flex-shrink-0 my-1">
-        <div className="relative p-3.5 rounded-[30px] bg-white shadow-[0_8px_25px_rgba(255,175,190,0.3)] border-2 border-pink-200">
-          <canvas ref={canvasRef} className="rounded-2xl block mx-auto" />
+      <div className="w-full max-w-[365px] flex flex-col items-center flex-shrink-0 my-1">
+        <div className="relative p-4 rounded-[34px] sm:rounded-[38px] bg-white shadow-[0_12px_35px_rgba(255,160,185,0.35)] border-2 border-[#FFD8E3]">
+          <canvas ref={canvasRef} className="rounded-2xl block mx-auto shadow-inner" />
         </div>
 
-        <p className="text-[10px] font-comfortaa font-bold text-[#574144] mt-1.5">
+        <p className="text-[11px] font-comfortaa font-bold text-[#795B6B] mt-2">
           📱 {language === 'id' ? 'Scan QR dengan HP untuk langsung masuk arena' : 'Scan QR with phone to join arena live'}
         </p>
 
@@ -135,16 +137,16 @@ export const HostArenaView: React.FC<HostArenaViewProps> = ({
         <button
           type="button"
           onClick={handleCopy}
-          className="mt-1 flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white hover:bg-pink-50 border border-pink-200 text-[10px] text-[#FF4D6D] font-comfortaa font-bold transition-all active:scale-95 shadow-xs cursor-pointer"
+          className="mt-1.5 flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white hover:bg-pink-50/60 border border-[#FFD8E3] text-xs text-[#FF3366] font-comfortaa font-bold transition-all active:scale-95 shadow-xs cursor-pointer select-none"
         >
           {copied ? (
             <>
-              <Check className="w-3 h-3 text-emerald-500" />
-              <span className="text-emerald-600">{language === 'id' ? 'Tautan Disalin!' : 'Link Copied!'}</span>
+              <Check className="w-3.5 h-3.5 text-emerald-500" />
+              <span className="text-emerald-600 font-extrabold">{language === 'id' ? 'Tautan Disalin!' : 'Link Copied!'}</span>
             </>
           ) : (
             <>
-              <Copy className="w-3 h-3 text-[#FF4D6D]" />
+              <Copy className="w-3.5 h-3.5 text-[#FF3366]" />
               <span>{language === 'id' ? 'Salin Tautan Room' : 'Copy Room Link'}</span>
             </>
           )}
@@ -152,13 +154,13 @@ export const HostArenaView: React.FC<HostArenaViewProps> = ({
       </div>
 
       {/* 4. CONTENDERS DOCK (Clean Rounded-Full Avatar Strip) */}
-      <div className="w-full flex flex-col gap-1.5 flex-shrink-0 text-left my-1 p-3 rounded-[28px] bg-white border border-pink-200/80 shadow-xs">
-        <div className="flex items-center justify-between text-[10px] font-comfortaa font-bold text-[#2F121A] px-1">
-          <span className="flex items-center gap-1.5 text-[#FF4D6D]">
-            <Users className="w-3.5 h-3.5 text-[#FF4D6D]" />
+      <div className="w-full max-w-[365px] flex flex-col gap-1.5 flex-shrink-0 text-left my-1.5 p-3.5 rounded-[30px] bg-white border-2 border-[#FFD8E3] shadow-xs">
+        <div className="flex items-center justify-between text-xs font-comfortaa font-bold text-[#241022] px-1">
+          <span className="flex items-center gap-1.5 text-[#FF3366]">
+            <Users className="w-3.5 h-3.5 text-[#FF3366]" />
             <span>{language === 'id' ? 'PESERTA SIAP' : 'CONTENDERS READY'}</span>
           </span>
-          <span className="font-mono text-[#FF4D6D] bg-pink-50 border border-pink-200 px-2 py-0.5 rounded-full text-[9px]">
+          <span className="font-mono text-[#FF3366] bg-[#FFEBF1] border border-[#FCD2DF] px-2.5 py-0.5 rounded-full text-[10px] font-bold">
             {joinedPlayers.length} / {config.maxPlayers}
           </span>
         </div>
@@ -168,14 +170,14 @@ export const HostArenaView: React.FC<HostArenaViewProps> = ({
           {joinedPlayers.map((player, idx) => (
             <span
               key={`${player}-${idx}`}
-              className={`px-2.5 py-1 rounded-full text-[10px] font-comfortaa font-bold flex items-center gap-1.5 shadow-xs ${
+              className={`px-3 py-1 rounded-full text-[11px] font-comfortaa font-bold flex items-center gap-1.5 shadow-xs ${
                 idx === 0
-                  ? 'bg-amber-100 border border-amber-300 text-amber-800'
-                  : 'bg-pink-100 border border-pink-200 text-[#FF4D6D]'
+                  ? 'bg-[#FEF9C3] border border-[#FDE047] text-[#B45309]'
+                  : 'bg-[#FFEBF1] border border-[#FCD2DF] text-[#FF3366]'
               }`}
             >
               {idx === 0 ? (
-                <Crown className="w-3 h-3 text-amber-500 fill-amber-400" />
+                <Crown className="w-3 h-3 text-[#F59E0B] fill-[#F59E0B]" />
               ) : (
                 <MonaBunnyMascot mood="happy" size={16} showAura={false} />
               )}
@@ -184,26 +186,26 @@ export const HostArenaView: React.FC<HostArenaViewProps> = ({
           ))}
 
           {joinedPlayers.length < config.maxPlayers && (
-            <span className="px-2.5 py-0.5 rounded-full text-[9px] font-comfortaa font-bold bg-pink-50 border border-pink-200/60 text-[#574144] flex items-center gap-1">
-              <Bot className="w-2.5 h-2.5 text-[#FF4D6D]" />
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-comfortaa font-bold bg-[#FFF0F4] border border-[#FCD2DF] text-[#795B6B] flex items-center gap-1">
+              <Bot className="w-3 h-3 text-[#FF3366]" />
               <span>+ {config.maxPlayers - joinedPlayers.length} AI Auto-Fill</span>
             </span>
           )}
         </div>
       </div>
 
-      {/* 5. PRIMARY CTA START BUTTON (Juicy 3D Mochi Pill) */}
-      <div className="w-full flex-shrink-0 pt-1">
+      {/* 5. PRIMARY CTA START BUTTON (Juicy 3D Coral Button Matching Figma) */}
+      <div className="w-full max-w-[365px] flex-shrink-0 pt-1 pb-1">
         <button
           type="button"
           onClick={handleStart}
-          className="relative w-full h-[54px] rounded-full bg-gradient-to-b from-[#FF758F] via-[#FA436C] to-[#E61E4F] text-white shadow-[0_5px_0_0_#A81B3F,0_10px_20px_rgba(230,30,79,0.3)] active:translate-y-1 active:shadow-[0_1px_0_0_#A81B3F] transition-all flex items-center justify-center gap-2 px-5 cursor-pointer group"
+          className="w-full h-13 sm:h-14 rounded-[22px] sm:rounded-[24px] bg-[#FF5C7A] text-white border-b-[5px] border-[#D81B60] shadow-[0_10px_25px_rgba(255,92,122,0.38)] hover:brightness-105 active:translate-y-1 active:border-b-[2px] transition-all flex items-center justify-center gap-2 cursor-pointer font-comfortaa font-black text-sm sm:text-base tracking-wider uppercase select-none group px-4"
         >
-          <Flame className="w-5 h-5 fill-white text-white group-hover:scale-110 transition-transform animate-bounce" />
-          <span className="font-comfortaa font-black text-sm tracking-wider uppercase drop-shadow-sm">
+          <Flame className="w-5 h-5 fill-white text-white group-hover:scale-110 transition-transform animate-bounce flex-shrink-0" />
+          <span className="truncate">
             {language === 'id'
-              ? `MULAI PERTANDINGAN (${config.maxPlayers || 16} PEMAIN)`
-              : `START BATTLE (${config.maxPlayers || 16} PLAYERS)`}
+              ? `MULAI PERTANDINGAN (${config.maxPlayers || 16}P)`
+              : `START BATTLE (${config.maxPlayers || 16}P)`}
           </span>
         </button>
       </div>
