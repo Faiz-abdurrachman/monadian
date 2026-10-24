@@ -10,13 +10,16 @@
 
 ---
 
-## 🚀 Tautan Live & Demo Panggung
+## 🚀 Live Deployment & Monad Testnet Contracts
 
-| Akses | Alamat / URL | Keterangan |
+| Komponen | Alamat / Tautan | Keterangan |
 |---|---|---|
-| **Wi-Fi Lokal Panggung** | `http://192.168.1.114:3000` | Khusus Juri & Audiens GIK UGM |
-| **Public Live Tunnel** | `https://guarantees-gage-width-shelf.trycloudflare.com` | Akses Global (Scan via Tombol QR di Web) |
+| **Live Web App** | [https://monadian.vercel.app](https://monadian.vercel.app) | Production Hosted on Vercel |
+| **MonadianGame (Core)** | [`0xC9fC8beA27bB568105e36fc16FbA73Db7F6FA423`](https://testnet.monadexplorer.com/address/0xC9fC8beA27bB568105e36fc16FbA73Db7F6FA423) | Game Orchestrator, Rounds & Elimination |
+| **MonadianCombat** | [`0xE8c07DDcC61C2880b89Edd6633F96F5210a0f64B`](https://testnet.monadexplorer.com/address/0xE8c07DDcC61C2880b89Edd6633F96F5210a0f64B) | Asynchronous Combat Inbox (0 State Contention) |
+| **MonadianVault** | [`0xb84bAC0fD5bA009ecF6C414CDA481D3623E5333F`](https://testnet.monadexplorer.com/address/0xb84bAC0fD5bA009ecF6C414CDA481D3623E5333F) | Escrow & Automated Prize Distribution |
 | **Monad Testnet Chain ID** | `10143` | RPC: `https://testnet-rpc.monad.xyz` |
+| **Active Demo Round** | `Round #1` | Live on-chain status: ACTIVE |
 
 ---
 

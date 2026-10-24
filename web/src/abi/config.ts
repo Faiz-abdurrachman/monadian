@@ -26,8 +26,8 @@ export const monadTestnet = defineChain({
 });
 
 export const CONTRACT_ADDRESSES = {
-  // Alamat default atau placeholder yang bisa di-override via env / deploy script
-  combat: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
-  vault: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
-  game: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
+  // Live Monad Testnet (Chain ID 10143)
+  combat: '0xE8c07DDcC61C2880b89Edd6633F96F5210a0f64B',
+  vault: '0xb84bAC0fD5bA009ecF6C414CDA481D3623E5333F',
+  game: '0xC9fC8beA27bB568105e36fc16FbA73Db7F6FA423',
 };
