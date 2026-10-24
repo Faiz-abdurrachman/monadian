@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en" style="width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#FFF8F7" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>BlitzGrid — The Monad Puzzle Royale</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&family=Fredoka:wght@400;500;600;700&family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <script>
+      // Global error listener to prevent silent white screen on iOS / Safari
+      window.addEventListener('error', function(e) {
+        console.error("BlitzGrid Startup Error:", e.message, e.filename, e.lineno);
+        var root = document.getElementById('root');
+        if (root && (!root.children || root.children.length === 0)) {
+          root.innerHTML = '<div style="color:#2F121A;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#FFF8F7;font-family:sans-serif;text-align:center;padding:20px;">' +
+            '<div style="font-size:32px;margin-bottom:12px;">🌸</div>' +
+            '<h2 style="color:#FF4D6D;margin:0 0 8px;">BLITZGRID</h2>' +
+            '<p style="color:#574144;font-size:13px;max-width:280px;line-height:1.4;">Memuat sistem game Monad... Silakan ketuk tombol di bawah jika layar belum muncul.</p>' +
+            '<button onclick="location.reload()" style="margin-top:16px;background:linear-gradient(to right,#FF758F,#FF4D6D);color:white;font-weight:bold;border:none;padding:10px 24px;border-radius:12px;font-size:14px;cursor:pointer;">Muat Ulang (Reload)</button>' +
+          '</div>';
+        }
+      });
+    </script>
+  </head>
+  <body class="bg-[#FFF8F7] select-none overflow-hidden touch-none font-quicksand text-[#2F121A]" style="width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; background-color: #FFF8F7;">
+    <div id="root" style="width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
