@@ -3,7 +3,7 @@ pragma solidity 0.8.26;
 
 import {Test} from "forge-std/Test.sol";
 
-contract BlitzGridBitwiseTest is Test {
+contract MonadianBitwiseTest is Test {
     uint64 private constant ROW_MASK = 0xFF;
     uint64 private constant COL_MASK = 0x0101010101010101;
 

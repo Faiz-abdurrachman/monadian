@@ -1,12 +1,12 @@
 ---
-name: BlitzGrid
+name: Monadian
 created: 2026-10-19
 updated: 2026-10-19
 status: planning
 version: 1.0.0
 ---
 
-# Dokumen Perencanaan & Spesifikasi — BlitzGrid
+# Dokumen Perencanaan & Spesifikasi — Monadian
 
 > **The Monad Puzzle Royale — Fast, Furious, Fully On-Chain.**
 
@@ -16,23 +16,23 @@ version: 1.0.0
 
 | File | Isi & Fungsi |
 | :--- | :--- |
-| **[`INDEX.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/INDEX.md)** | File ini — navigasi utama, status dokumen, quick reference (*Source of Truth*), dan alur baca |
-| **[`ringkasan-30-detik.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/ringkasan-30-detik.md)** | Pitch 30 detik, punchline juri, tagline, metafora visual, dan killer hook |
-| **[`PRD.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/PRD.md)** | *Product Requirements Document*: visi produk, target persona, problem-solution, feature specs, dan metrik sukses |
-| **[`mekanik-game.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/mekanik-game.md)** | Peta mekanik game lengkap: aturan 8x8, katalog balok, sistem kombo, formula Mana, 3 senjata sabotase, target matrix, win/loss, dan custom room |
-| **[`arsitektur-teknis.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/arsitektur-teknis.md)** | Arsitektur sistem: *Asynchronous Combat Inbox Pattern*, *uint64 bitwise board state*, zero-popup EIP-7702, dan integrasi event indexing |
-| **[`smart-contracts.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/smart-contracts.md)** | Detail kontrak Solidity lengkap: struct data, mapping, function signature, formula gas, dan pseudocode implementasi |
-| **[`flow-gameplay.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/flow-gameplay.md)** | User journey & flowchart state machine dari connect wallet, session delegation, match finding, live combat, sampai payout pot |
-| **[`kenapa-monad.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/kenapa-monad.md)** | Deep dive mutlak *Why Blockchain & Why Monad*, perbandingan vs Ethereum/Base/Solana, legal framing esports (anti-judol), dan bantahan kritik juri |
-| **[`roadmap.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/roadmap.md)** | Action plan 2 bulan build menuju demo 24 Oktober 2026 di GIK UGM (fase contract, game engine Pixi.js, UI/UX, playtesting, dan demo pitch) |
-| **[`biaya.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/biaya.md)** | Estimasi biaya development, gas fee per match, sponsorship revenue model, dan token burn economics |
-| **[`presentasi.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/presentasi.md)** | Pitch deck 3 menit untuk juri Monad Blitz Jogja di GIK UGM (Slide 1–10 + naskah demo 30 detik WOW factor) |
+| **[`INDEX.md`](file:///home/faiz/hackaton/monad/volume2/monadian/INDEX.md)** | File ini — navigasi utama, status dokumen, quick reference (*Source of Truth*), dan alur baca |
+| **[`ringkasan-30-detik.md`](file:///home/faiz/hackaton/monad/volume2/monadian/ringkasan-30-detik.md)** | Pitch 30 detik, punchline juri, tagline, metafora visual, dan killer hook |
+| **[`PRD.md`](file:///home/faiz/hackaton/monad/volume2/monadian/PRD.md)** | *Product Requirements Document*: visi produk, target persona, problem-solution, feature specs, dan metrik sukses |
+| **[`mekanik-game.md`](file:///home/faiz/hackaton/monad/volume2/monadian/mekanik-game.md)** | Peta mekanik game lengkap: aturan 8x8, katalog balok, sistem kombo, formula Mana, 3 senjata sabotase, target matrix, win/loss, dan custom room |
+| **[`arsitektur-teknis.md`](file:///home/faiz/hackaton/monad/volume2/monadian/arsitektur-teknis.md)** | Arsitektur sistem: *Asynchronous Combat Inbox Pattern*, *uint64 bitwise board state*, zero-popup EIP-7702, dan integrasi event indexing |
+| **[`smart-contracts.md`](file:///home/faiz/hackaton/monad/volume2/monadian/smart-contracts.md)** | Detail kontrak Solidity lengkap: struct data, mapping, function signature, formula gas, dan pseudocode implementasi |
+| **[`flow-gameplay.md`](file:///home/faiz/hackaton/monad/volume2/monadian/flow-gameplay.md)** | User journey & flowchart state machine dari connect wallet, session delegation, match finding, live combat, sampai payout pot |
+| **[`kenapa-monad.md`](file:///home/faiz/hackaton/monad/volume2/monadian/kenapa-monad.md)** | Deep dive mutlak *Why Blockchain & Why Monad*, perbandingan vs Ethereum/Base/Solana, legal framing esports (anti-judol), dan bantahan kritik juri |
+| **[`roadmap.md`](file:///home/faiz/hackaton/monad/volume2/monadian/roadmap.md)** | Action plan 2 bulan build menuju demo 24 Oktober 2026 di GIK UGM (fase contract, game engine Pixi.js, UI/UX, playtesting, dan demo pitch) |
+| **[`biaya.md`](file:///home/faiz/hackaton/monad/volume2/monadian/biaya.md)** | Estimasi biaya development, gas fee per match, sponsorship revenue model, dan token burn economics |
+| **[`presentasi.md`](file:///home/faiz/hackaton/monad/volume2/monadian/presentasi.md)** | Pitch deck 3 menit untuk juri Monad Blitz Jogja di GIK UGM (Slide 1–10 + naskah demo 30 detik WOW factor) |
 
 ---
 
 ## Ringkasan Eksekutif
 
-**BlitzGrid** adalah game *multiplayer grid puzzle battle royale* pertama di dunia yang berjalan sepenuhnya di atas blockchain Monad (*fully on-chain state*). Mengadaptasi mekanik adiktif *Block Blast* (game mobile nomor #1 di dunia) yang ditransformasikan menjadi pertarungan eliminasi massal 16–32 pemain berdurasi 60 detik. 
+**Monadian** adalah game *multiplayer grid puzzle battle royale* pertama di dunia yang berjalan sepenuhnya di atas blockchain Monad (*fully on-chain state*). Mengadaptasi mekanik adiktif *Block Blast* (game mobile nomor #1 di dunia) yang ditransformasikan menjadi pertarungan eliminasi massal 16–32 pemain berdurasi 60 detik. 
 
 Pemain menyusun balok di atas papan 8x8 untuk meledakkan garis dan mengumpulkan *Mempool Mana*. Mana tersebut digunakan untuk meluncurkan serangan sabotase langsung (*Glitch Stones, Toxic Hand, Frost Lock*) ke papan lawan. Pemain yang kehabisan ruang kosong tereliminasi, dan *last player standing* membawa pulang hadiah turnamen secara instan (*atomic settlement*).
 
@@ -71,15 +71,15 @@ Seluruh status papan pemain dienkapsulasi ke dalam **satu variabel `uint64` (64-
 ## Alur Pembacaan yang Disarankan
 
 1. **Untuk Memahami Visi & Pitch (10 Menit):**
-   * Baca [`ringkasan-30-detik.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/ringkasan-30-detik.md) → Menguasai punchline & konsep.
-   * Baca [`kenapa-monad.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/kenapa-monad.md) → Menguasai argumen "Kenapa Blockchain & Kenapa Monad" serta bantahan juri.
+   * Baca [`ringkasan-30-detik.md`](file:///home/faiz/hackaton/monad/volume2/monadian/ringkasan-30-detik.md) → Menguasai punchline & konsep.
+   * Baca [`kenapa-monad.md`](file:///home/faiz/hackaton/monad/volume2/monadian/kenapa-monad.md) → Menguasai argumen "Kenapa Blockchain & Kenapa Monad" serta bantahan juri.
 2. **Untuk Memahami Desain Game & User Flow (20 Menit):**
-   * Baca [`PRD.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/PRD.md) → Memahami kebutuhan produk & user persona.
-   * Baca [`mekanik-game.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/mekanik-game.md) → Membedah aturan main, balok, kombo, dan formula senjata.
-   * Baca [`flow-gameplay.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/flow-gameplay.md) → Menelusuri alur layar dan state machine dari awal hingga payout.
+   * Baca [`PRD.md`](file:///home/faiz/hackaton/monad/volume2/monadian/PRD.md) → Memahami kebutuhan produk & user persona.
+   * Baca [`mekanik-game.md`](file:///home/faiz/hackaton/monad/volume2/monadian/mekanik-game.md) → Membedah aturan main, balok, kombo, dan formula senjata.
+   * Baca [`flow-gameplay.md`](file:///home/faiz/hackaton/monad/volume2/monadian/flow-gameplay.md) → Menelusuri alur layar dan state machine dari awal hingga payout.
 3. **Untuk Mengimplementasikan Kode & Kontrak (Teknis Dev):**
-   * Baca [`arsitektur-teknis.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/arsitektur-teknis.md) → Pahami arsitektur *Combat Inbox* & paralelisme Monad.
-   * Baca [`smart-contracts.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/smart-contracts.md) → Pahami struktur data, ABI, dan kode Solidity Foundry.
-   * Baca [`roadmap.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/roadmap.md) & [`biaya.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/biaya.md) → Rencana pengerjaan 8 minggu dan budget operasional.
+   * Baca [`arsitektur-teknis.md`](file:///home/faiz/hackaton/monad/volume2/monadian/arsitektur-teknis.md) → Pahami arsitektur *Combat Inbox* & paralelisme Monad.
+   * Baca [`smart-contracts.md`](file:///home/faiz/hackaton/monad/volume2/monadian/smart-contracts.md) → Pahami struktur data, ABI, dan kode Solidity Foundry.
+   * Baca [`roadmap.md`](file:///home/faiz/hackaton/monad/volume2/monadian/roadmap.md) & [`biaya.md`](file:///home/faiz/hackaton/monad/volume2/monadian/biaya.md) → Rencana pengerjaan 8 minggu dan budget operasional.
 4. **Untuk Hari-H Demo Hackathon di GIK UGM:**
-   * Buka [`presentasi.md`](file:///home/faiz/hackaton/monad/volume2/blitzgrid/presentasi.md) → Naskah slide dan skrip demo 30 detik *live match*.
+   * Buka [`presentasi.md`](file:///home/faiz/hackaton/monad/volume2/monadian/presentasi.md) → Naskah slide dan skrip demo 30 detik *live match*.

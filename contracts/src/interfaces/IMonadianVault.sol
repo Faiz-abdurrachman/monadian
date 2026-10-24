@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 
-interface IBlitzGridVault {
+interface IMonadianVault {
     event PrizeDistributed(
         uint256 indexed roundId,
         address indexed champion,

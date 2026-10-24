@@ -1,5 +1,5 @@
 /**
- * Web Audio Synthesizer untuk BlitzGrid SFX Block Blast (Juicy, Bubbly & Tactile)
+ * Web Audio Synthesizer untuk Monadian SFX Block Blast (Juicy, Bubbly & Tactile)
  * 100% prosedural tanpa download asset eksternal.
  */
 

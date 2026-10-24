@@ -177,7 +177,7 @@ export const Board3D = forwardRef<Board3DHandle, Board3DProps>(({
       {/* ==================================================================== */}
       <div
         ref={containerRef}
-        id="blitzgrid-board-2d"
+        id="monadian-board-2d"
         className={`relative w-full h-full p-2 sm:p-3 bg-[#FFF8FA] rounded-[28px] sm:rounded-[36px] border-4 border-pink-200/90 shadow-[0_10px_35px_rgba(255,175,190,0.35)] flex items-center justify-center pointer-events-none select-none z-10 transition-transform ${
           isShaking ? 'animate-[boardShock_350ms_ease-in-out]' : ''
         }`}

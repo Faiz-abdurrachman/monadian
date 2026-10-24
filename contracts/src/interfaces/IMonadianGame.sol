@@ -3,7 +3,7 @@ pragma solidity 0.8.26;
 
 import {PlayerState, RoundConfig} from "../Structs.sol";
 
-interface IBlitzGridGame {
+interface IMonadianGame {
     event RoundCreated(uint256 indexed roundId, uint16 maxPlayers, uint256 entryFee);
     event PlayerJoined(uint256 indexed roundId, address indexed player);
     event RoundStarted(uint256 indexed roundId, bytes32 seed, uint32 startTime);

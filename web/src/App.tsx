@@ -808,7 +808,7 @@ export function App() {
   // Expose developer & demo automation tools on window
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      (window as any).__blitzgrid = {
+      const api = {
         setMana: (m: number) => setMana(m),
         simulateAttack: (type: WeaponType, senderName: string) => {
           setPendingAttacks((p) => [
@@ -825,6 +825,8 @@ export function App() {
         },
         dropPiece: (x: number, y: number, slot: number) => handleDropPiece(x, y, slot),
       };
+      (window as any).__monadian = api;
+      (window as any).__blitzgrid = api;
     }
   }, [board, sabotageMask, pendingAttacks, used, pieces]);
 
@@ -919,7 +921,7 @@ export function App() {
 
               <div>
                 <h2 className="font-comfortaa font-bold text-2xl text-[#2F121A] tracking-tight">
-                  BLITZGRID
+                  MONADIAN
                 </h2>
                 <p className="text-xs text-[#574144] mt-0.5 font-medium leading-relaxed">
                   100% On-Chain Puzzle Royale

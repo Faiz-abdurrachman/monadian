@@ -1,4 +1,4 @@
-# Analisis Biaya, Gas & Model Ekonomi — BlitzGrid
+# Analisis Biaya, Gas & Model Ekonomi — Monadian
 
 ---
 
@@ -8,7 +8,7 @@ Sebagai proyek berstandar produksi yang dibangun untuk hackathon dan dilanjutkan
 
 | Komponen Infrastruktur | Provider / Layanan | Biaya per Bulan | Biaya 2 Bulan (Build) | Keterangan |
 | :--- | :--- | :--- | :--- | :--- |
-| **Domain & DNS** | Cloudflare (`blitzgrid.xyz`) | $12 (sekali bayar) | $12 | Nama domain resmi & proteksi CDN/DDoS |
+| **Domain & DNS** | Cloudflare (`monadian.xyz`) | $12 (sekali bayar) | $12 | Nama domain resmi & proteksi CDN/DDoS |
 | **Frontend Web Hosting** | Vercel Pro / Netlify | $0 (Free Tier cukup) | $0 | Mendukung SSR Next.js & static assets PWA |
 | **Monad Dedicated RPC Node** | QuickNode / Alchemy Monad | $0 (Developer Tier) | $0 | Kuota free tier mencukupi untuk fase testnet |
 | **Event Indexer** | Envio Cloud (HyperIndex) | $0 (Hobbyist Tier) | $0 | Gratis untuk pengindeksan event testnet |
@@ -20,7 +20,7 @@ Sebagai proyek berstandar produksi yang dibangun untuk hackathon dan dilanjutkan
 
 ## 2. Simulasi Konsumsi Gas On-Chain per Pertandingan
 
-Salah satu poin penjualan terbesar BlitzGrid ke juri adalah efisiensi biaya gas on-chain yang sangat ekstrem berkat representasi papan `uint64`.
+Salah satu poin penjualan terbesar Monadian ke juri adalah efisiensi biaya gas on-chain yang sangat ekstrem berkat representasi papan `uint64`.
 
 ### 2.1 Parameter Simulasi 1 Ronde (16 Pemain)
 * Rata-rata gerakan per pemain hingga tereliminasi/menang: **12 – 15 langkah penempatan balok**.
@@ -52,7 +52,7 @@ Salah satu poin penjualan terbesar BlitzGrid ke juri adalah efisiensi biaya gas 
 
 ## 3. Model Pendapatan & Keberlanjutan Ekonomi (Business Model)
 
-BlitzGrid dirancang mandiri tanpa bergantung pada pendanaan ventura spekulatif melalui 3 pilar pendapatan nyata:
+Monadian dirancang mandiri tanpa bergantung pada pendanaan ventura spekulatif melalui 3 pilar pendapatan nyata:
 
 ### 3.1 Biaya Protokol Turnamen (5% Bracket Rake / Burn)
 * Dari setiap lobi berbayar (*Ranked Bracket*), 95% tiket dialokasikan untuk hadiah pemain (65% Juara 1, 20% Juara 2, 10% Juara 3).

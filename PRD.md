@@ -1,19 +1,19 @@
-# Product Requirements Document (PRD) — BlitzGrid
+# Product Requirements Document (PRD) — Monadian
 
 ---
 
 ## 1. Executive Summary & Product Vision
 
 ### 1.1 Visi Produk
-Menjadikan **BlitzGrid** sebagai gerbang adopsi massal (*consumer onboarding funnel*) terdepan di ekosistem Monad melalui game teka-teki kompetitif berbasis ketangkasan murni (*skill-based esports*). BlitzGrid membuktikan keunggulan arsitektur eksekusi paralel Monad bukan lewat grafik teknis yang membosankan, melainkan melalui pengalaman bermain 16–32 pemain sinkron berdurasi 60 detik yang cepat, mulus, dan adiktif di perangkat seluler.
+Menjadikan **Monadian** sebagai gerbang adopsi massal (*consumer onboarding funnel*) terdepan di ekosistem Monad melalui game teka-teki kompetitif berbasis ketangkasan murni (*skill-based esports*). Monadian membuktikan keunggulan arsitektur eksekusi paralel Monad bukan lewat grafik teknis yang membosankan, melainkan melalui pengalaman bermain 16–32 pemain sinkron berdurasi 60 detik yang cepat, mulus, dan adiktif di perangkat seluler.
 
 ### 1.2 Masalah Pasar (Problem Statement)
 1. **Game Web3 Membosankan & Berpenghalang Tinggi:** Kebanyakan game Web3 menuntut instalasi dompet yang rumit, pembelian NFT mahal di muka, atau memiliki alur giliran yang lambat (*sluggish turn-based*).
 2. **Ketiadaan Mode Multipemain pada Game Puzzle Populer:** Game nomor #1 di dunia saat ini, *Block Blast*, dimainkan oleh ratusan juta orang secara solo offline tanpa ada elemen kompetisi langsung antar-pemain.
 3. **Keterbatasan Rantai EVM Sekuensial:** Pada blockchain Ethereum atau L2 biasa, pembuatan game multiplayer dengan 16 orang yang berinteraksi dalam interval sub-detik akan menyebabkan kemacetan penyimpanan (*state contention*) dan lonjakan biaya gas yang mustahil ditanggung pemain kasual.
 
-### 1.3 Solusi BlitzGrid
-BlitzGrid menggabungkan mekanik intuitif penempatan balok 8x8 dengan sistem sabotase multipemain battle royale, di mana kombo garis menghasilkan amunisi untuk mengunci ruang lawan. Game ini berjalan 100% di atas Monad EVM menggunakan status papan 64-bit dan arsitektur *Asynchronous Combat Inbox*, disajikan dalam antarmuka PWA Pixi.js ultra-ringan dengan *zero pop-up wallet* berkat delegasi EIP-7702.
+### 1.3 Solusi Monadian
+Monadian menggabungkan mekanik intuitif penempatan balok 8x8 dengan sistem sabotase multipemain battle royale, di mana kombo garis menghasilkan amunisi untuk mengunci ruang lawan. Game ini berjalan 100% di atas Monad EVM menggunakan status papan 64-bit dan arsitektur *Asynchronous Combat Inbox*, disajikan dalam antarmuka PWA Pixi.js ultra-ringan dengan *zero pop-up wallet* berkat delegasi EIP-7702.
 
 ---
 
@@ -23,13 +23,13 @@ BlitzGrid menggabungkan mekanik intuitif penempatan balok 8x8 dengan sistem sabo
 * **Karakter:** Berusia 18–25 tahun, terbiasa main Block Blast / Candy Crush di sela-sela jam kuliah atau nongkrong di kafe.
 * **Kebutuhan:** Game yang bisa dimainkan instan di browser HP tanpa install aplikasi berat, ronde cepat di bawah 1 menit, dan bisa mabar bareng teman satu meja.
 * **Pain Point Web3:** Malas bikin dompet kripto, takut ketipu (*phishing*), benci pop-up konfirmasi.
-* **Solusi BlitzGrid:** Cukup login 1 klik pakai akun Google via Privy, langsung masuk arena latihan gratis atau turnamen 500 perak tanpa rasa ribet Web3.
+* **Solusi Monadian:** Cukup login 1 klik pakai akun Google via Privy, langsung masuk arena latihan gratis atau turnamen 500 perak tanpa rasa ribet Web3.
 
 ### Persona B: "The Monad Degen / Competitor" (Web3 Native Gamer)
 * **Karakter:** Pemegang token MON aktif, sering mencoba dApp baru di Testnet/Mainnet Monad, menyukai taruhan ketangkasan (*skill-gaming*) dan kompetisi leaderboard.
 * **Kebutuhan:** Membuktikan kehebatan mekanik Monad (transaksi cepat, gas murah), membungkus prize pool harian dari sponsor protokol.
 * **Pain Point Web3:** Muak dengan game ponzi yang tokennya dump dalam 3 hari.
-* **Solusi BlitzGrid:** Pot hadiah atomik transparan, sistem anti-cheat deterministik on-chain, dan turnamen harian bersponsor resmi.
+* **Solusi Monadian:** Pot hadiah atomik transparan, sistem anti-cheat deterministik on-chain, dan turnamen harian bersponsor resmi.
 
 ---
 
@@ -49,7 +49,7 @@ BlitzGrid menggabungkan mekanik intuitif penempatan balok 8x8 dengan sistem sabo
 * **External Wallet Connector:** Opsi koneksi MetaMask, Rabby, Phantom, dan WalletConnect untuk pengguna Web3 native.
 * **EIP-7702 / Session Key Delegation:**
   * Kontrak pendelegasian sesi memberikan izin sementara (*ephemeral key*) di memori browser untuk menandatangani transaksi langkah balok dan jurus sabotase selama 1 ronde (maksimal 120 detik).
-  * Batas pengeluaran gas dan fungsi dikunci ketat hanya pada kontrak `BlitzGridGame.sol`.
+  * Batas pengeluaran gas dan fungsi dikunci ketat hanya pada kontrak `MonadianGame.sol`.
 
 ### 4.2 Modul Game Engine & Rendering (Frontend)
 * **Rendering Engine:** Pixi.js (WebGL / HTML5 Canvas 2D) dengan target performa **60 FPS stabil di smartphone mid-range ke bawah**.

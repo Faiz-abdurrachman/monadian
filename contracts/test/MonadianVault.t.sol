@@ -2,10 +2,10 @@
 pragma solidity 0.8.26;
 
 import {Test} from "forge-std/Test.sol";
-import {BlitzGridVault} from "../src/BlitzGridVault.sol";
+import {MonadianVault} from "../src/MonadianVault.sol";
 
-contract BlitzGridVaultTest is Test {
-    BlitzGridVault public vault;
+contract MonadianVaultTest is Test {
+    MonadianVault public vault;
     address public gameContract = address(0x9999);
     address public champion = address(0x1111);
     address public runnerUp = address(0x2222);
@@ -13,7 +13,7 @@ contract BlitzGridVaultTest is Test {
     address public constant BURN_ADDRESS = 0x000000000000000000000000000000000000dEaD;
 
     function setUp() public {
-        vault = new BlitzGridVault();
+        vault = new MonadianVault();
         vault.setGameContract(gameContract);
     }
 

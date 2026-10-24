@@ -1,4 +1,4 @@
-# Rencana Eksekusi & Roadmap 2 Bulan — BlitzGrid
+# Rencana Eksekusi & Roadmap 2 Bulan — Monadian
 
 ---
 
@@ -24,7 +24,7 @@ Total waktu pengembangan adalah **2 Bulan Penuh (8 Minggu)**, dengan target pent
 ### Minggu 1: Kontrak Inti & Prototipe Demo Hackathon (19 – 24 Oktober 2026)
 * **Fokus Utama:** Menyelesaikan logika matematika bitwise di Foundry dan prototipe web playable untuk dipresentasikan di Monad Blitz Jogja (24 Oktober).
 * **Deliverables:**
-  * Kontrak `BlitzGridGame.sol` dengan logika bitwise `uint64` dan deteksi baris/kolom.
+  * Kontrak `MonadianGame.sol` dengan logika bitwise `uint64` dan deteksi baris/kolom.
   * Unit test Foundry dengan cakupan pengujian tabrakan balok 100%.
   * Deploy kontrak ke Monad Testnet (Chain ID `10143`).
   * Prototipe frontend fungsional: 1 papan 8x8 yang bisa ditaruh balok dan meledakkan garis di browser HP.
@@ -45,7 +45,7 @@ Total waktu pengembangan adalah **2 Bulan Penuh (8 Minggu)**, dengan target pent
 ### Minggu 3: Sistem Tempur Asinkron & 3 Senjata Sabotase (02 – 08 November 2026)
 * **Fokus Utama:** Mengimplementasikan pola tempur *Asynchronous Combat Inbox* dan 3 senjata sabotase.
 * **Deliverables:**
-  * Kontrak `BlitzGridCombat.sol` dengan antrean inbox per pemain.
+  * Kontrak `MonadianCombat.sol` dengan antrean inbox per pemain.
   * Mekanik peluncuran dan penerapan: *Glitch Stone* (batu kerikil), *Toxic Hand* (kutukan 3x3), dan *Frost Lock* (pembekuan petak).
   * Antarmuka HUD pemilih senjata dan integrasi *Mempool Mana Bar*.
 * **DoD:** Pemain A bisa menembakkan Glitch Stone ke Pemain B, dan batu tersebut muncul di giliran Pemain B secara deterministik tanpa tabrakan memori validator.
@@ -96,7 +96,7 @@ Total waktu pengembangan adalah **2 Bulan Penuh (8 Minggu)**, dengan target pent
 ### Minggu 8: Turnamen Publik Testnet & Kesiapan Mainnet (07 – 14 Desember 2026)
 * **Fokus Utama:** Peluncuran kampanye turnamen publik bersama komunitas Monad global.
 * **Deliverables:**
-  * Gelaran *BlitzGrid Community Cup #1* berhadiah total 500 MON sponsor.
+  * Gelaran *Monadian Community Cup #1* berhadiah total 500 MON sponsor.
   * Integrasi fitur *Share Victory Card* ke X dan Farcaster.
   * Finalisasi dokumentasi arsitektur dan kesiapan deployment ke Monad Mainnet.
 * **DoD:** Mencapai 1.000+ pengguna aktif unik dan 10.000+ transaksi on-chain tervalidasi dalam minggu pertama kompetisi terbuka.

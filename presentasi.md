@@ -1,4 +1,4 @@
-# Panduan Presentasi & Pitch Deck 3 Menit — BlitzGrid
+# Panduan Presentasi & Pitch Deck 3 Menit — Monadian
 
 > **Event:** Monad Blitz Jogja Vol. 2  
 > **Lokasi:** GIK Universitas Gadjah Mada (UGM), Yogyakarta  
@@ -10,9 +10,9 @@
 ## 1. Struktur Slide Pitch Deck (10 Slide)
 
 ```
-[ Slide 01: The Cover ] ──────> Logo BlitzGrid: The Monad Puzzle Royale
+[ Slide 01: The Cover ] ──────> Logo Monadian: The Monad Puzzle Royale
 [ Slide 02: The Hook ] ───────> 100 Juta Orang Main Block Blast Solo di HP
-[ Slide 03: The Solution ] ───> BlitzGrid: Battle Royale Puzzle 16P On-Chain
+[ Slide 03: The Solution ] ───> Monadian: Battle Royale Puzzle 16P On-Chain
 [ Slide 04: The Core Loop ] ──> Susun Balok, Cetak Kombo, Lempar Batu Sabotase!
 [ Slide 05: The Tech Feat ] ──> Inovasi uint64 & Asynchronous Combat Inbox Pattern
 [ Slide 06: LIVE DEMO (30s) ] > Scan QR di Layar: 1 Ronde Penuh 16 Pemain Live!
@@ -27,10 +27,10 @@
 ## 2. Naskah Presentasi per Slide (Script 3 Menit)
 
 ### Slide 1: Cover (Waktu: 00:00 – 00:15)
-* **Visual:** Logo neon cyberpunk BlitzGrid dengan latar belakang papan 8x8 bercahaya ungu Monad.
+* **Visual:** Logo neon cyberpunk Monadian dengan latar belakang papan 8x8 bercahaya ungu Monad.
 * **Naskah:**  
   > *"Selamat pagi/siang rekan-rekan dan para juri Monad Blitz Jogja!  
-  > Saya Faiz, dan hari ini kami mempersembahkan **BlitzGrid**: game Battle Royale puzzle 16 pemain on-chain pertama di dunia, yang dirancang khusus untuk membuktikan kedahsyatan arsitektur Monad!"*
+  > Saya Faiz, dan hari ini kami mempersembahkan **Monadian**: game Battle Royale puzzle 16 pemain on-chain pertama di dunia, yang dirancang khusus untuk membuktikan kedahsyatan arsitektur Monad!"*
 
 ---
 
@@ -46,7 +46,7 @@
 ### Slide 3: The Solution (Waktu: 00:40 – 01:05)
 * **Visual:** Tampilan mockup HP: Papan 8x8 di tengah, dikelilingi 15 papan mini musuh yang memancarkan garis laser serangan.
 * **Naskah:**  
-  > *"Inilah solusi kami: **BlitzGrid**.  
+  > *"Inilah solusi kami: **Monadian**.  
   > Kami mengubah mekanik adiktif Block Blast menjadi ajang adu ketangkasan Battle Royale 16 pemain berdurasi 60 detik.  
   > Setiap pemain menata balok di papan 8x8 miliknya. Saat kamu mencetak kombo, kamu mengumpulkan Mempool Mana untuk menembakkan batu sabotase ke papan lawan! Lawan yang kehabisan ruang kosong akan tereliminasi, dan Last Player Standing membawa pulang hadiah turnamen dalam hitungan milidetik."*
 
@@ -81,7 +81,7 @@
 ### Slide 7 & 8: Legalitas & Framing Esports (Waktu: 02:25 – 02:45)
 * **Visual:** Sertifikasi Game of Skill vs Game of Chance, dan 3 tier turnamen (Free Practice, Sponsored Cups, Ranked Bracket).
 * **Naskah:**  
-  > *"Dan yang paling penting di lingkungan kampus UGM: **BlitzGrid 100% Game of Skill (Bukan Judi).**  
+  > *"Dan yang paling penting di lingkungan kampus UGM: **Monadian 100% Game of Skill (Bukan Judi).**  
   > Kemenangan ditentukan murni oleh ketangkasan spasial dan kecepatan otak, setara dengan turnamen catur kilat atau esports resmi. Kami juga menyediakan arena gratis dan turnamen bersponsor protokol di mana pemain bisa bertanding tanpa menyetor uang sepeser pun."*
 
 ---
@@ -89,9 +89,9 @@
 ### Slide 9 & 10: Closing & Visi Masa Depan (Waktu: 02:45 – 03:00)
 * **Visual:** Roadmap 2 bulan menuju mainnet dan QR code playable demo.
 * **Naskah:**  
-  > *"BlitzGrid bukan cuma proyek hackathon 1 hari. Kami memiliki roadmap 2 bulan yang terukur untuk meluncurkan kompetisi komunitas terbuka hingga kesiapan Mainnet Monad.  
+  > *"Monadian bukan cuma proyek hackathon 1 hari. Kami memiliki roadmap 2 bulan yang terukur untuk meluncurkan kompetisi komunitas terbuka hingga kesiapan Mainnet Monad.  
   > Papan 8x8. Detak 400 milidetik. 16 pemain.  
-  > Mari kita buktikan kekuatan eksekusi paralel Monad kepada jutaan pengguna mobile dunia bersama BlitzGrid.  
+  > Mari kita buktikan kekuatan eksekusi paralel Monad kepada jutaan pengguna mobile dunia bersama Monadian.  
   > Terima kasih! Kami siap menjawab pertanyaan para juri."*
 
 ---

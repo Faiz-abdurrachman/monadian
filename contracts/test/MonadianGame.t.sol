@@ -2,25 +2,25 @@
 pragma solidity 0.8.26;
 
 import {Test} from "forge-std/Test.sol";
-import {BlitzGridGame} from "../src/BlitzGridGame.sol";
-import {BlitzGridCombat} from "../src/BlitzGridCombat.sol";
-import {BlitzGridVault} from "../src/BlitzGridVault.sol";
-import {BlitzGridPieces} from "../src/BlitzGridPieces.sol";
+import {MonadianGame} from "../src/MonadianGame.sol";
+import {MonadianCombat} from "../src/MonadianCombat.sol";
+import {MonadianVault} from "../src/MonadianVault.sol";
+import {MonadianPieces} from "../src/MonadianPieces.sol";
 import {RoundConfig, RoundStatus, PlayerState, AttackType} from "../src/Structs.sol";
 
-contract BlitzGridGameTest is Test {
-    BlitzGridGame public game;
-    BlitzGridCombat public combat;
-    BlitzGridVault public vault;
+contract MonadianGameTest is Test {
+    MonadianGame public game;
+    MonadianCombat public combat;
+    MonadianVault public vault;
 
     address public player1 = address(0x1111);
     address public player2 = address(0x2222);
 
     function setUp() public {
-        combat = new BlitzGridCombat();
-        vault = new BlitzGridVault();
+        combat = new MonadianCombat();
+        vault = new MonadianVault();
 
-        game = new BlitzGridGame(address(combat), address(vault));
+        game = new MonadianGame(address(combat), address(vault));
 
         combat.setGameContract(address(game));
         vault.setGameContract(address(game));
@@ -70,7 +70,7 @@ contract BlitzGridGameTest is Test {
         game.makeMove(roundId, 0, 0, 0);
 
         PlayerState memory p1 = game.getPlayerState(roundId, player1);
-        uint64 expectedMask = BlitzGridPieces.getMaskAt(pieceId0, 0, 0);
+        uint64 expectedMask = MonadianPieces.getMaskAt(pieceId0, 0, 0);
         assertEq(p1.board, expectedMask);
         assertEq(p1.score, 5); // 5 poin untuk penempatan tanpa line clear
 

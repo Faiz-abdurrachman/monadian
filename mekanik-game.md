@@ -1,4 +1,4 @@
-# Peta Mekanik Game Lengkap — BlitzGrid
+# Peta Mekanik Game Lengkap — Monadian
 
 ---
 
@@ -80,7 +80,7 @@ Segera setelah balok diletakkan secara sah, sistem memeriksa seluruh 8 baris dan
 
 ## 4. Sistem Kombo Beruntun & Mesin Energi (Mempool Mana Engine)
 
-Kombo adalah kunci kemenangan di BlitzGrid. Bukan sekadar mengejar skor pasif, kombo adalah penghasil **Mempool Mana** untuk mengisi amunisi senjata sabotase.
+Kombo adalah kunci kemenangan di Monadian. Bukan sekadar mengejar skor pasif, kombo adalah penghasil **Mempool Mana** untuk mengisi amunisi senjata sabotase.
 
 ### 4.1 Mekanika Combo Streak
 * **Combo Counter Bertambah (+1):** Jika penempatan balok secara berurutan menghasilkan minimal 1 garis yang meledak.

@@ -1,12 +1,12 @@
-# ⚡ BLITZGRID — The Monad Puzzle Royale
+# ⚡ MONADIAN — The Monad Puzzle Royale
 
 > **Pemenang Potensial Monad Blitz Jogja Vol. 2 (24 Oktober 2026, GIK UGM)**  
 > *Game Battle Royale Block Blast 16 Pemain 100% On-Chain Pertama di Dunia dengan Waktu Eksekusi 400ms Monad.*
 
 [![Monad Testnet](https://img.shields.io/badge/Monad-Testnet%20(10143)-836ef9?style=for-the-badge&logo=ethereum)](https://testnet.monad.xyz)
-[![Solidity Tests](https://img.shields.io/badge/Foundry-26%2F26%20Passed-emerald?style=for-the-badge&logo=solidity)](file:///home/faiz/hackaton/monad/volume2/blitzgrid/contracts)
-[![FPS](https://img.shields.io/badge/Performance-120%20FPS%20Canvas-cyan?style=for-the-badge)](file:///home/faiz/hackaton/monad/volume2/blitzgrid/web)
-[![EIP-7702](https://img.shields.io/badge/Session%20Key-EIP--7702%20Ready-amber?style=for-the-badge)](file:///home/faiz/hackaton/monad/volume2/blitzgrid/web/src/engine/sessionKey.ts)
+[![Solidity Tests](https://img.shields.io/badge/Foundry-26%2F26%20Passed-emerald?style=for-the-badge&logo=solidity)](file:///home/faiz/hackaton/monad/volume2/monadian/contracts)
+[![FPS](https://img.shields.io/badge/Performance-120%20FPS%20Canvas-cyan?style=for-the-badge)](file:///home/faiz/hackaton/monad/volume2/monadian/web)
+[![EIP-7702](https://img.shields.io/badge/Session%20Key-EIP--7702%20Ready-amber?style=for-the-badge)](file:///home/faiz/hackaton/monad/volume2/monadian/web/src/engine/sessionKey.ts)
 
 ---
 
@@ -20,11 +20,11 @@
 
 ---
 
-## 🎯 Mengapa BlitzGrid? (The Problem & Solution)
+## 🎯 Mengapa Monadian? (The Problem & Solution)
 
 1. **Masalah Web2:** Game santai seperti *Block Blast* diunduh **100+ juta kali** di seluruh dunia dan dimainkan di kafe-kafe setiap hari. Namun, game tersebut **100% solo offline** dan rawan cheat memori jika dibuat turnamen uang.
 2. **Masalah Web3:** Game Web3 selama ini dicap lambat, membosankan, dan merusak flow karena setiap langkah memicu pop-up dompet MetaMask.
-3. **Solusi BlitzGrid:** Membawa mekanik adiktif *Block Blast* menjadi **Battle Royale 16 Pemain 100% On-Chain** di atas Monad! Pemain berlomba menyusun balok, meledakkan kombo, mengumpulkan Mana, dan menembakkan sabotase ke lawan dalam ronde 60 detik.
+3. **Solusi Monadian:** Membawa mekanik adiktif *Block Blast* menjadi **Battle Royale 16 Pemain 100% On-Chain** di atas Monad! Pemain berlomba menyusun balok, meledakkan kombo, mengumpulkan Mana, dan menembakkan sabotase ke lawan dalam ronde 60 detik.
 
 ---
 
@@ -58,11 +58,11 @@ Dalam game 16 pemain yang saling menyerang, jika pemain A menyerang pemain B den
 ```
 contracts/
 ├── src/
-│   ├── BlitzGridBitwise.sol   # Operasi logika uint64 8x8 papan
-│   ├── BlitzGridPieces.sol    # Katalog 19 bentuk bidak poliomino
-│   ├── BlitzGridCombat.sol    # Inbox sabotase anti-state conflict
-│   ├── BlitzGridVault.sol     # Escrow pool hadiah (1.04 MON)
-│   └── BlitzGridGame.sol      # Orkestrator ronde, lifecyle & eliminasi
+│   ├── MonadianBitwise.sol   # Operasi logika uint64 8x8 papan
+│   ├── MonadianPieces.sol    # Katalog 19 bentuk bidak poliomino
+│   ├── MonadianCombat.sol    # Inbox sabotase anti-state conflict
+│   ├── MonadianVault.sol     # Escrow pool hadiah (1.04 MON)
+│   └── MonadianGame.sol      # Orkestrator ronde, lifecyle & eliminasi
 └── test/
     └── *.t.sol                # 26 Unit Test Foundry (100% Lulus)
 ```
@@ -96,6 +96,6 @@ npm run dev
 
 ## 👥 Tim Pengembang
 
-* **Lead Builder & Smart Contract Architect:** Faiz & Tim BlitzGrid
+* **Lead Builder & Smart Contract Architect:** Faiz & Tim Monadian
 * **Event:** Monad Blitz Jogja Vol. 2 — GIK Universitas Gadjah Mada (UGM)
 * **Tanggal:** Sabtu, 24 Oktober 2026

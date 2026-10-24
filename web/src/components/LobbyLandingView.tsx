@@ -99,7 +99,7 @@ export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
           </div>
           <div className="text-left leading-tight">
             <h1 className="font-comfortaa font-bold text-sm text-[#2F121A] tracking-wider uppercase">
-              BLITZGRID
+              MONADIAN
             </h1>
             <button
               onClick={onToggleNetwork}

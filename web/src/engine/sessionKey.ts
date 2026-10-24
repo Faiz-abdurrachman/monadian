@@ -1,5 +1,5 @@
 /**
- * BlitzGrid EIP-7702 Ephemeral Session Key & Viem Client Engine
+ * Monadian EIP-7702 Ephemeral Session Key & Viem Client Engine
  * Menyediakan interaksi tanpa popup MetaMask selama ronde 60 detik.
  */
 
@@ -14,9 +14,9 @@ import {
 } from 'viem';
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
 import { monadTestnet, CONTRACT_ADDRESSES } from '../abi/config';
-import BlitzGridGameArtifact from '../abi/BlitzGridGame.json';
+import MonadianGameArtifact from '../abi/MonadianGame.json';
 
-const SESSION_KEY_STORAGE = 'blitzgrid_ephemeral_session_key';
+const SESSION_KEY_STORAGE = 'monadian_ephemeral_session_key';
 
 export const publicClient = createPublicClient({
   chain: monadTestnet,
@@ -91,7 +91,7 @@ export class SessionKeyManager {
 
   public getUserAddress(): Address | null {
     if (!this.userAddress) {
-      const stored = safeGetItem('blitzgrid_user_address');
+      const stored = safeGetItem('monadian_user_address');
       if (stored && stored.startsWith('0x')) {
         this.userAddress = stored as Address;
       }
@@ -103,7 +103,7 @@ export class SessionKeyManager {
     this.userAddress = null;
     try {
       if (typeof window !== 'undefined' && window.localStorage) {
-        window.localStorage.removeItem('blitzgrid_user_address');
+        window.localStorage.removeItem('monadian_user_address');
       }
     } catch {}
   }
@@ -124,7 +124,7 @@ export class SessionKeyManager {
 
     const [account] = await walletClient.requestAddresses();
     this.userAddress = account;
-    safeSetItem('blitzgrid_user_address', account);
+    safeSetItem('monadian_user_address', account);
 
     // Otomatis cek & beralih/tambahkan Monad Testnet (Chain ID 10143)
     try {
@@ -222,7 +222,7 @@ export class SessionKeyManager {
 
     const hash = await walletClient.writeContract({
       address: CONTRACT_ADDRESSES.game as Address,
-      abi: BlitzGridGameArtifact.abi,
+      abi: MonadianGameArtifact.abi,
       functionName: 'joinRound',
       args: [roundId],
       value: parseEther(entryFeeMon),
@@ -252,7 +252,7 @@ export class SessionKeyManager {
 
     const hash = await sessionWalletClient.writeContract({
       address: CONTRACT_ADDRESSES.game as Address,
-      abi: BlitzGridGameArtifact.abi,
+      abi: MonadianGameArtifact.abi,
       functionName: 'makeMove',
       args: [roundId, pieceSlot, x, y],
     });
@@ -280,7 +280,7 @@ export class SessionKeyManager {
 
     const hash = await sessionWalletClient.writeContract({
       address: CONTRACT_ADDRESSES.game as Address,
-      abi: BlitzGridGameArtifact.abi,
+      abi: MonadianGameArtifact.abi,
       functionName: 'fireSabotage',
       args: [roundId, target, targetBitPosition],
     });
@@ -294,7 +294,7 @@ export class SessionKeyManager {
   public async getPlayerState(roundId: bigint, player: Address) {
     const data = await publicClient.readContract({
       address: CONTRACT_ADDRESSES.game as Address,
-      abi: BlitzGridGameArtifact.abi,
+      abi: MonadianGameArtifact.abi,
       functionName: 'getPlayerState',
       args: [roundId, player],
     });

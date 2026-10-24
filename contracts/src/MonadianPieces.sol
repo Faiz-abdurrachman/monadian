@@ -2,11 +2,11 @@
 pragma solidity 0.8.26;
 
 /**
- * @title BlitzGridPieces
+ * @title MonadianPieces
  * @notice Katalog 19 balok polyomino Block Blast dalam representasi bitwise uint64
  *         lengkap dengan Boundary Guard untuk mencegah bit-wrapping antar-baris.
  */
-library BlitzGridPieces {
+library MonadianPieces {
     uint8 public constant TOTAL_PIECES = 19;
 
     // Piece IDs

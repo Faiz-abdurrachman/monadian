@@ -2,14 +2,14 @@
 pragma solidity 0.8.26;
 
 import {AttackType} from "./Structs.sol";
-import {IBlitzGridCombat} from "./interfaces/IBlitzGridCombat.sol";
+import {IMonadianCombat} from "./interfaces/IMonadianCombat.sol";
 
 /**
- * @title BlitzGridCombat
+ * @title MonadianCombat
  * @notice Pola Asynchronous Combat Inbox: Memisahkan penulisan serangan dari state target
  *         sehingga validator Monad dapat mengeksekusi semua transaksi pemain secara murni paralel.
  */
-contract BlitzGridCombat is IBlitzGridCombat {
+contract MonadianCombat is IMonadianCombat {
     address public gameContract;
 
     // roundId => target => pendingStonesMask (uint64)
@@ -53,7 +53,7 @@ contract BlitzGridCombat is IBlitzGridCombat {
 
     /**
      * @notice Mengonsumsi seluruh serangan masuk yang terkumpul di inbox pemain.
-     * @dev Hanya dapat dipanggil oleh BlitzGridGame saat pemain target mengeksekusi gilirannya.
+     * @dev Hanya dapat dipanggil oleh MonadianGame saat pemain target mengeksekusi gilirannya.
      */
     function consumeInbox(uint256 roundId, address player)
         external

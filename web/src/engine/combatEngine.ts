@@ -1,6 +1,6 @@
 /**
- * BlitzGrid Combat Engine — Asynchronous Combat Inbox & Bot AI Threat System
- * Mengimplementasikan pola 1:1 dari kontrak Solidity BlitzGridCombat.sol
+ * Monadian Combat Engine — Asynchronous Combat Inbox & Bot AI Threat System
+ * Mengimplementasikan pola 1:1 dari kontrak Solidity MonadianCombat.sol
  */
 
 import { isBitSet } from './bitwise';

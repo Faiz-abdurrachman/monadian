@@ -1,6 +1,7 @@
 {
-  "name": "blitzgrid-root",
+  "name": "monadian",
   "private": true,
+  "description": "Monadian - Fast-paced on-chain block-puzzle combat arena on Monad",
   "scripts": {
     "postinstall": "npm --prefix web install",
     "dev": "npm --prefix web run dev",

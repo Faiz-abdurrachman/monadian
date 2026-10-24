@@ -24,7 +24,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('BlitzGrid React Error Boundary:', error, errorInfo);
+    console.error('Monadian React Error Boundary:', error, errorInfo);
   }
 
   render() {
@@ -35,7 +35,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
             🌸
           </div>
           <h1 className="font-comfortaa font-bold text-xl text-[#2F121A] tracking-wider mb-2 uppercase">
-            BLITZGRID MONAD
+            MONADIAN
           </h1>
           <p className="text-[#574144] text-xs max-w-xs mb-5 leading-relaxed font-medium">
             Terjadi kendala saat memuat grafik di perangkat Anda. Ketuk tombol di bawah untuk melanjutkan game.

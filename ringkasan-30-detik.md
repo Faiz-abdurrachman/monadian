@@ -1,11 +1,11 @@
-# Ringkasan 30 Detik — BlitzGrid
+# Ringkasan 30 Detik — Monadian
 
 > **"Bayangkan sensasi adiktif game nomor satu dunia, Block Blast, tapi diubah menjadi Battle Royale 16 pemain on-chain di mana kombo ledakanmu menembakkan batu sabotase ke papan lawan dalam waktu 400 milidetik."**
 
 ---
 
 ## 1. Tagline Resmi
-* **Utama:** *BlitzGrid: The Monad Puzzle Royale.*
+* **Utama:** *Monadian: The Monad Puzzle Royale.*
 * **Slogan Cepat:** *Fast, Furious, Fully On-Chain.*
 * **Sub-Heading:** *Turnamen Ketangkasan Spasial 60 Detik Berbasis Paralelisme MonadBFT.*
 
@@ -16,7 +16,7 @@
 > *"Juri sekalian, apa aplikasi consumer dengan jutaan pengguna harian paling aktif di dunia saat ini? Jawabannya adalah game puzzle mobile Block Blast.*  
 > *Namun di Web2, game ini 100% solo offline tanpa ada elemen kompetisi langsung.*  
 > 
-> *Kami memperkenalkan **BlitzGrid**: game Battle Royale puzzle 16 pemain on-chain pertama di dunia.*  
+> *Kami memperkenalkan **Monadian**: game Battle Royale puzzle 16 pemain on-chain pertama di dunia.*  
 > *Setiap pemain menyusun balok di grid 8x8. Saat kamu mencetak kombo, kamu mengumpulkan Mempool Mana untuk menembakkan batu sabotase ke papan lawan, mempersempit ruang mereka hingga balok mereka tak lagi muat dipasang.*  
 > 
 > *Game ini **mustahil dibangun di Ethereum atau Base** karena interaksi 16 pemain akan memicu kemacetan transaksi (state contention). Hanya arsitektur **Parallel Execution Monad dan blok 400ms** yang sanggup mengeksekusi 16 papan terisolasi secara bersamaan dengan biaya gas di bawah Rp 1 per gerakan.*  
@@ -46,7 +46,7 @@
 
 ## 5. Ringkasan Pembeda vs Game Web3 Lainnya
 
-| Masalah Game Web3 Biasa | Solusi di BlitzGrid |
+| Masalah Game Web3 Biasa | Solusi di Monadian |
 | :--- | :--- |
 | **Ribet Onboarding** (harus beli NFT / pasang wallet) | **Login Sosial Privy** (Google/Email langsung main dalam 3 detik) |
 | **Gameplay Lambat & Kaku** (turn-based lambat) | **Aksi Real-Time 60 Detik** (pacing blitz, refleks motorik murni) |

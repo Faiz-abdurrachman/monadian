@@ -1,6 +1,6 @@
 /**
- * BlitzGrid Engine — TypeScript Bitwise Mirror
- * 1:1 mirroring dari logika Solidity BlitzGridPieces & BlitzGridGame uint64
+ * Monadian Engine — TypeScript Bitwise Mirror
+ * 1:1 mirroring dari logika Solidity MonadianPieces & MonadianGame uint64
  * Dilengkapi dengan Palet Warna Candy Block Blast & Visual Layout
  */
 

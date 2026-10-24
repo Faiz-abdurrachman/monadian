@@ -1,20 +1,20 @@
-# Arsitektur & Spesifikasi Smart Contract — BlitzGrid
+# Arsitektur & Spesifikasi Smart Contract — Monadian
 
 ---
 
 ## 1. Ikhtisar Kontrak & Struktur Modular
 
-Sistem smart contract BlitzGrid dibangun menggunakan kerangka kerja **Foundry (Solidity 0.8.26)** dengan pendekatan modular untuk memaksimalkan isolasi penyimpanan (*storage isolation*) dan eksekusi paralel di validator Monad:
+Sistem smart contract Monadian dibangun menggunakan kerangka kerja **Foundry (Solidity 0.8.26)** dengan pendekatan modular untuk memaksimalkan isolasi penyimpanan (*storage isolation*) dan eksekusi paralel di validator Monad:
 
 ```
 contracts/
-├── BlitzGridVault.sol       # Escrow tiket, pengelolaan Prize Pool & pembakaran token (Burn)
-├── BlitzGridGame.sol        # Logika papan 8x8 uint64, kombo, line clears, dan verifikasi langkah
-├── BlitzGridCombat.sol      # Pola Combat Inbox, penyimpanan outbox senjata, dan target matrix
+├── MonadianVault.sol       # Escrow tiket, pengelolaan Prize Pool & pembakaran token (Burn)
+├── MonadianGame.sol        # Logika papan 8x8 uint64, kombo, line clears, dan verifikasi langkah
+├── MonadianCombat.sol      # Pola Combat Inbox, penyimpanan outbox senjata, dan target matrix
 └── interfaces/
-    ├── IBlitzGridGame.sol
-    ├── IBlitzGridVault.sol
-    └── IBlitzGridCombat.sol
+    ├── IMonadianGame.sol
+    ├── IMonadianVault.sol
+    └── IMonadianCombat.sol
 ```
 
 ---
@@ -62,17 +62,17 @@ struct RoundConfig {
 
 ## 3. Spesifikasi Kontrak Inti (Core Implementation)
 
-### 3.1 `BlitzGridGame.sol` (Logika Bitwise & Penempatan Balok)
+### 3.1 `MonadianGame.sol` (Logika Bitwise & Penempatan Balok)
 
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 
 import {PlayerState, RoundStatus} from "./Structs.sol";
-import {IBlitzGridCombat} from "./interfaces/IBlitzGridCombat.sol";
-import {IBlitzGridVault} from "./interfaces/IBlitzGridVault.sol";
+import {IMonadianCombat} from "./interfaces/IMonadianCombat.sol";
+import {IMonadianVault} from "./interfaces/IMonadianVault.sol";
 
-contract BlitzGridGame {
+contract MonadianGame {
     uint64 private constant ROW_MASK = 0xFF;
     uint64 private constant COL_MASK = 0x0101010101010101;
 
@@ -81,16 +81,16 @@ contract BlitzGridGame {
     mapping(uint256 roundId => uint256) public activePlayersCount;
     mapping(uint256 roundId => bytes32) public roundSeeds;
 
-    IBlitzGridCombat public combatModule;
-    IBlitzGridVault public vaultModule;
+    IMonadianCombat public combatModule;
+    IMonadianVault public vaultModule;
 
     event PiecePlaced(uint256 indexed roundId, address indexed player, uint64 newBoard, uint8 linesCleared);
     event ComboScored(uint256 indexed roundId, address indexed player, uint8 streak, uint32 manaEarned);
     event PlayerEliminated(uint256 indexed roundId, address indexed player, uint8 rank);
 
     constructor(address _combatModule, address _vaultModule) {
-        combatModule = IBlitzGridCombat(_combatModule);
-        vaultModule = IBlitzGridVault(_vaultModule);
+        combatModule = IMonadianCombat(_combatModule);
+        vaultModule = IMonadianVault(_vaultModule);
     }
 
     /**
@@ -164,7 +164,7 @@ contract BlitzGridGame {
 
 ---
 
-### 3.2 `BlitzGridCombat.sol` (Pola Asynchronous Combat Inbox)
+### 3.2 `MonadianCombat.sol` (Pola Asynchronous Combat Inbox)
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -172,7 +172,7 @@ pragma solidity 0.8.26;
 
 import {AttackType, AttackPayload} from "./Structs.sol";
 
-contract BlitzGridCombat {
+contract MonadianCombat {
     // Antrean outbox serangan per ronde per target
     mapping(uint256 roundId => mapping(address target => uint64 pendingStonesMask)) public targetInboxes;
 
@@ -216,13 +216,13 @@ contract BlitzGridCombat {
 
 ---
 
-### 3.3 `BlitzGridVault.sol` (Escrow Tiket & Payout Hadiah Atomik)
+### 3.3 `MonadianVault.sol` (Escrow Tiket & Payout Hadiah Atomik)
 
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 
-contract BlitzGridVault {
+contract MonadianVault {
     address public constant BURN_ADDRESS = 0x000000000000000000000000000000000000dEaD;
 
     mapping(uint256 roundId => uint256) public prizePools;
@@ -279,6 +279,6 @@ contract BlitzGridVault {
 
 ## 5. Pertimbangan Keamanan & Ketahanan Kontrak (Security Audit Checklist)
 
-1. **Reentrancy Protection:** Seluruh fungsi transfer hadiah di `BlitzGridVault.sol` menerapkan prinsip *Checks-Effects-Interactions* dan dilindungi pengunci `ReentrancyGuard` OpenZeppelin.
+1. **Reentrancy Protection:** Seluruh fungsi transfer hadiah di `MonadianVault.sol` menerapkan prinsip *Checks-Effects-Interactions* dan dilindungi pengunci `ReentrancyGuard` OpenZeppelin.
 2. **Validasi Masker Spasial:** Fungsi `makeMove()` memvalidasi bahwa `pieceMask` tidak melebihi batas 64-bit dan benar-benar cocok dengan salah satu dari 19 bentuk biner sah di katalog balok.
 3. **Anti-Griefing Timer:** Kontrak menyimpan `lastMoveTimestamp`. Jika pemain sengaja menahan koneksi (*rage quit / AFK*), pemain lain dapat memanggil fungsi `claimTimeoutElimination(roundId, target)` setelah 8 detik untuk mendiskualifikasi pemain AFK tersebut.

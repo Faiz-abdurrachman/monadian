@@ -224,7 +224,7 @@ export interface TranslationDictionary {
 export const translations: Record<Language, TranslationDictionary> = {
   id: {
     header: {
-      title: 'BLITZGRID',
+      title: 'MONADIAN',
       subtitle: 'MONAD PUZZLE ROYALE',
       guideBtn: 'PANDUAN',
       slidesBtn: 'SLIDES',
@@ -299,12 +299,12 @@ export const translations: Record<Language, TranslationDictionary> = {
       finalityLabel: 'Monad Testnet 10143: 800ms Finality',
       shareBtn: 'BAGIKAN HASIL KE X / TWITTER',
       shareText: (score, rank, prize) =>
-        `Saya baru saja meraih Rank #${rank} di BlitzGrid (The Monad Puzzle Royale) dengan Skor ${score} dan memenangkan ${prize}! ⚡🧱 Dibangun di atas @monad_xyz. Mainkan sekarang: `,
+        `Saya baru saja meraih Rank #${rank} di Monadian (The Monad Puzzle Royale) dengan Skor ${score} dan memenangkan ${prize}! ⚡🧱 Dibangun di atas @monad_xyz. Mainkan sekarang: `,
       playAgainBtn: 'MAIN LAGI (PLAY AGAIN)',
       backToLobbyBtn: 'KEMBALI KE LOBI',
     },
     lobby: {
-      title: 'BLITZGRID',
+      title: 'MONADIAN',
       subtitle: 'THE MONAD PUZZLE ROYALE',
       tagline: '100% On-Chain Block Blast Battle Royale 16 Pemain di Monad Testnet',
       venueBadge: 'MONAD BLITZ JOGJA VOL. 2 — GIK UGM',
@@ -398,7 +398,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       slides: [
         {
           tag: 'SLIDE 01 // COVER',
-          title: 'BLITZGRID',
+          title: 'MONADIAN',
           subtitle: 'The Monad Puzzle Royale — 100% On-Chain Block Blast Battle Royale 16 Pemain',
           points: [
             {
@@ -413,7 +413,7 @@ export const translations: Record<Language, TranslationDictionary> = {
             },
             {
               title: 'Penyaji Pitch',
-              desc: 'Faiz & Tim BlitzGrid — 3 Menit Pitch + 2 Menit Q&A Juri',
+              desc: 'Faiz & Tim Monadian — 3 Menit Pitch + 2 Menit Q&A Juri',
               badge: '3-Min Pitch',
             },
           ],
@@ -444,7 +444,7 @@ export const translations: Record<Language, TranslationDictionary> = {
         },
         {
           tag: 'SLIDE 03 // THE SOLUTION',
-          title: 'BLITZGRID: PUZZLE ROYALE 16P ON-CHAIN',
+          title: 'MONADIAN: PUZZLE ROYALE 16P ON-CHAIN',
           subtitle: 'Ubah Mekanik Santai Menjadi Battle Royale Refleks 60 Detik',
           points: [
             {
@@ -560,7 +560,7 @@ export const translations: Record<Language, TranslationDictionary> = {
         {
           tag: 'SLIDE 08 // MARKET & TOKEN SINK',
           title: 'PELUANG PASAR & EKONOMI MONAD',
-          subtitle: 'Bagaimana BlitzGrid Mendorong Transaksi Harian Ritel di Jaringan Monad',
+          subtitle: 'Bagaimana Monadian Mendorong Transaksi Harian Ritel di Jaringan Monad',
           points: [
             {
               title: 'Micro-Wager Escrow Pot',
@@ -620,7 +620,7 @@ export const translations: Record<Language, TranslationDictionary> = {
             },
             {
               title: 'Punchline Penutup',
-              desc: '"Jika Block Blast membuat jutaan orang terpaku di layar secara sendirian, BlitzGrid membuat jutaan orang bertarung serentak di atas Monad!"',
+              desc: '"Jika Block Blast membuat jutaan orang terpaku di layar secara sendirian, Monadian membuat jutaan orang bertarung serentak di atas Monad!"',
               badge: 'Faiz & Tim',
             },
           ],
@@ -668,7 +668,7 @@ export const translations: Record<Language, TranslationDictionary> = {
   },
   en: {
     header: {
-      title: 'BLITZGRID',
+      title: 'MONADIAN',
       subtitle: 'MONAD PUZZLE ROYALE',
       guideBtn: 'GUIDE',
       slidesBtn: 'SLIDES',
@@ -743,12 +743,12 @@ export const translations: Record<Language, TranslationDictionary> = {
       finalityLabel: 'Monad Testnet 10143: 800ms Finality',
       shareBtn: 'SHARE RESULT ON X / TWITTER',
       shareText: (score, rank, prize) =>
-        `Just scored Rank #${rank} in BlitzGrid (The Monad Puzzle Royale) with ${score} PTS and won ${prize}! ⚡🧱 Powered by @monad_xyz. Play live: `,
+        `Just scored Rank #${rank} in Monadian (The Monad Puzzle Royale) with ${score} PTS and won ${prize}! ⚡🧱 Powered by @monad_xyz. Play live: `,
       playAgainBtn: 'PLAY AGAIN',
       backToLobbyBtn: 'BACK TO LOBBY',
     },
     lobby: {
-      title: 'BLITZGRID',
+      title: 'MONADIAN',
       subtitle: 'THE MONAD PUZZLE ROYALE',
       tagline: '100% On-Chain Block Blast Battle Royale for 16 Players on Monad',
       venueBadge: 'MONAD BLITZ JOGJA VOL. 2 — GIK UGM',
@@ -842,7 +842,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       slides: [
         {
           tag: 'SLIDE 01 // COVER',
-          title: 'BLITZGRID',
+          title: 'MONADIAN',
           subtitle: 'The Monad Puzzle Royale — 100% On-Chain 16-Player Block Blast Battle Royale',
           points: [
             {
@@ -857,7 +857,7 @@ export const translations: Record<Language, TranslationDictionary> = {
             },
             {
               title: 'Pitch Presenter',
-              desc: 'Faiz & The BlitzGrid Team — 3-Minute Pitch + 2-Minute Jury Q&A',
+              desc: 'Faiz & The Monadian Team — 3-Minute Pitch + 2-Minute Jury Q&A',
               badge: '3-Min Pitch',
             },
           ],
@@ -888,7 +888,7 @@ export const translations: Record<Language, TranslationDictionary> = {
         },
         {
           tag: 'SLIDE 03 // THE SOLUTION',
-          title: 'BLITZGRID: 16P ON-CHAIN PUZZLE ROYALE',
+          title: 'MONADIAN: 16P ON-CHAIN PUZZLE ROYALE',
           subtitle: 'Transforming Casual Tile-Matching into a 60-Second Reflex Battle Arena',
           points: [
             {
@@ -1004,7 +1004,7 @@ export const translations: Record<Language, TranslationDictionary> = {
         {
           tag: 'SLIDE 08 // MARKET & TOKEN SINK',
           title: 'MARKET OPPORTUNITY & TOKEN SINK',
-          subtitle: 'How BlitzGrid Drives Daily Retail Transaction Velocity on Monad',
+          subtitle: 'How Monadian Drives Daily Retail Transaction Velocity on Monad',
           points: [
             {
               title: 'Micro-Wager Escrow Pools',
@@ -1064,7 +1064,7 @@ export const translations: Record<Language, TranslationDictionary> = {
             },
             {
               title: 'Closing Punchline',
-              desc: '"If Block Blast keeps millions playing in solitary confinement, BlitzGrid unites millions in simultaneous on-chain combat on Monad!"',
+              desc: '"If Block Blast keeps millions playing in solitary confinement, Monadian unites millions in simultaneous on-chain combat on Monad!"',
               badge: 'Faiz & Team',
             },
           ],

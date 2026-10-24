@@ -2,13 +2,13 @@
 pragma solidity 0.8.26;
 
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import {IBlitzGridVault} from "./interfaces/IBlitzGridVault.sol";
+import {IMonadianVault} from "./interfaces/IMonadianVault.sol";
 
 /**
- * @title BlitzGridVault
+ * @title MonadianVault
  * @notice Escrow tiket turnamen, settlement instan dalam 800ms, dan token burn 5%.
  */
-contract BlitzGridVault is IBlitzGridVault, ReentrancyGuard {
+contract MonadianVault is IMonadianVault, ReentrancyGuard {
     address public constant BURN_ADDRESS = 0x000000000000000000000000000000000000dEaD;
     address public gameContract;
 

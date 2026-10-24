@@ -3,7 +3,7 @@ pragma solidity 0.8.26;
 
 import {AttackType} from "../Structs.sol";
 
-interface IBlitzGridCombat {
+interface IMonadianCombat {
     event AttackDispatched(
         uint256 indexed roundId,
         address indexed attacker,

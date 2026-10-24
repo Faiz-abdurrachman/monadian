@@ -2,25 +2,25 @@
 pragma solidity 0.8.26;
 
 import {PlayerState, RoundConfig, RoundStatus, AttackType} from "./Structs.sol";
-import {BlitzGridPieces} from "./BlitzGridPieces.sol";
-import {IBlitzGridCombat} from "./interfaces/IBlitzGridCombat.sol";
-import {IBlitzGridVault} from "./interfaces/IBlitzGridVault.sol";
-import {IBlitzGridGame} from "./interfaces/IBlitzGridGame.sol";
+import {MonadianPieces} from "./MonadianPieces.sol";
+import {IMonadianCombat} from "./interfaces/IMonadianCombat.sol";
+import {IMonadianVault} from "./interfaces/IMonadianVault.sol";
+import {IMonadianGame} from "./interfaces/IMonadianGame.sol";
 
 /**
- * @title BlitzGridGame
- * @notice Game Core Engine untuk BlitzGrid di Monad.
+ * @title MonadianGame
+ * @notice Game Core Engine untuk Monadian di Monad.
  *         Menerapkan penyimpanan papan uint64, logika bitwise collision & line clears,
  *         Mempool Mana engine, dan matchmaking terisolasi.
  */
-contract BlitzGridGame is IBlitzGridGame {
+contract MonadianGame is IMonadianGame {
     uint64 private constant ROW_MASK = 0xFF;
     uint64 private constant COL_MASK = 0x0101010101010101;
     uint32 public constant AFK_TIMEOUT = 8 seconds;
     uint32 public constant GLITCH_STONE_COST = 30;
 
-    IBlitzGridCombat public immutable COMBAT_MODULE;
-    IBlitzGridVault public immutable VAULT_MODULE;
+    IMonadianCombat public immutable COMBAT_MODULE;
+    IMonadianVault public immutable VAULT_MODULE;
 
     uint256 public nextRoundId = 1;
 
@@ -42,8 +42,8 @@ contract BlitzGridGame is IBlitzGridGame {
     constructor(address _combatModule, address _vaultModule) {
         require(_combatModule != address(0), "Invalid combat");
         require(_vaultModule != address(0), "Invalid vault");
-        COMBAT_MODULE = IBlitzGridCombat(_combatModule);
-        VAULT_MODULE = IBlitzGridVault(_vaultModule);
+        COMBAT_MODULE = IMonadianCombat(_combatModule);
+        VAULT_MODULE = IMonadianVault(_vaultModule);
     }
 
     /**
@@ -148,13 +148,13 @@ contract BlitzGridGame is IBlitzGridGame {
         }
 
         // 2. Ambil ID balok deterministik dan masker bitwise pada (x, y)
-        uint8 pieceId = BlitzGridPieces.getDeterministicPiece(
+        uint8 pieceId = MonadianPieces.getDeterministicPiece(
             roundSeeds[roundId],
             msg.sender,
             state.handCycle,
             pieceSlot
         );
-        uint64 pieceMask = BlitzGridPieces.getMaskAt(pieceId, x, y);
+        uint64 pieceMask = MonadianPieces.getMaskAt(pieceId, x, y);
 
         // 3. Validasi Tabrakan Bitwise (Hanya 1 operasi AND + ISZERO)
         require((state.board & pieceMask) == 0, "Move Invalid: Collision Detected");
@@ -298,7 +298,7 @@ contract BlitzGridGame is IBlitzGridGame {
         champions[roundId] = champion;
         emit RoundEnded(roundId, champion);
 
-        // Settle pot hadiah atomik via BlitzGridVault
+        // Settle pot hadiah atomik via MonadianVault
         VAULT_MODULE.settleRound(
             roundId,
             champion,
@@ -328,7 +328,7 @@ contract BlitzGridGame is IBlitzGridGame {
         bytes32 seed = roundSeeds[roundId];
 
         for (uint8 i = 0; i < 3; i++) {
-            pieces[i] = BlitzGridPieces.getDeterministicPiece(seed, player, state.handCycle, i);
+            pieces[i] = MonadianPieces.getDeterministicPiece(seed, player, state.handCycle, i);
             used[i] = ((state.usedPiecesMask >> i) & 1) != 0;
         }
     }

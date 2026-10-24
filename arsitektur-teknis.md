@@ -1,10 +1,10 @@
-# Arsitektur Sistem & Rekayasa Teknis — BlitzGrid
+# Arsitektur Sistem & Rekayasa Teknis — Monadian
 
 ---
 
 ## 1. Ikhtisar Arsitektur Tingkat Tinggi (High-Level Architecture)
 
-BlitzGrid dirancang dari awal untuk memaksimalkan seluruh keunggulan teknis arsitektur **Monad (10.000 TPS, waktu blok 400ms, dan finalitas 800ms)**. Sistem terdiri dari empat pilar utama yang saling terhubung:
+Monadian dirancang dari awal untuk memaksimalkan seluruh keunggulan teknis arsitektur **Monad (10.000 TPS, waktu blok 400ms, dan finalitas 800ms)**. Sistem terdiri dari empat pilar utama yang saling terhubung:
 
 ```mermaid
 flowchart TD
@@ -21,7 +21,7 @@ flowchart TD
     end
 
     subgraph ConsensusLayer ["3. Monad Blockchain Layer (EVM)"]
-        ContractCore["BlitzGridCore.sol (Game Logic & Escrow)"]
+        ContractCore["MonadianCore.sol (Game Logic & Escrow)"]
         SlotMemory["Isolated uint64 Storage Slots"]
         InboxBuffer["Asynchronous Combat Inbox Pattern"]
     end
@@ -42,7 +42,7 @@ flowchart TD
 Mayoritas game grid Web3 gagal karena menyimpan papan dalam bentuk array multidimensi (`uint8[8][8]` atau `mapping(uint => mapping(uint => uint))`). Pola naif tersebut memicu ratusan operasi SLOAD/SSTORE yang boros gas dan lambat.
 
 ### 2.1 Formula Matematika Bitwise
-BlitzGrid mengompresi seluruh papan 8x8 kotak ke dalam **SATU variabel `uint64` (8 byte)**:
+Monadian mengompresi seluruh papan 8x8 kotak ke dalam **SATU variabel `uint64` (8 byte)**:
 * Bit ke-$i$ bernilai `0` jika petak kosong.
 * Bit ke-$i$ bernilai `1` jika petak terisi balok atau batu sabotase.
 * Indeks bit dihitung dengan: $\text{Index} = y \times 8 + x$.
@@ -98,8 +98,8 @@ Monad menggunakan konsensus **Optimistic Parallel Execution**. Jika Transaksi A 
 
 Jika Pemain A menyerang Pemain B dengan menulis langsung ke status Pemain B (`boards[PlayerB].rocks += 1`), saat Pemain B juga sedang menaruh balok di papannya sendiri, **terjadi tabrakan memori parah!**
 
-### 3.2 Pola Solusi BlitzGrid: Isolasi Memori Mutlak
-Untuk menjamin 100% paralelisme tanpa pernah terjadi *re-execution*, BlitzGrid menerapkan aturan ketat: **Setiap transaksi pemain HANYA BOLEH menulis ke slot memorinya sendiri.**
+### 3.2 Pola Solusi Monadian: Isolasi Memori Mutlak
+Untuk menjamin 100% paralelisme tanpa pernah terjadi *re-execution*, Monadian menerapkan aturan ketat: **Setiap transaksi pemain HANYA BOLEH menulis ke slot memorinya sendiri.**
 
 ```
 [ Blok N (Detik 0.0) ]
@@ -123,14 +123,14 @@ Dengan pola **Combat Inbox** ini, 16 hingga 32 pemain yang saling serang di dala
 
 ## 4. Abstraksi Akun & Manajemen Sesi (EIP-7702 Zero Pop-Up)
 
-Agar game berkecepatan 60 detik ini tidak rusak oleh jendela konfirmasi MetaMask yang mengganggu, BlitzGrid mengimplementasikan standar **EIP-7702 Account Delegation**:
+Agar game berkecepatan 60 detik ini tidak rusak oleh jendela konfirmasi MetaMask yang mengganggu, Monadian mengimplementasikan standar **EIP-7702 Account Delegation**:
 
 1. **Lobby Sign-In (1x Signature):**
    * Saat pemain menekan tombol *"Enter Tournament"* di lobi, klien membuat pasangan kunci sementara (*ephemeral keypair*) di penyimpanan lokal terenkripsi browser (LocalStorage / IndexedDB).
    * Pemain menandatangani otorisasi EIP-7702 yang mendelegasikan izin eksekusi transaksi mikro dari alamat EOA pemain kepada *ephemeral key* tersebut.
 2. **Session Scoping & Safety Rules:**
    * Izin didelegasikan dengan parameter restriksi ketat:
-     * Hanya berlaku untuk memanggil fungsi `makeMove()` dan `fireWeapon()` pada alamat kontrak `BlitzGridGame.sol`.
+     * Hanya berlaku untuk memanggil fungsi `makeMove()` dan `fireWeapon()` pada alamat kontrak `MonadianGame.sol`.
      * Memiliki masa kedaluwarsa otomatis dalam 120 detik (1 ronde + jeda lobi).
      * Memiliki batas pengeluaran gas maksimum (gas allowance) sebesar 0.05 MON.
 3. **Execution Loop di Layar:**

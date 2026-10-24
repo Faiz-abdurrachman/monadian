@@ -7,19 +7,19 @@
     <meta name="theme-color" content="#FFF8F7" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <title>BlitzGrid — The Monad Puzzle Royale</title>
+    <title>Monadian — The Monad Puzzle Royale</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&family=Fredoka:wght@400;500;600;700&family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
     <script>
       // Global error listener to prevent silent white screen on iOS / Safari
       window.addEventListener('error', function(e) {
-        console.error("BlitzGrid Startup Error:", e.message, e.filename, e.lineno);
+        console.error("Monadian Startup Error:", e.message, e.filename, e.lineno);
         var root = document.getElementById('root');
         if (root && (!root.children || root.children.length === 0)) {
           root.innerHTML = '<div style="color:#2F121A;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#FFF8F7;font-family:sans-serif;text-align:center;padding:20px;">' +
             '<div style="font-size:32px;margin-bottom:12px;">🌸</div>' +
-            '<h2 style="color:#FF4D6D;margin:0 0 8px;">BLITZGRID</h2>' +
+            '<h2 style="color:#FF4D6D;margin:0 0 8px;">MONADIAN</h2>' +
             '<p style="color:#574144;font-size:13px;max-width:280px;line-height:1.4;">Memuat sistem game Monad... Silakan ketuk tombol di bawah jika layar belum muncul.</p>' +
             '<button onclick="location.reload()" style="margin-top:16px;background:linear-gradient(to right,#FF758F,#FF4D6D);color:white;font-weight:bold;border:none;padding:10px 24px;border-radius:12px;font-size:14px;cursor:pointer;">Muat Ulang (Reload)</button>' +
           '</div>';

@@ -1,4 +1,4 @@
-# Alur Permainan & Pengalaman Pengguna (Flow Gameplay) — BlitzGrid
+# Alur Permainan & Pengalaman Pengguna (Flow Gameplay) — Monadian
 
 ---
 
@@ -58,7 +58,7 @@ stateDiagram-v2
 ## 2. Rincian Fase Perjalanan Pemain (Player Journey)
 
 ### Fase 1: Onboarding Kilat & Pembuatan Akun (Detik 0 – 3)
-1. **Akses:** Pemain membuka URL web `blitzgrid.xyz` di browser HP (Safari iOS atau Chrome Android) atau scan QR code di layar hackathon.
+1. **Akses:** Pemain membuka URL web `monadian.xyz` di browser HP (Safari iOS atau Chrome Android) atau scan QR code di layar hackathon.
 2. **One-Click Auth:** Pemain memilih login menggunakan akun **Google, Twitter (X), atau Email** via Privy. Bagi pengguna crypto native, tersedia opsi tombol *"Connect Web3 Wallet"* (MetaMask / Rabby).
 3. **Penyediaan Saldo:** 
    * Untuk pengguna baru di Testnet Monad: Smart contract faucet internal otomatis memberikan *airdrop* percobaan 1 MON untuk langsung bisa menjajal turnamen.
@@ -74,7 +74,7 @@ stateDiagram-v2
    * **Custom Room:** Membuat ruang privat bersama teman menggunakan 6-digit Room Code.
 2. **Otorisasi Sesi (EIP-7702):**
    * Saat pemain mengonfirmasi masuk lobi, muncul pop-up izin dompet **UNTUK PERTAMA DAN TERAKHIR KALINYA**.
-   * Pemain menandatangani sesi pendelegasian yang mengizinkan *ephemeral key* lokal untuk mengeksekusi transaksi langkah balok dan serangan sabotase di kontrak `BlitzGridGame.sol` selama 120 detik.
+   * Pemain menandatangani sesi pendelegasian yang mengizinkan *ephemeral key* lokal untuk mengeksekusi transaksi langkah balok dan serangan sabotase di kontrak `MonadianGame.sol` selama 120 detik.
    * **Hasil:** Setelah klik tombol ini, **TIDAK AKAN ADA LAGI POP-UP DOMPET** sampai ronde selesai.
 
 ---
@@ -121,11 +121,11 @@ Ini adalah puncak intensitas permainan:
    * Pemain terakhir yang bertahan disambut dengan ledakan konfeti emas dan teks: **VICTORY ROYALE!**
    * Ditampilkan statistik lengkap pertandingan: Total Garis Meledak, Kombo Tertinggi, Jumlah Kill, dan Total Mana yang Dihasilkan.
 2. **Penyelesaian Hadiah Atomik (800ms):**
-   * Tanpa perlu menekan tombol *"Withdraw"* atau menunggu verifikasi admin, smart contract `BlitzGridVault.sol` **langsung mentransfer 65% total pot MON ke dompet pemenang** dalam 2 blok Monad (800 milidetik).
+   * Tanpa perlu menekan tombol *"Withdraw"* atau menunggu verifikasi admin, smart contract `MonadianVault.sol` **langsung mentransfer 65% total pot MON ke dompet pemenang** dalam 2 blok Monad (800 milidetik).
    * Notifikasi transaksi sukses muncul hijau di sudut layar.
 3. **Kartu Bukti Kemenangan (Shareable Victory Card):**
    * Klien secara otomatis menghasilkan kartu grafik estetis beresolusi tinggi yang merangkum kemenangan pemain.
    * Terdapat tombol 1-klik: **"Share to X / Farcaster"** dengan teks otomatis:  
-     > *"Baru aja nyapu bersih 16 pemain di BlitzGrid Monad! 65% prize pool masuk dompet dalam 800ms. Siapa berani duel di grid 8x8? #MonadBlitz #BlitzGrid"*
+     > *"Baru aja nyapu bersih 16 pemain di Monadian Monad! 65% prize pool masuk dompet dalam 800ms. Siapa berani duel di grid 8x8? #MonadBlitz #Monadian"*
 4. **Tombol "Play Again" (Retensi Tanpa Batas):**
    * Pemain disuguhkan tombol besar *"Play Again"*, yang langsung melemparkan mereka kembali ke antrean matchmaking baru dalam waktu 2 detik.

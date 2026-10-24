@@ -2,17 +2,17 @@
 pragma solidity 0.8.26;
 
 import {Test} from "forge-std/Test.sol";
-import {BlitzGridCombat} from "../src/BlitzGridCombat.sol";
+import {MonadianCombat} from "../src/MonadianCombat.sol";
 import {AttackType} from "../src/Structs.sol";
 
-contract BlitzGridCombatTest is Test {
-    BlitzGridCombat public combat;
+contract MonadianCombatTest is Test {
+    MonadianCombat public combat;
     address public gameContract = address(0x9999);
     address public playerA = address(0xAAAA);
     address public playerB = address(0xBBBB);
 
     function setUp() public {
-        combat = new BlitzGridCombat();
+        combat = new MonadianCombat();
         combat.setGameContract(gameContract);
     }
 
