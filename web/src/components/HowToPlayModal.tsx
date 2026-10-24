@@ -5,10 +5,17 @@ import { useLanguage } from '../locales/LanguageContext';
 interface HowToPlayModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenPitchDeck?: () => void;
+  onOpenQr?: () => void;
 }
 
-export const HowToPlayModal: React.FC<HowToPlayModalProps> = ({ isOpen, onClose }) => {
-  const { t } = useLanguage();
+export const HowToPlayModal: React.FC<HowToPlayModalProps> = ({
+  isOpen,
+  onClose,
+  onOpenPitchDeck,
+  onOpenQr,
+}) => {
+  const { t, language } = useLanguage();
   if (!isOpen) return null;
 
   return (
@@ -94,10 +101,42 @@ export const HowToPlayModal: React.FC<HowToPlayModalProps> = ({ isOpen, onClose 
         {/* Action Button */}
         <button
           onClick={onClose}
-          className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-[#FF758F] via-[#FF4D6D] to-[#FF758F] text-white font-comfortaa font-bold text-xs tracking-wider shadow-[0_6px_20px_rgba(255,77,109,0.35)] hover:brightness-105 active:translate-y-1 transition-all flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-[#FF758F] via-[#FF4D6D] to-[#FF758F] text-white font-comfortaa font-bold text-xs tracking-wider shadow-[0_6px_20px_rgba(255,77,109,0.35)] hover:brightness-105 active:translate-y-1 transition-all flex items-center justify-center gap-2 cursor-pointer mb-2"
         >
           <span>{t.howToPlay.gotItBtn}</span>
         </button>
+
+        {/* Judge & Stage Access */}
+        {(onOpenPitchDeck || onOpenQr) && (
+          <div className="w-full flex items-center justify-center gap-2 pt-2 border-t border-pink-100">
+            {onOpenPitchDeck && (
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onOpenPitchDeck();
+                }}
+                className="flex-1 py-1.5 px-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 text-[10.5px] font-comfortaa font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+              >
+                <span>📺</span>
+                <span>{language === 'id' ? 'Slide Pitch Deck' : 'Pitch Deck'}</span>
+              </button>
+            )}
+            {onOpenQr && (
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onOpenQr();
+                }}
+                className="flex-1 py-1.5 px-2.5 rounded-xl bg-pink-50 hover:bg-pink-100 border border-pink-200 text-[#FF4D6D] text-[10.5px] font-comfortaa font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+              >
+                <span>📱</span>
+                <span>{language === 'id' ? 'QR Panggung' : 'Stage QR'}</span>
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

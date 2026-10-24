@@ -33,7 +33,7 @@ import {
 } from './engine/bitwise';
 import { sounds } from './engine/audio';
 import { sessionEngine } from './engine/sessionKey';
-import { Trophy, HelpCircle, Home } from 'lucide-react';
+import { Trophy, HelpCircle, Home, QrCode } from 'lucide-react';
 import { useLanguage } from './locales/LanguageContext';
 import { LanguageToggle } from './components/LanguageToggle';
 
@@ -956,26 +956,37 @@ export function App() {
                   <span className="text-[9.5px] font-mono font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">0 Pop-Up</span>
                 </div>
               </div>
+
+              {/* Stage Presentation & QR Quick Access for Presenters */}
+              <div className="flex items-center justify-between gap-2 pt-1 border-t border-pink-100/80">
+                <button
+                  type="button"
+                  onClick={() => setIsPitchDeckOpen(true)}
+                  className="flex-1 py-1.5 px-3 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 text-[10.5px] font-comfortaa font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-2xs"
+                >
+                  <span>📺</span>
+                  <span>Pitch Deck</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsQrModalOpen(true)}
+                  className="py-1.5 px-3 rounded-xl bg-pink-50 hover:bg-pink-100 border border-pink-200 text-[#FF4D6D] text-[10.5px] font-comfortaa font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-2xs"
+                  title="Buka QR Panggung"
+                >
+                  <QrCode className="w-3.5 h-3.5" />
+                  <span>QR Stage</span>
+                </button>
+              </div>
             </div>
           </aside>
         )}
 
-        {/* CENTER COLUMN: Sleek Smartphone Frame Mockup on Desktop (Expands smoothly in Host Stage View) */}
-        <div className={`relative w-full h-[100dvh] max-h-[100dvh] xl:h-[min(840px,94dvh)] xl:max-h-[860px] bg-[#FFF8F7] text-[#2F121A] font-quicksand rounded-none xl:rounded-[42px] border-0 xl:border-[6px] border-[#FBCFE8] shadow-none xl:shadow-[0_15px_60px_rgba(255,175,190,0.4)] px-2 pt-1 pb-1.5 sm:px-3 sm:py-2 flex flex-col justify-between items-center overflow-hidden flex-shrink-0 transition-all duration-300 ${
-          currentView === 'host' ? 'xl:w-[500px]' : 'xl:w-[440px]'
+        {/* CENTER COLUMN: Sleek Mobile Canvas (Clean rounded frame on desktop, edge-to-edge on mobile) */}
+        <div className={`relative w-full h-[100dvh] max-h-[100dvh] xl:h-[min(840px,94dvh)] xl:max-h-[860px] bg-[#FFF8F7] text-[#2F121A] font-quicksand rounded-none xl:rounded-[44px] border-0 xl:border-4 border-[#FBCFE8] shadow-none xl:shadow-[0_20px_60px_rgba(255,175,190,0.35)] flex flex-col justify-between items-center overflow-hidden flex-shrink-0 transition-all duration-300 ${
+          currentView === 'lobby' ? 'p-0' : 'px-2 pt-1 pb-1.5 sm:px-3 sm:py-2'
+        } ${
+          currentView === 'host' ? 'xl:w-[500px]' : 'xl:w-[410px]'
         }`}>
-          
-          {/* Smartphone Dynamic Island Notch (Desktop XL Only) */}
-          <div className="hidden xl:flex flex-shrink-0 w-full items-center justify-between px-4 pt-1 pb-1 text-[#574144]">
-            <span className="text-[11px] font-comfortaa font-bold">09:41</span>
-            <div className="w-20 h-4 bg-pink-100 rounded-full border border-pink-200 flex items-center justify-center shadow-xs">
-              <span className="w-2 h-2 rounded-full bg-[#FF4D6D] animate-pulse" />
-            </div>
-            <div className="flex items-center gap-1.5 text-[10px] font-comfortaa font-bold">
-              <span>5G</span>
-              <span>100%</span>
-            </div>
-          </div>
 
           {currentView === 'lobby' ? (
             <LobbyLandingView
@@ -1130,9 +1141,6 @@ export function App() {
             </>
           )}
 
-          {/* Phone Bottom Home Bar (Desktop Only) */}
-          <div className="hidden xl:block flex-shrink-0 w-28 h-1 bg-pink-300/60 rounded-full mx-auto my-0.5" />
-
           {/* Game Over Modal */}
           {isGameOver && (
             <GameOverModal
@@ -1235,6 +1243,8 @@ export function App() {
       <HowToPlayModal
         isOpen={isHelpModalOpen}
         onClose={() => setIsHelpModalOpen(false)}
+        onOpenPitchDeck={() => setIsPitchDeckOpen(true)}
+        onOpenQr={() => setIsQrModalOpen(true)}
       />
 
       {/* 10-Slide Interactive Stage Pitch Deck Modal */}
