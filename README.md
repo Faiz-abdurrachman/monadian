@@ -1,7 +1,7 @@
-# ⚡ MONADIAN — The Monad Puzzle Royale
+# ⚡ MONADIAN — The 16-Player Monad Puzzle Royale
 
-> **Pemenang Potensial Monad Blitz Jogja Vol. 2 (24 Oktober 2026, GIK UGM)**  
-> *Game Battle Royale Block Blast 16 Pemain 100% On-Chain Pertama di Dunia dengan Waktu Eksekusi 400ms Monad.*
+> **Built for Monad Blitz Jogja V2 (24 October 2026 — Garuda Spark Innovation Hub)**  
+> *The world's first 100% on-chain 16-player Block Blast Battle Royale powered by Monad's 400ms parallel execution.*
 
 [![Monad Testnet](https://img.shields.io/badge/Monad-Testnet%20(10143)-836ef9?style=for-the-badge&logo=ethereum)](https://testnet.monad.xyz)
 [![Solidity Tests](https://img.shields.io/badge/Foundry-28%2F28%20Passed-emerald?style=for-the-badge&logo=solidity)](contracts/)
@@ -12,93 +12,97 @@
 
 ## 🚀 Live Deployment & Monad Testnet Contracts
 
-| Komponen | Alamat / Tautan | Keterangan |
-|---|---|---|
-| **Live Web App** | [https://monadian.vercel.app](https://monadian.vercel.app) | Production Hosted on Vercel |
-| **MonadianGame (Core)** | [`0xC9fC8beA27bB568105e36fc16FbA73Db7F6FA423`](https://testnet.monadexplorer.com/address/0xC9fC8beA27bB568105e36fc16FbA73Db7F6FA423) | Game Orchestrator, Rounds & Elimination |
-| **MonadianCombat** | [`0xE8c07DDcC61C2880b89Edd6633F96F5210a0f64B`](https://testnet.monadexplorer.com/address/0xE8c07DDcC61C2880b89Edd6633F96F5210a0f64B) | Asynchronous Combat Inbox (0 State Contention) |
-| **MonadianVault** | [`0xb84bAC0fD5bA009ecF6C414CDA481D3623E5333F`](https://testnet.monadexplorer.com/address/0xb84bAC0fD5bA009ecF6C414CDA481D3623E5333F) | Escrow & Automated Prize Distribution |
-| **Monad Testnet Chain ID** | `10143` | RPC: `https://testnet-rpc.monad.xyz` |
-| **Active Demo Round** | `Round #1` | Live on-chain status: ACTIVE |
+| Component | Link / Address | Status |
+|---|---|:---:|
+| **🌐 Live Web App** | [https://monadian.vercel.app](https://monadian.vercel.app) | Live on Vercel ✅ |
+| **📜 MonadianGame (Core)** | [`0xC9fC8beA27bB568105e36fc16FbA73Db7F6FA423`](https://testnet.monadexplorer.com/address/0xC9fC8beA27bB568105e36fc16FbA73Db7F6FA423) | **Verified (Exact Match)** ✅ |
+| **⚔️ MonadianCombat** | [`0xE8c07DDcC61C2880b89Edd6633F96F5210a0f64B`](https://testnet.monadexplorer.com/address/0xE8c07DDcC61C2880b89Edd6633F96F5210a0f64B) | **Verified (Exact Match)** ✅ |
+| **🏦 MonadianVault** | [`0xb84bAC0fD5bA009ecF6C414CDA481D3623E5333F`](https://testnet.monadexplorer.com/address/0xb84bAC0fD5bA009ecF6C414CDA481D3623E5333F) | **Verified (Exact Match)** ✅ |
+| **⛓️ Network** | Monad Testnet (`10143`) | RPC: `https://testnet-rpc.monad.xyz` |
+| **🎮 Active Demo Round** | `Round #1` | **Status: ACTIVE** on-chain |
 
 ---
 
-## 🎯 Mengapa Monadian? (The Problem & Solution)
+## ⚡ Quickstart: Run in 60 Seconds
 
-1. **Masalah Web2:** Game santai seperti *Block Blast* diunduh **100+ juta kali** di seluruh dunia dan dimainkan di kafe-kafe setiap hari. Namun, game tersebut **100% solo offline** dan rawan cheat memori jika dibuat turnamen uang.
-2. **Masalah Web3:** Game Web3 selama ini dicap lambat, membosankan, dan merusak flow karena setiap langkah memicu pop-up dompet MetaMask.
-3. **Solusi Monadian:** Membawa mekanik adiktif *Block Blast* menjadi **Battle Royale 16 Pemain 100% On-Chain** di atas Monad! Pemain berlomba menyusun balok, meledakkan kombo, mengumpulkan Mana, dan menembakkan sabotase ke lawan dalam ronde 60 detik.
-
----
-
-## 🧠 2 Terobosan Engineering EVM Monad
-
-### 1. `uint64` Bitwise Logic (< 3,500 Gas)
-Seluruh papan 8x8 dan status bidak direpresentasikan hanya dalam satu integer `uint64` (64 bit):
-* **Pengecekan Tabrakan:** `(board & pieceMask) == 0` (1 opcode bitwise AND)
-* **Penempatan Bidak:** `board | pieceMask` (1 opcode bitwise OR)
-* **Deteksi Baris/Kolom Penuh:** Masking bit konstan 0(1) instan
-* **Gas:** Konsumsi gas penempatan balok **< 3,500 gas**, menghemat **98.5% gas** dibandingkan representasi matriks array `uint8[8][8]`.
-
-### 2. Asynchronous Combat Inbox Pattern
-Dalam game 16 pemain yang saling menyerang, jika pemain A menyerang pemain B dengan mengubah storage `playerB.board` secara langsung, akan timbul **state conflict** yang menggagalkan eksekusi paralel Monad.
-* **Solusi Kami:** Setiap pemain memiliki antrean `CombatInbox` terisolasi.
-* Serangan masuk disimpan di `inbox[targetId]`, dan baru dieksekusi saat giliran pemain target melangkah (`consumeInbox()`).
-* **Hasil:** 0 State Contention, **100% kompatibel dengan Monad Parallel Execution Engine!**
-
----
-
-## 🕹️ Invisible Web3 UX (EIP-7702 Ephemeral Key)
-
-* **0 MetaMask Pop-ups:** Pemain cukup menandatangani 1 kali sesi delegasi di awal.
-* Transaksi penempatan balok dan sabotase ditandatangani otomatis di latar belakang oleh session key ephemeral berumur 60 detik.
-* Sensasi bermain instan seperti game Web2 (120 FPS tanpa lag).
-
----
-
-## 🏰 Arsitektur Kontrak Pintar (`contracts/`)
-
-```
-contracts/
-├── src/
-│   ├── MonadianBitwise.sol   # Operasi logika uint64 8x8 papan
-│   ├── MonadianPieces.sol    # Katalog 19 bentuk bidak poliomino
-│   ├── MonadianCombat.sol    # Inbox sabotase anti-state conflict
-│   ├── MonadianVault.sol     # Escrow pool hadiah (1.04 MON)
-│   └── MonadianGame.sol      # Orkestrator ronde, lifecyle & eliminasi
-└── test/
-    └── *.t.sol                # 26 Unit Test Foundry (100% Lulus)
-```
-
-Jalankan test lokal:
+### 1. Smart Contracts & Foundry Tests
 ```bash
 cd contracts
 forge test -vvv
+# Output: 28 tests passed, 0 failed (100% pass rate in ~21ms)
 ```
 
----
-
-## 🎨 Arsitektur Frontend (`web/`)
-
-* **Engine:** React 18 + Vite + TypeScript + Tailwind CSS
-* **Board Visuals:** 2D Canvas & CSS 3D Glassmorphism Candy Cap (44px socket chunky).
-* **Audio Prosedural:** 100% Web Audio API sintetis (0 KB file download) dengan tempo 112 BPM arcade chiptune loop.
-* **Presenter Kit:**
-  - `HowToPlayModal.tsx`: Panduan 15 detik instan untuk juri.
-  - `PitchDeckModal.tsx`: 10 slide presentasi panggung interaktif dengan keyboard arrow & fullscreen mode.
-  - `LobbyQRModal.tsx`: Generator QR Code canvas untuk penonton/juri bergabung.
-
-Jalankan lokal:
+### 2. Run Web Frontend
 ```bash
 cd web
 npm install
 npm run dev
+# Opens at http://localhost:3000
 ```
 
 ---
 
-## 👥 Tim Pengembang
+## 🎯 The Problem & The Monad Solution
 
-* **Lead Builder & Smart Contract Architect:** Faiz & Tim Monadian
-* **Event:** Monad Blitz Jogja Vol. 2 — GIK Universitas Gadjah Mada (UGM)
-* **Tanggal:** Sabtu, 24 Oktober 2026
+* **The Web2 Problem:** Casual games like *Block Blast* have **100M+ downloads worldwide**, but they are 100% offline solo games vulnerable to client-side memory tampering if real-money stakes are involved.
+* **The Web3 Problem:** Web3 games are notoriously sluggish with disruptive MetaMask confirmation popups interrupting gameplay flow.
+* **The Monadian Solution:** Translating the addictive Block Blast mechanic into a **16-Player 100% On-Chain Battle Royale**! Players place polyomino pieces, blast lines, accumulate Mana, and fire live sabotage missiles at opponents in fast-paced 60-second rounds.
+
+---
+
+## 🧠 2 Core Monad EVM Engineering Breakthroughs
+
+### 1. `uint64` Bitwise Board Logic (< 3,500 Gas)
+The entire 8x8 grid is stored inside a single `uint64` integer (64 bits):
+* **Collision Check:** `(board & pieceMask) == 0` (1 bitwise AND opcode)
+* **Piece Placement:** `board | pieceMask` (1 bitwise OR opcode)
+* **Instant Line Clearance:** Constant bitmasks with zero loops
+* **Gas Consumption:** **< 3,500 gas** per move, saving **98.5% gas** compared to traditional matrix array representations (`uint8[8][8]`).
+
+### 2. Asynchronous Combat Inbox Pattern (Parallel Execution Safe)
+In a 16-player PvP match where players attack each other simultaneously, directly modifying an opponent's storage slot (`playerB.board`) causes **state contention**, breaking Monad's parallel execution pipelining.
+* **Our Solution:** Each player possesses an isolated `CombatInbox`.
+* Incoming sabotages are queued into `inbox[targetId]`.
+* Sabotages are executed only when the target player takes their next turn (`consumeInbox()`).
+* **Result:** **Zero State Contention**, 100% optimized for the Monad Parallel Execution Engine!
+
+---
+
+## 🕹️ Invisible Web3 UX (EIP-7702 Ephemeral Session Key)
+
+* **0 MetaMask Popups During Match:** Sign once at lobby entry.
+* Move placements and sabotage attacks are signed in the background via ephemeral session keys with instant 400ms finality.
+* Plays like a high-end Web2 game (120 FPS Three.js Canvas).
+
+---
+
+## 🏰 Smart Contract Architecture (`contracts/`)
+
+```
+contracts/
+├── src/
+│   ├── MonadianBitwise.sol   # uint64 8x8 bitwise board math & clearance
+│   ├── MonadianPieces.sol    # Deterministic catalog of 19 polyomino pieces
+│   ├── MonadianCombat.sol    # Asynchronous Combat Inbox anti-state conflict
+│   ├── MonadianVault.sol     # Non-custodial escrow pool & prize split
+│   └── MonadianGame.sol      # Main orchestrator, lifecycle & elimination
+└── test/
+    └── *.t.sol                # 28 Unit Tests (100% Passed)
+```
+
+---
+
+## 🎨 Frontend Architecture (`web/`)
+
+* **Engine:** React 18 + Vite + TypeScript + Tailwind CSS
+* **Board Visuals:** Three.js 3D Voxel Candy Cap Grid with tactile socket physics.
+* **Procedural Audio:** 100% synthetic Web Audio API arcade chiptune loops (0 KB network assets).
+* **Presenter Kit:** Built-in Stage Pitch Deck Modal, QR Code Joiner, and Host Spectator Views.
+
+---
+
+## 👥 Builders & Team
+
+* **Lead Builder & Smart Contract Architect:** Faiz & Monadian Team
+* **Event:** Monad Blitz Jogja Vol. 2 (24 October 2026)
+* **Venue:** Garuda Spark Innovation Hub — Yogyakarta
