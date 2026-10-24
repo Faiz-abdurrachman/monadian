@@ -1,0 +1,29 @@
+# Node / Web
+node_modules/
+web/node_modules/
+web/dist/
+*.log
+
+# Foundry / Contracts
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+
+# Vercel & Environment
+.vercel
+.env
+.DS_Store
+
+# Temporary Playwright Logs & Test Captures
+.playwright-mcp/
+demo_videos/
+record_combat_demo.js
+/*.png
+
+# Local Agent Handover, Helper Scripts & Skills Cache
+.agents/
+skills-lock.json
+commit_by_feature.sh
+PROMPT-START-AI.md
+PROMPT-UNTUK-AI-BARU.md
+SYSTEM_STATE_HANDOVER.md
