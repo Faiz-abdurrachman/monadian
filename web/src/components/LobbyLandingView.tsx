@@ -77,7 +77,7 @@ export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
   };
 
   return (
-    <div className="w-full h-full min-h-0 flex flex-col justify-between items-center text-center select-none font-quicksand bg-gradient-to-b from-[#FFF5F6] via-[#FFEBF0] to-[#FFF0F4] text-[#2F121A] relative px-4 pt-4 pb-6 sm:px-6 sm:pt-6 sm:pb-7 overflow-x-hidden overflow-y-auto">
+    <div className="w-full h-full min-h-0 flex flex-col justify-between items-center text-center select-none font-quicksand bg-gradient-to-b from-[#FFF5F6] via-[#FFEBF0] to-[#FFF0F4] text-[#2F121A] relative px-4 pt-3 pb-4 sm:px-6 sm:pt-5 sm:pb-6 overflow-x-hidden overflow-y-auto">
       {/* Soft Ambient Blossom Glows */}
       <div className="absolute -top-16 -left-16 w-56 h-56 rounded-full bg-pink-300/30 blur-3xl pointer-events-none" />
       <div className="absolute top-1/2 -right-16 w-60 h-60 rounded-full bg-rose-200/40 blur-3xl pointer-events-none" />
@@ -86,7 +86,7 @@ export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
       {/* ==================================================================== */}
       {/* 1. TOP BAR (Monadian Brand, Language Toggle, Help Button)            */}
       {/* ==================================================================== */}
-      <header className="w-full max-w-sm flex items-center justify-between flex-shrink-0 z-20">
+      <header className="w-full max-w-[360px] sm:max-w-[380px] flex items-center justify-between flex-shrink-0 z-20 pt-1 pb-1">
         {/* Brand Title: Monadian */}
         <h1 className="font-fredoka font-bold text-2xl sm:text-[28px] text-[#241022] tracking-tight leading-none select-none">
           Monadian
@@ -110,7 +110,7 @@ export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
 
       {/* Guest Invitation Banner (if scanned room QR link) */}
       {guestRoomInfo && (
-        <div className="w-full max-w-sm flex-shrink-0 p-2.5 my-1 rounded-2xl bg-gradient-to-r from-pink-100 via-rose-50 to-pink-100 border-2 border-[#FBCFE8] shadow-sm text-left flex items-center justify-between gap-2 z-20 animate-pulse">
+        <div className="w-full max-w-[360px] sm:max-w-[380px] flex-shrink-0 p-2.5 my-1 rounded-2xl bg-gradient-to-r from-pink-100 via-rose-50 to-pink-100 border-2 border-[#FBCFE8] shadow-sm text-left flex items-center justify-between gap-2 z-20 animate-pulse">
           <div className="leading-tight">
             <span className="text-[10px] font-comfortaa font-bold text-[#FF4D6D] block">
               🌸 {language === 'id' ? `Undangan Room #${guestRoomInfo.roomCode}` : `Room #${guestRoomInfo.roomCode} Invite`}
@@ -131,9 +131,9 @@ export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
       {/* ==================================================================== */}
       {/* 2. MAIN CENTER STACK (Mascot + Wallet Card + Action Buttons)         */}
       {/* ==================================================================== */}
-      <div className="w-full max-w-[345px] sm:max-w-[360px] flex flex-col items-center flex-1 justify-center z-10 my-auto py-1">
+      <div className="w-full max-w-[350px] sm:max-w-[370px] flex flex-col items-center flex-1 justify-center z-10 my-auto py-1">
         {/* Floating Best Score Pill Badge (Overlaps Bunny Ears Tips like Figma) */}
-        <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-white/95 border border-[#FBCFE8] shadow-[0_3px_12px_rgba(255,100,130,0.12)] z-30 -mb-6">
+        <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-white/95 border border-[#FBCFE8] shadow-[0_3px_12px_rgba(255,100,130,0.12)] z-30 -mb-5 sm:-mb-6">
           <span className="text-sm">🏆</span>
           <span className="text-[11px] font-comfortaa font-extrabold tracking-wider text-[#FF4D6D] uppercase">
             BEST
@@ -145,20 +145,20 @@ export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
 
         {/* Dynamic 3D Bunny Mascot Sticker (Proportional Hero Cropped at Waist like Figma) */}
         <div className="relative w-full flex items-center justify-center select-none pointer-events-none z-10">
-          <div className="relative w-[225px] sm:w-[255px] h-[235px] sm:h-[265px] overflow-hidden flex justify-center">
+          <div className="relative w-[280px] sm:w-[310px] h-[265px] sm:h-[295px] overflow-hidden flex justify-center">
             {userAddress ? (
               /* UDAH CONNECT: Happy waving bunny sticker */
               <img
                 src="/assets/homepage/bunny_connected.png"
                 alt="Monadian Happy Mascot"
-                className="w-[225px] sm:w-[255px] h-auto object-top drop-shadow-[0_16px_32px_rgba(255,100,140,0.22)]"
+                className="w-[280px] sm:w-[310px] h-auto object-top drop-shadow-[0_16px_32px_rgba(255,100,140,0.22)]"
               />
             ) : (
               /* BELUM CONNECT: Cute shy bunny sticker */
               <img
                 src="/assets/homepage/bunny_disconnected.png"
                 alt="Monadian Shy Mascot"
-                className="w-[225px] sm:w-[255px] h-auto object-top drop-shadow-[0_16px_32px_rgba(255,100,140,0.22)]"
+                className="w-[280px] sm:w-[310px] h-auto object-top drop-shadow-[0_16px_32px_rgba(255,100,140,0.22)]"
               />
             )}
           </div>

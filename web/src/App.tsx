@@ -33,7 +33,7 @@ import {
 } from './engine/bitwise';
 import { sounds } from './engine/audio';
 import { sessionEngine } from './engine/sessionKey';
-import { Trophy, HelpCircle, Home, QrCode } from 'lucide-react';
+import { HelpCircle, Home } from 'lucide-react';
 import { useLanguage } from './locales/LanguageContext';
 import { LanguageToggle } from './components/LanguageToggle';
 
@@ -904,88 +904,13 @@ export function App() {
         </div>
       )}
 
-      {/* Presentation Stage Container (3 Columns on Large Displays) */}
-      <div className="w-full max-w-7xl h-full xl:h-[min(860px,96dvh)] flex items-center justify-center gap-4 xl:gap-8 z-10 px-2 sm:px-4">
-
-        {/* LEFT PANEL: Monad Hackathon Highlights (Ultra-Clean, Rounded Bento) */}
-        {currentView !== 'host' && (
-          <aside className="hidden xl:flex flex-col w-[300px] justify-center gap-4 py-2">
-            <div className="bg-white/95 backdrop-blur-xl border-2 border-[#FCE7F3] rounded-[38px] p-6 shadow-[0_12px_35px_rgba(255,175,190,0.25)] flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <span className="text-[9.5px] font-comfortaa font-bold tracking-wider text-[#FF4D6D] uppercase bg-pink-100 border border-pink-200 px-3 py-1 rounded-full flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF4D6D] animate-ping" />
-                  MONAD BLITZ
-                </span>
-                <span className="text-[10px] font-comfortaa font-bold text-[#FF4D6D] bg-pink-50 px-2.5 py-1 rounded-full border border-pink-100">GIK UGM</span>
-              </div>
-
-              <div>
-                <h2 className="font-comfortaa font-bold text-2xl text-[#2F121A] tracking-tight">
-                  MONADIAN
-                </h2>
-                <p className="text-xs text-[#574144] mt-0.5 font-medium leading-relaxed">
-                  100% On-Chain Puzzle Royale
-                </p>
-              </div>
-
-              <div className="h-px bg-pink-100/80 w-full" />
-
-              {/* 3 Simple Rounded Pills (No wall of text) */}
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between px-3.5 py-2.5 rounded-2xl bg-[#FFF8FA] border border-pink-100">
-                  <div className="flex items-center gap-2">
-                    <span className="text-base">⚡</span>
-                    <span className="font-comfortaa font-bold text-xs text-[#2F121A]">uint64 Board</span>
-                  </div>
-                  <span className="text-[9.5px] font-mono font-bold text-[#FF4D6D] bg-pink-100 px-2 py-0.5 rounded-full">&lt; 3.5k Gas</span>
-                </div>
-
-                <div className="flex items-center justify-between px-3.5 py-2.5 rounded-2xl bg-[#FFF8FA] border border-pink-100">
-                  <div className="flex items-center gap-2">
-                    <span className="text-base">⚔️</span>
-                    <span className="font-comfortaa font-bold text-xs text-[#2F121A]">Async Combat</span>
-                  </div>
-                  <span className="text-[9.5px] font-mono font-bold text-[#FF4D6D] bg-rose-100 px-2 py-0.5 rounded-full">Parallel</span>
-                </div>
-
-                <div className="flex items-center justify-between px-3.5 py-2.5 rounded-2xl bg-[#FFF8FA] border border-pink-100">
-                  <div className="flex items-center gap-2">
-                    <span className="text-base">🔑</span>
-                    <span className="font-comfortaa font-bold text-xs text-[#2F121A]">Session Keys</span>
-                  </div>
-                  <span className="text-[9.5px] font-mono font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">0 Pop-Up</span>
-                </div>
-              </div>
-
-              {/* Stage Presentation & QR Quick Access for Presenters */}
-              <div className="flex items-center justify-between gap-2 pt-1 border-t border-pink-100/80">
-                <button
-                  type="button"
-                  onClick={() => setIsPitchDeckOpen(true)}
-                  className="flex-1 py-1.5 px-3 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 text-[10.5px] font-comfortaa font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-2xs"
-                >
-                  <span>📺</span>
-                  <span>Pitch Deck</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsQrModalOpen(true)}
-                  className="py-1.5 px-3 rounded-xl bg-pink-50 hover:bg-pink-100 border border-pink-200 text-[#FF4D6D] text-[10.5px] font-comfortaa font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-2xs"
-                  title="Buka QR Panggung"
-                >
-                  <QrCode className="w-3.5 h-3.5" />
-                  <span>QR Stage</span>
-                </button>
-              </div>
-            </div>
-          </aside>
-        )}
-
-        {/* CENTER COLUMN: Sleek Mobile Canvas (Clean rounded frame on desktop, edge-to-edge on mobile) */}
-        <div className={`relative w-full h-[100dvh] max-h-[100dvh] xl:h-[min(840px,94dvh)] xl:max-h-[860px] bg-[#FFF8F7] text-[#2F121A] font-quicksand rounded-none xl:rounded-[44px] border-0 xl:border-4 border-[#FBCFE8] shadow-none xl:shadow-[0_20px_60px_rgba(255,175,190,0.35)] flex flex-col justify-between items-center overflow-hidden flex-shrink-0 transition-all duration-300 ${
+      {/* App Main View Container (Clean Centered Mobile Canvas, Zero Side Clutter) */}
+      <div className="w-full h-full min-h-[100dvh] flex items-center justify-center z-10 p-0 sm:py-3">
+        {/* CENTER COLUMN: Clean mobile canvas (Rounded bento on desktop, edge-to-edge on mobile) */}
+        <div className={`relative w-full h-[100dvh] max-h-[100dvh] sm:h-[min(860px,96dvh)] sm:max-h-[880px] bg-[#FFF8F7] text-[#2F121A] font-quicksand rounded-none sm:rounded-[44px] border-0 sm:border-4 border-[#FBCFE8] shadow-none sm:shadow-[0_20px_60px_rgba(255,175,190,0.35)] flex flex-col justify-between items-center overflow-hidden flex-shrink-0 transition-all duration-300 ${
           currentView === 'lobby' ? 'p-0' : 'px-2 pt-1 pb-1.5 sm:px-3 sm:py-2'
         } ${
-          currentView === 'host' ? 'xl:w-[500px]' : 'xl:w-[410px]'
+          currentView === 'host' ? 'sm:w-[500px]' : 'sm:w-[410px]'
         }`}>
 
           {currentView === 'lobby' ? (
@@ -1157,74 +1082,6 @@ export function App() {
             />
           )}
         </div>
-
-        {/* RIGHT PANEL: Tournament Vault & Arsenal (Ultra-Clean, Rounded Bento) */}
-        {currentView !== 'host' && (
-          <aside className="hidden xl:flex flex-col w-[300px] justify-center gap-4 py-2">
-          <div className="bg-white/95 backdrop-blur-xl border-2 border-[#FCE7F3] rounded-[38px] p-6 shadow-[0_12px_35px_rgba(255,175,190,0.25)] flex flex-col gap-4">
-            <div className="flex items-center justify-between">
-              <span className="text-[9.5px] font-comfortaa font-bold tracking-wider text-amber-800 uppercase bg-amber-100 border border-amber-200 px-3 py-1 rounded-full flex items-center gap-1.5">
-                <Trophy className="w-3 h-3 text-amber-600" />
-                VAULT ESCROW
-              </span>
-              <span className="text-[10px] font-mono font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
-                {activeArenaConfig?.prizeScheme === 'winnerTakesAll' || currentMaxPlayers === 2 ? 'WINNER 95%' : 'PODIUM TOP-3'}
-              </span>
-            </div>
-
-            <div>
-              <span className="font-comfortaa font-black text-3xl text-amber-800 tracking-tight block">
-                {displayPot.toFixed(2)} MON
-              </span>
-              <span className="text-xs text-[#574144] font-medium">
-                {language === 'id' ? 'Hadiah Terkunci Turnamen' : 'Tournament Prize Pool'}
-              </span>
-            </div>
-
-            {/* Dynamic Prize distribution breakdown */}
-            {activeArenaConfig?.prizeScheme === 'winnerTakesAll' || currentMaxPlayers === 2 ? (
-              <div className="flex items-center justify-between gap-1.5 p-1.5 rounded-2xl bg-[#FFF8FA] border border-pink-100 text-[10px] font-comfortaa font-bold text-center">
-                <div className="flex-1 py-1 rounded-xl bg-amber-100 text-amber-900">🏆 95% Juara 1</div>
-                <div className="w-20 py-1 rounded-xl bg-rose-100 text-[#FF4D6D]">🏛️ 5% Vault</div>
-              </div>
-            ) : (
-              <div className="flex items-center justify-between gap-1 p-1.5 rounded-2xl bg-[#FFF8FA] border border-pink-100 text-[10px] font-comfortaa font-bold text-center">
-                <div className="flex-1 py-1 rounded-xl bg-amber-100/70 text-amber-900">🥇 65%</div>
-                <div className="flex-1 py-1 rounded-xl bg-pink-100/70 text-[#2F121A]">🥈 20%</div>
-                <div className="flex-1 py-1 rounded-xl bg-pink-100/70 text-[#2F121A]">🥉 10%</div>
-                <div className="flex-1 py-1 rounded-xl bg-rose-100/70 text-[#FF4D6D]">🏛️ 5%</div>
-              </div>
-            )}
-
-            <div className="h-px bg-pink-100/80 w-full" />
-
-            {/* Sabotage Weapons Quick Dock */}
-            <div>
-              <span className="text-[10px] font-comfortaa font-bold uppercase tracking-wider text-[#FF4D6D] block mb-2">
-                SABOTAGE ARSENAL
-              </span>
-              <div className="grid grid-cols-3 gap-2">
-                <div className="flex flex-col items-center justify-center p-2 rounded-2xl bg-[#FFF8FA] border border-pink-100 text-center">
-                  <span className="text-base mb-0.5">⚡</span>
-                  <span className="font-comfortaa font-bold text-[10px] text-[#2F121A]">Glitch</span>
-                  <span className="text-[8.5px] font-mono text-[#0369A1] font-bold">30 Mana</span>
-                </div>
-                <div className="flex flex-col items-center justify-center p-2 rounded-2xl bg-[#FFF8FA] border border-pink-100 text-center">
-                  <span className="text-base mb-0.5">🧪</span>
-                  <span className="font-comfortaa font-bold text-[10px] text-[#2F121A]">Toxic</span>
-                  <span className="text-[8.5px] font-mono text-rose-600 font-bold">60 Mana</span>
-                </div>
-                <div className="flex flex-col items-center justify-center p-2 rounded-2xl bg-[#FFF8FA] border border-pink-100 text-center">
-                  <span className="text-base mb-0.5">❄️</span>
-                  <span className="font-comfortaa font-bold text-[10px] text-[#2F121A]">Frost</span>
-                  <span className="text-[8.5px] font-mono text-indigo-600 font-bold">90 Mana</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          </aside>
-        )}
-
       </div>
 
       {/* Visual Projectile Laser Beams (Sabotage VFX) */}
