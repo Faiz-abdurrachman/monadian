@@ -109,37 +109,48 @@ export class SessionKeyManager {
   }
 
   /**
-   * Koneksi Web3 Wallet (MetaMask, Rabby, dll.)
+   * Koneksi Web3 Wallet (MetaMask, Rabby, dll.) dengan optimasi Mobile & Timeout
    */
   public async connectWallet(): Promise<Address> {
     if (typeof window === 'undefined' || !(window as unknown as { ethereum?: unknown }).ethereum) {
-      throw new Error('Web3 Wallet tidak terdeteksi. Silakan pasang MetaMask atau Rabby.');
+      throw new Error('Web3 Wallet tidak terdeteksi. Silakan buka di browser MetaMask Mobile.');
     }
 
     const ethereum = (window as unknown as { ethereum: any }).ethereum;
-    const walletClient = createWalletClient({
-      chain: monadTestnet,
-      transport: custom(ethereum),
-    });
 
-    const [account] = await walletClient.requestAddresses();
+    // 1. Dapatkan alamat akun secara langsung dengan timeout 8 detik (anti-hang di mobile)
+    let accounts: string[] = [];
+    try {
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('Waktu koneksi habis. Buka pop-up MetaMask untuk menyetujui.')), 8000)
+      );
+
+      const reqPromise = ethereum.request({ method: 'eth_requestAccounts' });
+      accounts = (await Promise.race([reqPromise, timeoutPromise])) as string[];
+    } catch (err: any) {
+      // Coba fallback cek eth_accounts jika sudah pernah diapprove
+      const existing = (await ethereum.request({ method: 'eth_accounts' }).catch(() => [])) as string[];
+      if (existing && existing.length > 0) {
+        accounts = existing;
+      } else {
+        throw err;
+      }
+    }
+
+    if (!accounts || accounts.length === 0) {
+      throw new Error('Tidak ada akun MetaMask yang dipilih.');
+    }
+
+    const account = accounts[0] as Address;
     this.userAddress = account;
     safeSetItem('monadian_user_address', account);
 
-    // Otomatis cek & beralih/tambahkan Monad Testnet (Chain ID 10143)
-    try {
-      const currentChainHex = await (ethereum as any).request?.({ method: 'eth_chainId' }).catch(() => null);
-      const isAlreadyMonad = currentChainHex && parseInt(currentChainHex, 16) === monadTestnet.id;
-
-      if (!isAlreadyMonad) {
-        // Beri jeda 600ms agar pop-up persetujuan akun MetaMask selesai menutup dengan aman
-        // sebelum memicu pop-up tambah jaringan baru (mencegah tab origin collision)
-        await new Promise((resolve) => setTimeout(resolve, 600));
-        await this.switchOrAddMonadChain();
-      }
-    } catch (chainErr) {
-      console.warn('Peringatan switch chain saat connect:', chainErr);
-    }
+    // 2. Non-blocking: Cek & switch chain di latar belakang (tidak membekukan tombol UI)
+    setTimeout(() => {
+      this.switchOrAddMonadChain().catch((e) => {
+        console.info('Switch Monad chain info:', e.message || e);
+      });
+    }, 300);
 
     return account;
   }
