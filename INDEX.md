@@ -24,9 +24,9 @@ version: 1.0.0
 | **[`smart-contracts.md`](file:///home/faiz/hackaton/monad/volume2/monadian/smart-contracts.md)** | Detail kontrak Solidity lengkap: struct data, mapping, function signature, formula gas, dan pseudocode implementasi |
 | **[`flow-gameplay.md`](file:///home/faiz/hackaton/monad/volume2/monadian/flow-gameplay.md)** | User journey & flowchart state machine dari connect wallet, session delegation, match finding, live combat, sampai payout pot |
 | **[`kenapa-monad.md`](file:///home/faiz/hackaton/monad/volume2/monadian/kenapa-monad.md)** | Deep dive mutlak *Why Blockchain & Why Monad*, perbandingan vs Ethereum/Base/Solana, legal framing esports (anti-judol), dan bantahan kritik juri |
-| **[`roadmap.md`](file:///home/faiz/hackaton/monad/volume2/monadian/roadmap.md)** | Action plan 2 bulan build menuju demo 24 Oktober 2026 di GIK UGM (fase contract, game engine Pixi.js, UI/UX, playtesting, dan demo pitch) |
+| **[`roadmap.md`](file:///home/faiz/hackaton/monad/volume2/monadian/roadmap.md)** | Action plan 2 bulan build menuju demo 24 Oktober 2026 di Monad Blitz (fase contract, game engine Pixi.js, UI/UX, playtesting, dan demo pitch) |
 | **[`biaya.md`](file:///home/faiz/hackaton/monad/volume2/monadian/biaya.md)** | Estimasi biaya development, gas fee per match, sponsorship revenue model, dan token burn economics |
-| **[`presentasi.md`](file:///home/faiz/hackaton/monad/volume2/monadian/presentasi.md)** | Pitch deck 3 menit untuk juri Monad Blitz Jogja di GIK UGM (Slide 1–10 + naskah demo 30 detik WOW factor) |
+| **[`presentasi.md`](file:///home/faiz/hackaton/monad/volume2/monadian/presentasi.md)** | Pitch deck 3 menit untuk juri Monad Blitz Jogja di Monad Blitz (Slide 1–10 + naskah demo 30 detik WOW factor) |
 
 ---
 
@@ -38,7 +38,7 @@ Pemain menyusun balok di atas papan 8x8 untuk meledakkan garis dan mengumpulkan 
 
 Seluruh status papan pemain dienkapsulasi ke dalam **satu variabel `uint64` (64-bit)** dan diselesaikan secara murni paralel menggunakan konsensus **MonadBFT (400ms block time)** dan arsitektur **Asynchronous Combat Inbox Pattern** yang 100% bebas benturan status (*zero state contention*).
 
-* **Target Event:** Monad Blitz Jogja Vol. 2 (Sabtu, 24 Oktober 2026, GIK UGM)
+* **Target Event:** Monad Blitz Jogja Vol. 2 (Sabtu, 24 Oktober 2026, Monad Blitz)
 * **Durasi Build:** 2 Bulan Penuh (Oktober – Desember 2026)
 * **Status:** Dokumen Perencanaan Lengkap, Siap Eksekusi Kode
 
@@ -81,5 +81,5 @@ Seluruh status papan pemain dienkapsulasi ke dalam **satu variabel `uint64` (64-
    * Baca [`arsitektur-teknis.md`](file:///home/faiz/hackaton/monad/volume2/monadian/arsitektur-teknis.md) → Pahami arsitektur *Combat Inbox* & paralelisme Monad.
    * Baca [`smart-contracts.md`](file:///home/faiz/hackaton/monad/volume2/monadian/smart-contracts.md) → Pahami struktur data, ABI, dan kode Solidity Foundry.
    * Baca [`roadmap.md`](file:///home/faiz/hackaton/monad/volume2/monadian/roadmap.md) & [`biaya.md`](file:///home/faiz/hackaton/monad/volume2/monadian/biaya.md) → Rencana pengerjaan 8 minggu dan budget operasional.
-4. **Untuk Hari-H Demo Hackathon di GIK UGM:**
+4. **Untuk Hari-H Demo Hackathon di Monad Blitz:**
    * Buka [`presentasi.md`](file:///home/faiz/hackaton/monad/volume2/monadian/presentasi.md) → Naskah slide dan skrip demo 30 detik *live match*.

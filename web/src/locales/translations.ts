@@ -307,7 +307,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       title: 'MONADIAN',
       subtitle: 'THE MONAD PUZZLE ROYALE',
       tagline: '100% On-Chain Block Blast Battle Royale 16 Pemain di Monad Testnet',
-      venueBadge: 'MONAD BLITZ JOGJA VOL. 2 — GIK UGM',
+      venueBadge: 'MONAD BLITZ TOURNAMENT',
       playerLabel: 'NICKNAME PEMAIN',
       playerPlaceholder: 'Masukkan nama (cth: Faiz.mon)',
       defaultPlayerName: 'Pemain_1',
@@ -380,8 +380,8 @@ export const translations: Record<Language, TranslationDictionary> = {
     lobbyQr: {
       title: 'PINDAI UNTUK BERGABUNG LOBI',
       subtitle: 'Arahkan kamera smartphone untuk langsung bertanding (Multiplayer P2P):',
-      lanLabel: 'Wi-Fi Lokal (GIK UGM)',
-      lanDesc: 'Koneksi latensi ultra-rendah untuk juri & audiens di venue',
+      lanLabel: 'Jaringan Lokal / Wi-Fi',
+      lanDesc: 'Koneksi latensi ultra-rendah untuk multiplayer lokal di venue',
       tunnelLabel: 'Akses Publik (Cloudflare Tunnel)',
       tunnelDesc: 'Dapat diakses dari jaringan data seluler apa pun',
       copyBtn: 'Salin Tautan',
@@ -389,7 +389,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       closeBtn: 'Tutup',
     },
     pitchDeck: {
-      topSub: 'MONAD BLITZ JOGJA VOL. 2 — GIK UGM',
+      topSub: 'MONAD BLITZ HACKATHON 2026',
       toggleFullscreen: 'Mode Layar Penuh Proyektor',
       closeSlide: 'Tutup Slide',
       keyboardHint: '(Gunakan panah keyboard ◄ ► atau Space untuk navigasi)',
@@ -404,7 +404,7 @@ export const translations: Record<Language, TranslationDictionary> = {
             {
               title: 'Event Presentasi',
               desc: 'Monad Blitz Jogja Vol. 2 — Sabtu, 24 Oktober 2026',
-              badge: 'GIK UGM',
+              badge: 'Garuda Spark',
             },
             {
               title: 'Kategori Inovasi',
@@ -541,7 +541,7 @@ export const translations: Record<Language, TranslationDictionary> = {
           points: [
             {
               title: 'Scan QR Code di Layar',
-              desc: 'Juri dan penonton dapat langsung bergabung ke room lobi via Wi-Fi GIK UGM atau Cloudflare Tunnel.',
+              desc: 'Pemain dapat langsung bergabung ke room lobi via scan kamera smartphone atau browser.',
               badge: 'Scan & Play',
             },
             {
@@ -583,7 +583,7 @@ export const translations: Record<Language, TranslationDictionary> = {
         {
           tag: 'SLIDE 09 // ROADMAP POST-HACKATHON',
           title: 'RENCANA PRODUKSI & PELUNCURAN',
-          subtitle: 'Dari Hackathon GIK UGM Menuju Mainnet Monad 2026',
+          subtitle: 'Dari Monad Blitz Menuju Mainnet Monad 2026',
           points: [
             {
               title: 'Bulan 1 (Okt - Nov 2026)',
@@ -610,7 +610,7 @@ export const translations: Record<Language, TranslationDictionary> = {
           points: [
             {
               title: 'Live Playable URL',
-              desc: 'http://192.168.1.114:3000 (Wi-Fi GIK UGM) atau Public Tunnel',
+              desc: 'https://monadian.vercel.app atau Jaringan Lokal',
               badge: 'Play Now',
             },
             {
@@ -751,7 +751,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       title: 'MONADIAN',
       subtitle: 'THE MONAD PUZZLE ROYALE',
       tagline: '100% On-Chain Block Blast Battle Royale for 16 Players on Monad',
-      venueBadge: 'MONAD BLITZ JOGJA VOL. 2 — GIK UGM',
+      venueBadge: 'MONAD BLITZ TOURNAMENT',
       playerLabel: 'PLAYER NICKNAME',
       playerPlaceholder: 'Enter name (e.g. Faiz.mon)',
       defaultPlayerName: 'Player_1',
@@ -824,8 +824,8 @@ export const translations: Record<Language, TranslationDictionary> = {
     lobbyQr: {
       title: 'SCAN TO JOIN LOBBY',
       subtitle: 'Point any smartphone camera to instantly drop into the battle arena (P2P):',
-      lanLabel: 'Local Wi-Fi (GIK UGM)',
-      lanDesc: 'Ultra-low latency LAN connection for judges & stage audience',
+      lanLabel: 'Local Wi-Fi / LAN',
+      lanDesc: 'Ultra-low latency connection for local multiplayer at the venue',
       tunnelLabel: 'Public Access (Cloudflare Tunnel)',
       tunnelDesc: 'Universally accessible across any cellular carrier network',
       copyBtn: 'Copy URL',
@@ -833,7 +833,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       closeBtn: 'Close',
     },
     pitchDeck: {
-      topSub: 'MONAD BLITZ JOGJA VOL. 2 — GIK UGM',
+      topSub: 'MONAD BLITZ HACKATHON 2026',
       toggleFullscreen: 'Toggle Presentation Fullscreen',
       closeSlide: 'Close Slides',
       keyboardHint: '(Use keyboard arrow keys ◄ ► or Space to navigate)',
@@ -848,7 +848,7 @@ export const translations: Record<Language, TranslationDictionary> = {
             {
               title: 'Hackathon Event',
               desc: 'Monad Blitz Jogja Vol. 2 — Saturday, October 24, 2026',
-              badge: 'GIK UGM',
+              badge: 'Garuda Spark',
             },
             {
               title: 'Category',
@@ -985,7 +985,7 @@ export const translations: Record<Language, TranslationDictionary> = {
           points: [
             {
               title: 'Scan On-Screen QR Code',
-              desc: 'Judges and audience join the live lobby room via GIK UGM Wi-Fi or Cloudflare Tunnel.',
+              desc: 'Players join the live lobby room via smartphone camera QR scan.',
               badge: 'Scan & Play',
             },
             {
@@ -1027,7 +1027,7 @@ export const translations: Record<Language, TranslationDictionary> = {
         {
           tag: 'SLIDE 09 // POST-HACKATHON ROADMAP',
           title: 'PRODUCTION ROADMAP & ROLLOUT',
-          subtitle: 'From GIK UGM Hackathon to Monad Mainnet Launch in 2026',
+          subtitle: 'From Monad Blitz to Monad Mainnet Launch in 2026',
           points: [
             {
               title: 'Month 1 (Oct - Nov 2026)',
@@ -1054,7 +1054,7 @@ export const translations: Record<Language, TranslationDictionary> = {
           points: [
             {
               title: 'Live Playable URL',
-              desc: 'http://192.168.1.114:3000 (GIK UGM Wi-Fi) or Public Cloudflare Tunnel',
+              desc: 'https://monadian.vercel.app or Local Network',
               badge: 'Play Now',
             },
             {

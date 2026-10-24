@@ -11,6 +11,7 @@ import { PitchDeckModal } from './components/PitchDeckModal';
 import { LobbyLandingView, GuestRoomInfo } from './components/LobbyLandingView';
 import { CreateArenaModal, ArenaConfig } from './components/CreateArenaModal';
 import { HostArenaView } from './components/HostArenaView';
+import { CameraQrScannerModal } from './components/CameraQrScannerModal';
 import {
   CombatAttack,
   consumePlayerInbox,
@@ -53,6 +54,7 @@ export function App() {
 
   // Tournament Arena State (Mode 1: P2P Buy-in vs Mode 2: Sponsored Bounty)
   const [isCreateArenaOpen, setIsCreateArenaOpen] = useState<boolean>(false);
+  const [isCameraScannerOpen, setIsCameraScannerOpen] = useState<boolean>(false);
   const [activeArenaConfig, setActiveArenaConfig] = useState<ArenaConfig | null>(null);
   const [joinedPlayers, setJoinedPlayers] = useState<string[]>([]);
   const [guestRoomInfo, setGuestRoomInfo] = useState<GuestRoomInfo | null>(null);
@@ -748,7 +750,7 @@ export function App() {
     // Live Stage Interactivity: Simulate guests scanning QR & joining
     setTimeout(() => {
       setJoinedPlayers((prev) => {
-        if (prev.length === 1) return [...prev, 'Juri_UGM_1'];
+        if (prev.length === 1) return [...prev, 'Bunny_Rival'];
         return prev;
       });
     }, 2200);
@@ -759,6 +761,56 @@ export function App() {
         return prev;
       });
     }, 4800);
+  };
+
+  // Join Arena via Camera QR Scan (Works on Mobile Camera & MetaMask in-app browser)
+  const handleScanQrSuccess = (scannedData: string) => {
+    let roomCode = '371';
+    let poolType: 'buyIn' | 'sponsored' = 'buyIn';
+    let potMon = '0.80';
+    let maxPlayers = 16;
+
+    try {
+      if (scannedData.includes('?') || scannedData.includes('room=')) {
+        const queryString = scannedData.includes('?')
+          ? scannedData.substring(scannedData.indexOf('?'))
+          : `?${scannedData}`;
+        const params = new URLSearchParams(queryString);
+        if (params.get('room')) roomCode = params.get('room')!;
+        if (params.get('mode') === 'sponsored') poolType = 'sponsored';
+        if (params.get('pot')) potMon = params.get('pot')!;
+        if (params.get('players')) maxPlayers = parseInt(params.get('players')!, 10) || 16;
+      } else if (scannedData.trim()) {
+        roomCode = scannedData.trim().replace(/^#/, '');
+      }
+    } catch (e) {
+      console.warn('Gagal membaca data QR:', e);
+    }
+
+    const scannedConfig: ArenaConfig = {
+      roomName: `Monad Blitz Arena #${roomCode}`,
+      roomCode,
+      poolType,
+      entryFeeMon: poolType === 'sponsored' ? '0' : (parseFloat(potMon) / maxPlayers).toFixed(2),
+      sponsorPotMon: poolType === 'sponsored' ? potMon : '0',
+      prizeScheme: 'podium',
+      maxPlayers,
+      hostName: 'Host.mon',
+    };
+
+    setActiveArenaConfig(scannedConfig);
+
+    const myName = playerName.trim() || (userAddress ? `${userAddress.slice(0, 6)}...` : 'Pemain_1');
+    setJoinedPlayers(['Host.mon', myName, 'Bunny_Rival']);
+    setCurrentView('host');
+    sounds.playPickup();
+
+    setTxNotice(
+      language === 'id'
+        ? `🎉 Berhasil bergabung ke Arena #${roomCode}! Peserta: Host.mon, ${myName}, Bunny_Rival`
+        : `🎉 Joined Arena #${roomCode}! Contenders: Host.mon, ${myName}, Bunny_Rival`
+    );
+    setTimeout(() => setTxNotice(null), 4000);
   };
 
   const handleStartGameFromHost = () => {
@@ -935,6 +987,7 @@ export function App() {
               onOpenGuide={() => setIsHelpModalOpen(true)}
               onOpenPitchDeck={() => setIsPitchDeckOpen(true)}
               onOpenQr={() => setIsQrModalOpen(true)}
+              onOpenQrScanner={() => setIsCameraScannerOpen(true)}
               sessionAddress={sessionAddress}
               guestRoomInfo={guestRoomInfo}
               userAddress={userAddress}
@@ -1253,6 +1306,13 @@ export function App() {
         onClose={() => setIsCreateArenaOpen(false)}
         hostName={playerName}
         onCreateArena={handleCreateArena}
+      />
+
+      {/* Live Camera QR Scanner Modal (Mobile / MetaMask in-app / Desktop) */}
+      <CameraQrScannerModal
+        isOpen={isCameraScannerOpen}
+        onClose={() => setIsCameraScannerOpen(false)}
+        onScanSuccess={handleScanQrSuccess}
       />
     </div>
   );

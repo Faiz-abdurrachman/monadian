@@ -1,7 +1,7 @@
 # Panduan Presentasi & Pitch Deck 3 Menit — Monadian
 
 > **Event:** Monad Blitz Jogja Vol. 2  
-> **Lokasi:** GIK Universitas Gadjah Mada (UGM), Yogyakarta  
+> **Lokasi:** Monad Blitz Tournament Venue  
 > **Durasi Pitch:** 3 Menit Presentasi + 2 Menit Tanya Jawab Juri  
 > **Target:** Memikat juri teknis Monad Foundation, panitia lokal, dan audiens kampus.
 
@@ -81,7 +81,7 @@
 ### Slide 7 & 8: Legalitas & Framing Esports (Waktu: 02:25 – 02:45)
 * **Visual:** Sertifikasi Game of Skill vs Game of Chance, dan 3 tier turnamen (Free Practice, Sponsored Cups, Ranked Bracket).
 * **Naskah:**  
-  > *"Dan yang paling penting di lingkungan kampus UGM: **Monadian 100% Game of Skill (Bukan Judi).**  
+  > *"Dan yang paling penting di lingkungan kampus Monad: **Monadian 100% Game of Skill (Bukan Judi).**  
   > Kemenangan ditentukan murni oleh ketangkasan spasial dan kecepatan otak, setara dengan turnamen catur kilat atau esports resmi. Kami juga menyediakan arena gratis dan turnamen bersponsor protokol di mana pemain bisa bertanding tanpa menyetor uang sepeser pun."*
 
 ---

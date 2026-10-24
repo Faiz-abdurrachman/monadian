@@ -63,7 +63,7 @@ Game battle royale sinkron 16 pemain dengan tempo 60 detik ini **SECARA TEKNIS A
 
 ## 3. Aspek Legal & Regulasi: "Apakah Ini Judi (Judol) atau Kompetisi Ketangkasan?"
 
-Isu ini sangat krusial karena hackathon diadakan di lingkungan akademik **GIK Universitas Gadjah Mada (UGM), Yogyakarta, Indonesia**.
+Isu ini sangat krusial karena hackathon diadakan di lingkungan akademik **Monad Blitz Tournament Venue, Indonesia**.
 
 ### 3.1 Landasan Hukum: The Predominant Factor Test
 Dalam hukum internasional dan hukum pidana Indonesia (Pasal 303 KUHP), sebuah aktivitas diklasifikasikan sebagai perjudian jika hasilnya didominasi oleh **faktor peluang atau keberuntungan murni (Game of Chance)** seperti slot, rolet, atau lempar dadu.

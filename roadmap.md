@@ -4,10 +4,10 @@
 
 ## 1. Ikhtisar Garis Waktu (Timeline Overview)
 
-Total waktu pengembangan adalah **2 Bulan Penuh (8 Minggu)**, dengan target penting di awal: **Presentasi & Live Demo pada Monad Blitz Jogja Vol. 2 (Sabtu, 24 Oktober 2026, GIK UGM)**, lalu dilanjutkan dengan *deep polish* hingga peluncuran Mainnet Monad.
+Total waktu pengembangan adalah **2 Bulan Penuh (8 Minggu)**, dengan target penting di awal: **Presentasi & Live Demo pada Monad Blitz Jogja Vol. 2 (Sabtu, 24 Oktober 2026, Monad Blitz)**, lalu dilanjutkan dengan *deep polish* hingga peluncuran Mainnet Monad.
 
 ```
-[ Minggu 1: 19 - 24 Okt 2026 ] ──> KONTRAK INTI & PROTOTIPE DEMO HACKATHON GIK UGM
+[ Minggu 1: 19 - 24 Okt 2026 ] ──> KONTRAK INTI & PROTOTIPE DEMO HACKATHON Monad Blitz
 [ Minggu 2: 26 Okt - 01 Nov  ] ──> ENGINE PIXI.JS 2D & MOBILE DRAG-AND-DROP UX
 [ Minggu 3: 02 - 08 Nov 2026 ] ──> SISTEM TEMPUR ASINKRON & 3 SENJATA SABOTASE
 [ Minggu 4: 09 - 15 Nov 2026 ] ──> EIP-7702 SESSION KEYS & ZERO-POPUP EXECUTION
@@ -28,7 +28,7 @@ Total waktu pengembangan adalah **2 Bulan Penuh (8 Minggu)**, dengan target pent
   * Unit test Foundry dengan cakupan pengujian tabrakan balok 100%.
   * Deploy kontrak ke Monad Testnet (Chain ID `10143`).
   * Prototipe frontend fungsional: 1 papan 8x8 yang bisa ditaruh balok dan meledakkan garis di browser HP.
-* **Definition of Done (DoD):** Juri di GIK UGM bisa mencoba menaruh balok di web demo dan melihat status papan tersimpan on-chain di testnet.
+* **Definition of Done (DoD):** Juri di Monad Blitz bisa mencoba menaruh balok di web demo dan melihat status papan tersimpan on-chain di testnet.
 
 ---
 
@@ -107,6 +107,6 @@ Total waktu pengembangan adalah **2 Bulan Penuh (8 Minggu)**, dengan target pent
 
 | Potensi Masalah saat Demo Hackathon | Tingkat Dampak | Solusi & Protokol Mitigasi |
 | :--- | :--- | :--- |
-| **Koneksi Wi-Fi GIK UGM Lambat / Padat** | Tinggi | Klien Pixi.js memiliki *Local Optimistic Simulation Engine* yang langsung mengeksekusi animasi di layar HP secara instan tanpa menunggu respons jaringan, lalu merekonsiliasi state di background. |
+| **Koneksi Wi-Fi Monad Blitz Lambat / Padat** | Tinggi | Klien Pixi.js memiliki *Local Optimistic Simulation Engine* yang langsung mengeksekusi animasi di layar HP secara instan tanpa menunggu respons jaringan, lalu merekonsiliasi state di background. |
 | **RPC Node Monad Publik Mengalami Rate Limit** | Sedang | Menyiapkan 2 endpoint RPC cadangan pribadi (QuickNode / Alchemy private endpoints) yang otomatis berpindah (*auto-failover*) jika RPC default down. |
 | **Juri Tidak Punya Saldo MON di Dompetnya** | Rendah | Mengaktifkan mode *Free Practice Arena* atau *Sponsored Cup*, serta bot sponsor internal yang otomatis mendanai gas delegasi juri saat pertama kali scan QR code. |

@@ -5,6 +5,7 @@ import {
   LogOut,
   Copy,
   Check,
+  Camera,
 } from 'lucide-react';
 import { useLanguage } from '../locales/LanguageContext';
 import { LanguageToggle } from './LanguageToggle';
@@ -26,6 +27,7 @@ interface LobbyLandingViewProps {
   onOpenGuide: () => void;
   onOpenPitchDeck?: () => void;
   onOpenQr?: () => void;
+  onOpenQrScanner?: () => void;
   sessionAddress?: string | null;
   guestRoomInfo?: GuestRoomInfo | null;
   userAddress?: string | null;
@@ -38,6 +40,7 @@ export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
   onEnterArena,
   onOpenCreateArena,
   onOpenGuide,
+  onOpenQrScanner,
   guestRoomInfo,
   userAddress,
   isConnectingWallet,
@@ -95,6 +98,18 @@ export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
         {/* Right Controls: Language Toggle + Help (?) Button */}
         <div className="flex items-center gap-2">
           <LanguageToggle />
+
+          {/* Camera QR Scanner Button */}
+          {onOpenQrScanner && (
+            <button
+              type="button"
+              onClick={onOpenQrScanner}
+              className="w-8 h-8 rounded-full bg-white/80 border border-[#FBCFE8] flex items-center justify-center text-[#FF3366] hover:bg-white active:scale-95 transition-all cursor-pointer shadow-2xs"
+              title={language === 'id' ? 'Scan QR Arena (Kamera)' : 'Scan Arena QR (Camera)'}
+            >
+              <Camera className="w-4 h-4" />
+            </button>
+          )}
 
           {/* Guide Help Button (?) */}
           <button
@@ -201,6 +216,18 @@ export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
                     )}
                   </div>
                 </div>
+
+                {/* SCAN QR CAMERA BUTTON TO JOIN ARENA */}
+                {onOpenQrScanner && (
+                  <button
+                    type="button"
+                    onClick={onOpenQrScanner}
+                    className="w-full py-2 px-3 rounded-full bg-[#FFF0F4] hover:bg-pink-100/70 border border-[#FCD2DF] text-[#A12D4C] shadow-xs active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer font-comfortaa font-bold text-xs tracking-wider select-none mt-0.5"
+                  >
+                    <Camera className="w-3.5 h-3.5 text-[#FF3366]" />
+                    <span>{language === 'id' ? 'SCAN QR ARENA (KAMERA)' : 'SCAN ARENA QR (CAMERA)'}</span>
+                  </button>
+                )}
               </>
             ) : (
               /* ---------------- STATE B: NO WALLET CONNECTED --------------- */
@@ -223,6 +250,18 @@ export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
                   </span>
                   <ArrowRight className="w-4 h-4 text-white stroke-[2.5]" />
                 </button>
+
+                {/* Scan QR Arena Camera Button (Direct Join) */}
+                {onOpenQrScanner && (
+                  <button
+                    type="button"
+                    onClick={onOpenQrScanner}
+                    className="w-full py-2 px-3 rounded-full bg-[#FFF0F4] hover:bg-pink-100/70 border border-[#FCD2DF] text-[#A12D4C] shadow-xs active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-comfortaa font-bold text-xs tracking-wider select-none mt-0.5"
+                  >
+                    <Camera className="w-3.5 h-3.5 text-[#FF3366]" />
+                    <span>{language === 'id' ? 'SCAN QR ARENA (KAMERA)' : 'SCAN ARENA QR (CAMERA)'}</span>
+                  </button>
+                )}
               </>
             )}
           </div>

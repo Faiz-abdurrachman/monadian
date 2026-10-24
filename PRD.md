@@ -97,7 +97,7 @@ Monadian menggabungkan mekanik intuitif penempatan balok 8x8 dengan sistem sabot
 ## 6. Metrik Keberhasilan (KPIs)
 
 ### A. Metrik Hackathon Monad Blitz Jogja (24 Oktober 2026)
-* **Demo Reliability:** 100% sukses menjalankan live battle 16 pemain bersama juri di panggung GIK UGM tanpa crash atau desync.
+* **Demo Reliability:** 100% sukses menjalankan live battle 16 pemain bersama juri di panggung Monad Blitz tanpa crash atau desync.
 * **Time-to-Play:** Pemain baru bisa mulai bermain dalam waktu **kurang dari 10 detik** sejak scan QR code di layar proyektor.
 
 ### B. Metrik Pasca-Peluncuran Testnet/Mainnet
