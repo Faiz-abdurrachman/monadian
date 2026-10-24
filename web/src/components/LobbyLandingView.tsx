@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   HelpCircle,
   Presentation,
   QrCode,
-  Edit2,
-  Check,
   Play,
-  Swords,
-  Wallet,
+  ArrowRight,
+  LogOut,
+  Copy,
+  Check,
 } from 'lucide-react';
 import { useLanguage } from '../locales/LanguageContext';
 import { LanguageToggle } from './LanguageToggle';
 import { sounds } from '../engine/audio';
-import { MonaBunnyMascot } from './MonaBunnyMascot';
 
 export interface GuestRoomInfo {
   roomCode: string;
@@ -38,19 +37,12 @@ interface LobbyLandingViewProps {
   onDisconnectWallet?: () => void;
 }
 
-const PRESET_NAMES = ['Faiz.mon', 'Juri_UGM', 'MonadChad', 'SakuraKing'];
-
 export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
-  playerName,
-  onPlayerNameChange,
   onEnterArena,
   onOpenCreateArena,
-  isLiveTestnet,
-  onToggleNetwork,
   onOpenGuide,
   onOpenPitchDeck,
   onOpenQr,
-  sessionAddress,
   guestRoomInfo,
   userAddress,
   isConnectingWallet,
@@ -58,8 +50,7 @@ export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
   onDisconnectWallet,
 }) => {
   const { language } = useLanguage();
-  const [isEditingName, setIsEditingName] = useState<boolean>(false);
-  const [tempName, setTempName] = useState<string>(playerName);
+  const [copied, setCopied] = React.useState<boolean>(false);
 
   const handleStartClassic = () => {
     sounds.playPickup();
@@ -71,76 +62,70 @@ export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
     onOpenCreateArena();
   };
 
-  const handleSaveName = () => {
-    const trimmed = tempName.trim() || 'Faiz.mon';
-    onPlayerNameChange(trimmed);
-    setIsEditingName(false);
+  const handleCopyAddress = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (userAddress) {
+      navigator.clipboard.writeText(userAddress);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  // Truncate address for clean pill display (e.g. 0x8C2Bc47a...2510c69c6)
+  const formatAddress = (addr: string) => {
+    if (addr.length <= 20) return addr;
+    return `${addr.slice(0, 10)}...${addr.slice(-8)}`;
   };
 
   return (
-    <div className="flex-1 min-h-0 w-full flex flex-col justify-between items-center text-center select-none font-quicksand bg-[#FFF8F7] text-[#2F121A] relative p-3 sm:p-4 overflow-hidden">
-      {/* Ambient Blossom & Strawberry Lighting Blobs (Figma Tokens) */}
-      <div className="absolute -top-12 -left-12 w-48 h-48 rounded-full bg-pink-300/30 blur-3xl pointer-events-none" />
-      <div className="absolute top-1/3 -right-12 w-56 h-56 rounded-full bg-pink-200/40 blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-10 left-1/4 w-52 h-52 rounded-full bg-rose-200/40 blur-3xl pointer-events-none" />
-
-      {/* Floating Sparkles & Blossom Emojis */}
-      <div className="absolute top-12 left-3 text-pink-300/60 text-base pointer-events-none select-none">🌸</div>
-      <div className="absolute top-24 right-4 text-pink-300/50 text-xs pointer-events-none select-none">✨</div>
+    <div className="flex-1 min-h-0 w-full flex flex-col justify-between items-center text-center select-none font-quicksand bg-gradient-to-b from-[#FFF5F6] via-[#FFEBF0] to-[#FFF0F4] text-[#2F121A] relative p-3 sm:p-5 overflow-y-auto overflow-x-hidden">
+      {/* Soft Ambient Blossom Glows */}
+      <div className="absolute -top-16 -left-16 w-56 h-56 rounded-full bg-pink-300/30 blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 -right-16 w-60 h-60 rounded-full bg-rose-200/40 blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-12 left-1/4 w-56 h-56 rounded-full bg-pink-200/40 blur-3xl pointer-events-none" />
 
       {/* ==================================================================== */}
-      {/* 1. TOP HEADER (Logo, Network Mode Switch, Language, Quick Guide)     */}
+      {/* 1. TOP BAR (Monadian Brand, Language Pill, Slide & Guide Buttons)    */}
       {/* ==================================================================== */}
-      <header className="w-full flex items-center justify-between gap-2 flex-shrink-0 pt-0.5 z-10">
-        {/* Logo & Network Tag */}
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-2xl bg-gradient-to-tr from-[#FF758F] to-[#FF4D6D] border-2 border-white text-white shadow-xs flex items-center justify-center text-sm font-black">
-            🌸
-          </div>
-          <div className="text-left leading-tight">
-            <h1 className="font-comfortaa font-bold text-sm text-[#2F121A] tracking-wider uppercase">
-              MONADIAN
-            </h1>
-            <button
-              onClick={onToggleNetwork}
-              className={`text-[8px] font-comfortaa font-bold px-2 py-0.5 rounded-full border transition-all cursor-pointer flex items-center gap-1 ${
-                isLiveTestnet
-                  ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
-                  : 'bg-pink-100 text-[#FF4D6D] border-pink-200'
-              }`}
-              title={language === 'id' ? 'Klik untuk ganti mode jaringan' : 'Click to toggle network mode'}
-            >
-              <span className={`w-1.5 h-1.5 rounded-full ${isLiveTestnet ? 'bg-emerald-500 animate-pulse' : 'bg-[#FF4D6D]'}`} />
-              <span>{isLiveTestnet ? 'MONAD TESTNET' : 'STAGE DEMO'}</span>
-            </button>
-          </div>
-        </div>
+      <header className="w-full max-w-md flex items-center justify-between flex-shrink-0 pt-1 pb-1 z-20">
+        {/* Brand Title: Monadian */}
+        <h1 className="font-fredoka font-bold text-2xl sm:text-3xl text-[#2F121A] tracking-tight">
+          Monadian
+        </h1>
 
-        {/* Right Controls: Language Switcher & Quick Guide Modal */}
-        <div className="flex items-center gap-1.5">
+        {/* Right Controls: Language Toggle + Pitch Deck + Guide Help */}
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <LanguageToggle />
 
+          {/* Quick Pitch Deck Modal Button */}
+          <button
+            onClick={onOpenPitchDeck}
+            className="w-8 h-8 rounded-full bg-white/90 border border-pink-200 shadow-xs flex items-center justify-center text-[#574144] hover:text-[#FF4D6D] hover:bg-pink-50 active:scale-95 transition-all cursor-pointer"
+            title={language === 'id' ? 'Buka Slide Presentasi Juri' : 'Open Stage Pitch Deck'}
+          >
+            <Presentation className="w-3.5 h-3.5 text-amber-600" />
+          </button>
+
+          {/* Guide Help Button */}
           <button
             onClick={onOpenGuide}
-            className="w-8 h-8 rounded-full bg-white border border-pink-200 shadow-xs flex items-center justify-center text-[#574144] hover:text-[#FF4D6D] hover:bg-pink-50 active:scale-95 transition-all cursor-pointer"
-            title={language === 'id' ? 'Panduan Singkat 15 Detik' : '15-Second Judge Guide'}
+            className="w-8 h-8 rounded-full bg-white/90 border border-pink-200 shadow-xs flex items-center justify-center text-[#FF4D6D] hover:bg-pink-50 active:scale-95 transition-all cursor-pointer font-bold text-sm"
+            title={language === 'id' ? 'Panduan Singkat' : 'Quick Guide'}
           >
             <HelpCircle className="w-4 h-4 text-[#FF4D6D]" />
           </button>
         </div>
       </header>
 
-      {/* Guest Invitation Banner (if scanned room link) */}
+      {/* Guest Invitation Banner (if scanned room QR link) */}
       {guestRoomInfo && (
-        <div className="w-full flex-shrink-0 p-2.5 rounded-2xl bg-gradient-to-r from-pink-100 via-rose-50 to-pink-100 border-2 border-[#FBCFE8] shadow-sm text-left flex items-center justify-between gap-2 z-10 animate-pulse">
+        <div className="w-full max-w-md flex-shrink-0 p-2.5 my-1 rounded-2xl bg-gradient-to-r from-pink-100 via-rose-50 to-pink-100 border-2 border-[#FBCFE8] shadow-sm text-left flex items-center justify-between gap-2 z-20 animate-pulse">
           <div className="leading-tight">
             <span className="text-[10px] font-comfortaa font-bold text-[#FF4D6D] block">
-              🌸 {language === 'id' ? `Undangan Masuk Room #${guestRoomInfo.roomCode}` : `Room #${guestRoomInfo.roomCode} Invitation`}
+              🌸 {language === 'id' ? `Undangan Room #${guestRoomInfo.roomCode}` : `Room #${guestRoomInfo.roomCode} Invite`}
             </span>
             <span className="text-[9px] text-[#574144]">
-              {guestRoomInfo.mode === 'sponsored'
-                ? language === 'id' ? `Mode Bounty Gratis • Hadiah ${guestRoomInfo.pot} MON` : `Sponsored Bounty • ${guestRoomInfo.pot} MON Prize`
-                : language === 'id' ? `Mode P2P Buy-In • Pot ${guestRoomInfo.pot} MON` : `P2P Buy-In • ${guestRoomInfo.pot} MON Pot`}
+              {language === 'id' ? `Pot Hadiah: ${guestRoomInfo.pot} MON` : `Prize Pot: ${guestRoomInfo.pot} MON`}
             </span>
           </div>
           <button
@@ -153,234 +138,186 @@ export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
       )}
 
       {/* ==================================================================== */}
-      {/* 2. HERO PRESENTATION CARD (Minimal, Spacious & Kawaii)               */}
+      {/* 2. CENTER STAGE: BEST SCORE BADGE & 3D STICKER MASCOT                */}
       {/* ==================================================================== */}
-      <div className="w-full flex-shrink-0 bg-white/95 backdrop-blur-xl border border-pink-200/80 rounded-[32px] p-4 sm:p-5 shadow-[0_8px_30px_rgba(255,175,190,0.2)] flex flex-col items-center relative z-10">
-        <MonaBunnyMascot mood="idle" size={76} className="mb-1" />
+      <div className="w-full max-w-md flex-1 flex flex-col items-center justify-center py-2 z-10">
+        {/* Floating Best Score Pill Badge */}
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/90 backdrop-blur-md border border-pink-200 shadow-[0_2px_10px_rgba(255,77,109,0.12)] mb-2">
+          <span className="text-sm">🏆</span>
+          <span className="text-[11px] font-comfortaa font-extrabold tracking-wider text-[#FF4D6D] uppercase">
+            BEST
+          </span>
+          <span className="text-sm font-comfortaa font-black text-[#FF4D6D] ml-0.5">
+            14,850
+          </span>
+        </div>
 
-        <h2 className="font-fredoka font-bold text-xl text-[#2F121A] tracking-wide uppercase">
-          PUZZLE ROYALE
-        </h2>
-        <p className="text-xs font-jakarta text-[#8A6B73] mt-0.5 font-medium">
-          {language === 'id'
-            ? 'Block Blast Battle Royale di Monad Testnet'
-            : 'Block Blast Battle Royale on Monad Testnet'}
-        </p>
+        {/* Dynamic 3D Bunny Mascot Sticker */}
+        <div className="relative flex items-center justify-center my-1 select-none pointer-events-none">
+          {userAddress ? (
+            /* UDAH CONNECT: Happy waving bunny with open smile & excitement lines */
+            <img
+              src="/assets/homepage/bunny_connected.png"
+              alt="Monadian Happy Mascot"
+              className="w-48 sm:w-56 h-auto max-h-[220px] object-contain drop-shadow-[0_12px_24px_rgba(255,100,130,0.25)] animate-bounce-subtle"
+            />
+          ) : (
+            /* BELUM CONNECT: Cute shy bunny with hands in front */
+            <img
+              src="/assets/homepage/bunny_disconnected.png"
+              alt="Monadian Shy Mascot"
+              className="w-44 sm:w-52 h-auto max-h-[220px] object-contain drop-shadow-[0_12px_24px_rgba(255,100,130,0.2)] animate-pulse-subtle"
+            />
+          )}
+        </div>
       </div>
 
       {/* ==================================================================== */}
-      {/* 3. PLAYER & WEB3 WALLET CARD (Prominent & Clear Connected State)     */}
+      {/* 3. SECTION - PLAYER STATUS (Connected vs Disconnected Wallet Card)    */}
       {/* ==================================================================== */}
-      <div className="w-full flex-shrink-0 bg-white/95 backdrop-blur-md border border-pink-200/80 rounded-[28px] p-3 shadow-xs flex flex-col gap-2.5 z-10">
-        {/* Tier 1: Player Profile & High Score */}
-        <div className="flex items-center justify-between gap-2 px-1">
-          <div className="flex items-center gap-2 min-w-0">
-            <MonaBunnyMascot mood={userAddress ? 'happy' : 'idle'} size={32} showAura={false} className="flex-shrink-0" />
-            <div className="min-w-0">
-              {isEditingName ? (
-                <div className="flex flex-col gap-1">
-                  <div className="flex items-center gap-1">
-                    <input
-                      type="text"
-                      value={tempName}
-                      maxLength={16}
-                      onChange={(e) => setTempName(e.target.value)}
-                      className="w-24 px-2 py-0.5 text-xs font-jakarta font-bold border border-pink-300 rounded-full bg-pink-50 text-[#2F121A] focus:outline-none"
-                      autoFocus
-                    />
+      <div className="w-full max-w-md flex-shrink-0 z-10 mb-3">
+        <div className="w-full bg-white/95 backdrop-blur-md rounded-[28px] border-2 border-pink-200/90 shadow-[0_8px_25px_rgba(255,175,190,0.2)] p-3.5 sm:p-4 flex flex-col items-center">
+          {userAddress ? (
+            /* ---------------- STATE A: CONNECTED TO MONAD ---------------- */
+            <div className="w-full flex flex-col items-center gap-2">
+              <span className="text-xs sm:text-sm font-comfortaa font-bold text-[#574144]">
+                {language === 'id' ? 'Terhubung ke Monad' : 'Connected to Monad'}
+              </span>
+
+              {/* Juicy Pastel Pill with Connected Address */}
+              <div className="w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#F9A8D4] via-[#F472B6] to-[#F9A8D4] border border-pink-200 text-white shadow-xs flex items-center justify-between gap-2">
+                <span className="font-comfortaa font-bold text-xs sm:text-sm tracking-wide truncate">
+                  {formatAddress(userAddress)}
+                </span>
+                <div className="flex items-center gap-1.5 flex-shrink-0">
+                  <button
+                    type="button"
+                    onClick={handleCopyAddress}
+                    className="p-1 rounded-full bg-white/20 hover:bg-white/30 text-white transition-all cursor-pointer"
+                    title={copied ? 'Tersalin!' : 'Salin Alamat'}
+                  >
+                    {copied ? <Check className="w-3.5 h-3.5 text-white" /> : <Copy className="w-3.5 h-3.5 text-white" />}
+                  </button>
+                  {onDisconnectWallet && (
                     <button
-                      onClick={handleSaveName}
-                      className="p-1 rounded-full bg-[#FF4D6D] text-white text-xs cursor-pointer"
+                      type="button"
+                      onClick={onDisconnectWallet}
+                      className="p-1 rounded-full bg-white/20 hover:bg-rose-500 text-white transition-all cursor-pointer"
+                      title={language === 'id' ? 'Putuskan Wallet' : 'Disconnect'}
                     >
-                      <Check className="w-3 h-3" />
+                      <LogOut className="w-3.5 h-3.5 text-white" />
                     </button>
-                  </div>
-                  <div className="flex items-center gap-1 flex-wrap">
-                    {PRESET_NAMES.map((name) => (
-                      <button
-                        key={name}
-                        type="button"
-                        onClick={() => {
-                          setTempName(name);
-                          onPlayerNameChange(name);
-                          setIsEditingName(false);
-                        }}
-                        className="text-[8px] font-jakarta px-1.5 py-0.5 rounded-full bg-pink-100 hover:bg-pink-200 text-[#FF4D6D] transition-colors cursor-pointer"
-                      >
-                        {name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <button
-                  onClick={() => {
-                    setTempName(playerName);
-                    setIsEditingName(true);
-                  }}
-                  className="flex items-center gap-1 text-xs font-jakarta font-bold text-[#2F121A] hover:text-[#FF4D6D] truncate cursor-pointer text-left"
-                  title="Klik untuk ubah nama"
-                >
-                  <span className="truncate">{playerName || 'Faiz.mon'}</span>
-                  <Edit2 className="w-2.5 h-2.5 text-[#FF4D6D] flex-shrink-0 opacity-60" />
-                </button>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-1.5 flex-shrink-0">
-            <span className="font-jakarta font-bold text-[10px] text-[#574144] bg-pink-50 px-2 py-0.5 rounded-full border border-pink-100">
-              🏆 14.8k
-            </span>
-          </div>
-        </div>
-
-        {/* Tier 2: Dedicated Web3 Wallet Status (High Visibility & Clear Distinction) */}
-        {userAddress ? (
-          /* STATE A: SUDAH KONEK / CONNECTED TO MONAD TESTNET */
-          <div className="w-full p-2.5 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50 to-pink-50 border-2 border-emerald-400/80 shadow-xs flex items-center justify-between gap-2 text-left animate-fadeIn">
-            <div className="flex items-center gap-2 min-w-0">
-              <div className="w-7 h-7 rounded-xl bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 shadow-xs">
-                <Check className="w-4 h-4 text-white stroke-[3]" />
-              </div>
-              <div className="min-w-0 leading-tight">
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="text-[10px] font-jakarta font-bold text-emerald-800 uppercase tracking-wide flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                    {language === 'id' ? 'TERHUBUNG KE MONAD' : 'CONNECTED TO MONAD'}
-                  </span>
-                  <span className="text-[8.5px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 px-1.5 py-0.2 rounded-full">
-                    Chain 10143
-                  </span>
-                </div>
-                <div className="flex items-center gap-1 mt-0.5">
-                  <span className="text-xs font-mono font-bold text-[#2F121A] truncate">
-                    {userAddress.slice(0, 6)}...{userAddress.slice(-4)}
-                  </span>
-                  {sessionAddress && (
-                    <span className="text-[9px] font-jakarta font-bold text-[#FF4D6D] bg-pink-100 px-1.5 py-0.2 rounded-full border border-pink-200">
-                      🔑 0 Gas Session
-                    </span>
                   )}
                 </div>
               </div>
             </div>
+          ) : (
+            /* ---------------- STATE B: NO WALLET CONNECTED --------------- */
+            <div className="w-full flex flex-col items-center gap-2">
+              <span className="text-xs sm:text-sm font-comfortaa font-bold text-[#574144]">
+                {language === 'id' ? 'Belum Terhubung' : 'No Wallet Connected'}
+              </span>
 
-            <button
-              type="button"
-              onClick={onDisconnectWallet}
-              className="text-[10px] font-jakarta font-bold text-[#574144] hover:text-rose-600 bg-white hover:bg-rose-50 border border-pink-200 px-2.5 py-1 rounded-full transition-all cursor-pointer shadow-2xs flex-shrink-0"
-              title={language === 'id' ? 'Putuskan koneksi wallet' : 'Disconnect wallet'}
-            >
-              {language === 'id' ? 'Putus' : 'Disconnect'}
-            </button>
-          </div>
-        ) : (
-          /* STATE B: BELUM KONEK / CALL-TO-ACTION PROMINEN */
-          <button
-            type="button"
-            onClick={onConnectWallet}
-            disabled={isConnectingWallet}
-            className="w-full py-2.5 px-3.5 rounded-2xl bg-gradient-to-r from-[#836EF9] via-[#9333EA] to-[#FF4D6D] text-white font-jakarta font-bold text-xs shadow-[0_4px_16px_rgba(131,110,249,0.35)] hover:opacity-95 active:scale-[0.98] transition-all flex items-center justify-between cursor-pointer"
-          >
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
-                <Wallet className="w-3.5 h-3.5 text-white" />
-              </div>
-              <div className="text-left leading-tight">
-                <span className="block text-xs font-bold text-white">
+              {/* Primary Connect Button */}
+              <button
+                type="button"
+                onClick={onConnectWallet}
+                disabled={isConnectingWallet}
+                className="w-full py-3 px-6 rounded-full bg-gradient-to-r from-[#FF4D6D] to-[#E61E4F] text-white font-comfortaa font-bold text-sm sm:text-base shadow-[0_6px_20px_rgba(255,77,109,0.4)] hover:opacity-95 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75"
+              >
+                <span>
                   {isConnectingWallet
                     ? (language === 'id' ? 'Menghubungkan...' : 'Connecting...')
-                    : (language === 'id' ? 'Hubungkan Wallet (MetaMask / Rabby)' : 'Connect Web3 Wallet')}
+                    : (language === 'id' ? 'Hubungkan Wallet' : 'Connect Wallet')}
                 </span>
-                <span className="block text-[9.5px] text-white/80 font-medium">
-                  {language === 'id' ? 'Aktifkan mode on-chain Monad Testnet' : 'Enable Monad Testnet on-chain mode'}
-                </span>
-              </div>
+                <ArrowRight className="w-4 h-4 text-white" />
+              </button>
             </div>
-            <span className="text-[10px] bg-white/25 px-2.5 py-0.5 rounded-full font-bold text-white ml-2">
-              {language === 'id' ? 'KONEK' : 'CONNECT'} &rarr;
-            </span>
-          </button>
-        )}
+          )}
+        </div>
       </div>
 
       {/* ==================================================================== */}
-      {/* 4. PRIMARY ACTIONS: PVP ARENA (HERO) & SOLO PRACTICE (CLEAN)         */}
+      {/* 4. PRIMARY 3D JUICY ACTION BUTTONS (PLAY PVP & PLAY SOLO)             */}
       {/* ==================================================================== */}
-      <div className="w-full flex-shrink-0 flex flex-col gap-2.5 z-10">
-        {/* BUTTON 1 (PRIMARY): PVP BATTLE ROYALE */}
+      <div className="w-full max-w-md flex-shrink-0 flex flex-col gap-3 z-10 mb-2">
+        {/* BUTTON 1: PLAY PVP (Coral-Pink 3D Button) */}
         <button
           type="button"
           onClick={handleStartArena}
-          className="w-full h-14 rounded-full bg-gradient-to-r from-[#FF758F] via-[#FF4D6D] to-[#E61E4F] text-white shadow-[0_8px_25px_rgba(255,77,109,0.35)] hover:opacity-95 active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 px-6 cursor-pointer group"
+          className="w-full h-16 sm:h-18 rounded-[26px] bg-gradient-to-r from-[#FF6584] via-[#FF4D6D] to-[#E61E4F] text-white shadow-[0_6px_0_#D81B60,0_12px_24px_rgba(255,77,109,0.35)] hover:brightness-105 active:translate-y-1 active:shadow-[0_2px_0_#D81B60,0_6px_12px_rgba(255,77,109,0.25)] transition-all flex items-center justify-between px-4 sm:px-5 cursor-pointer group"
         >
-          <Swords className="w-5 h-5 text-white" />
-          <span className="font-comfortaa font-bold text-sm sm:text-base tracking-wider uppercase text-white">
-            {language === 'id' ? 'MAIN ARENA PVP' : 'PVP BATTLE ROYALE'}
-          </span>
-          <span className="text-[10px] font-mono bg-white/20 backdrop-blur-xs text-white px-2 py-0.5 rounded-full font-bold ml-1">
-            1.5 MON
-          </span>
+          {/* Left Translucent Play Circle */}
+          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-white/20 backdrop-blur-xs flex items-center justify-center flex-shrink-0 border border-white/30">
+            <Play className="w-5 h-5 text-white fill-white ml-0.5" />
+          </div>
+
+          {/* Center Text Block */}
+          <div className="flex-1 text-left px-3 sm:px-4 leading-tight">
+            <span className="block font-comfortaa font-extrabold text-base sm:text-lg tracking-wider uppercase text-white drop-shadow-xs">
+              {language === 'id' ? 'MAIN PVP' : 'PLAY PVP'}
+            </span>
+            <span className="block text-[11px] sm:text-xs font-quicksand font-bold text-white/90">
+              {language === 'id' ? 'Main Arena PVP 1.5 mon' : 'Main Arena PVP 1.5 mon'}
+            </span>
+          </div>
+
+          {/* Right Crisp Circular Arrow Button */}
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow-md group-hover:translate-x-0.5 transition-transform">
+            <ArrowRight className="w-5 h-5 text-[#FF4D6D] stroke-[2.5]" />
+          </div>
         </button>
 
-        {/* BUTTON 2 (SECONDARY): LATIHAN SOLO */}
+        {/* BUTTON 2: PLAY SOLO (Lavender-Pink 3D Button) */}
         <button
           type="button"
           onClick={handleStartClassic}
-          className="w-full h-11 rounded-full bg-white/90 border border-pink-200 text-[#574144] hover:text-[#2F121A] hover:bg-pink-50 font-comfortaa font-bold text-xs sm:text-sm tracking-wide transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-[0.98]"
+          className="w-full h-16 sm:h-18 rounded-[26px] bg-gradient-to-r from-[#F9A8D4] via-[#F472B6] to-[#EC4899] text-white shadow-[0_6px_0_#DB2777,0_12px_24px_rgba(244,114,182,0.35)] hover:brightness-105 active:translate-y-1 active:shadow-[0_2px_0_#DB2777,0_6px_12px_rgba(244,114,182,0.25)] transition-all flex items-center justify-between px-4 sm:px-5 cursor-pointer group"
         >
-          <Play className="w-3.5 h-3.5 text-[#FF4D6D] fill-[#FF4D6D]" />
-          <span>{language === 'id' ? 'Latihan Solo (Offline)' : 'Solo Practice (Offline)'}</span>
+          {/* Left Translucent Play Circle */}
+          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-white/25 backdrop-blur-xs flex items-center justify-center flex-shrink-0 border border-white/30">
+            <Play className="w-5 h-5 text-white fill-white ml-0.5" />
+          </div>
+
+          {/* Center Text Block */}
+          <div className="flex-1 text-left px-3 sm:px-4 leading-tight">
+            <span className="block font-comfortaa font-extrabold text-base sm:text-lg tracking-wider uppercase text-white drop-shadow-xs">
+              {language === 'id' ? 'MAIN SOLO' : 'PLAY SOLO'}
+            </span>
+            <span className="block text-[11px] sm:text-xs font-quicksand font-bold text-white/90">
+              {language === 'id' ? 'Latihan Mandiri' : 'Training'}
+            </span>
+          </div>
+
+          {/* Right Crisp Circular Arrow Button */}
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow-md group-hover:translate-x-0.5 transition-transform">
+            <ArrowRight className="w-5 h-5 text-[#EC4899] stroke-[2.5]" />
+          </div>
         </button>
       </div>
 
       {/* ==================================================================== */}
-      {/* 5. BOTTOM NAVIGATION (Rounded-Full Pill Dock)                        */}
+      {/* 5. MINIMAL BOTTOM DOCK (Clean, Discreet Stage & QR Modal Access)     */}
       {/* ==================================================================== */}
-      <nav className="w-full flex-shrink-0 h-12 bg-white/95 backdrop-blur-md rounded-full border-2 border-[#FCE7F3] shadow-xs flex items-center justify-around px-3 z-10">
-        {/* Tab 1: Lobby */}
-        <button
-          type="button"
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-pink-100 text-[#FF4D6D] font-comfortaa font-bold text-[10px] cursor-pointer"
-        >
-          <span>🎮</span>
-          <span>{language === 'id' ? 'Lobi' : 'Lobby'}</span>
-        </button>
-
-        {/* Tab 2: Host Stage QR */}
+      <footer className="w-full max-w-md flex items-center justify-center gap-3 pt-1 z-10">
         <button
           type="button"
           onClick={onOpenCreateArena}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[#574144] hover:text-[#2F121A] hover:bg-pink-50 transition-all font-comfortaa font-bold text-[10px] cursor-pointer"
-          title={language === 'id' ? 'Panggung Proyektor' : 'Stage Projector'}
+          className="px-3.5 py-1.5 rounded-full bg-white/80 hover:bg-white border border-pink-200/80 shadow-2xs text-[11px] font-comfortaa font-bold text-[#574144] hover:text-[#FF4D6D] transition-all cursor-pointer flex items-center gap-1.5"
         >
           <span>🎪</span>
           <span>{language === 'id' ? 'Panggung' : 'Stage'}</span>
         </button>
 
-        {/* Tab 3: Pitch Slides */}
-        <button
-          type="button"
-          onClick={onOpenPitchDeck}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[#574144] hover:text-[#2F121A] hover:bg-pink-50 transition-all font-comfortaa font-bold text-[10px] cursor-pointer"
-          title={language === 'id' ? 'Slide Juri' : 'Pitch Deck'}
-        >
-          <Presentation className="w-3.5 h-3.5 text-amber-600" />
-          <span>{language === 'id' ? 'Slide Juri' : 'Pitch Deck'}</span>
-        </button>
-
-        {/* Tab 4: Scan QR */}
         <button
           type="button"
           onClick={onOpenQr}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[#574144] hover:text-[#2F121A] hover:bg-pink-50 transition-all font-comfortaa font-bold text-[10px] cursor-pointer"
-          title="QR"
+          className="px-3.5 py-1.5 rounded-full bg-white/80 hover:bg-white border border-pink-200/80 shadow-2xs text-[11px] font-comfortaa font-bold text-[#574144] hover:text-[#FF4D6D] transition-all cursor-pointer flex items-center gap-1.5"
         >
           <QrCode className="w-3.5 h-3.5 text-[#FF4D6D]" />
           <span>QR</span>
         </button>
-      </nav>
+      </footer>
     </div>
   );
 };
