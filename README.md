@@ -4,9 +4,9 @@
 > *Game Battle Royale Block Blast 16 Pemain 100% On-Chain Pertama di Dunia dengan Waktu Eksekusi 400ms Monad.*
 
 [![Monad Testnet](https://img.shields.io/badge/Monad-Testnet%20(10143)-836ef9?style=for-the-badge&logo=ethereum)](https://testnet.monad.xyz)
-[![Solidity Tests](https://img.shields.io/badge/Foundry-26%2F26%20Passed-emerald?style=for-the-badge&logo=solidity)](file:///home/faiz/hackaton/monad/volume2/monadian/contracts)
-[![FPS](https://img.shields.io/badge/Performance-120%20FPS%20Canvas-cyan?style=for-the-badge)](file:///home/faiz/hackaton/monad/volume2/monadian/web)
-[![EIP-7702](https://img.shields.io/badge/Session%20Key-EIP--7702%20Ready-amber?style=for-the-badge)](file:///home/faiz/hackaton/monad/volume2/monadian/web/src/engine/sessionKey.ts)
+[![Solidity Tests](https://img.shields.io/badge/Foundry-28%2F28%20Passed-emerald?style=for-the-badge&logo=solidity)](contracts/)
+[![FPS](https://img.shields.io/badge/Performance-120%20FPS%20Canvas-cyan?style=for-the-badge)](web/)
+[![EIP-7702](https://img.shields.io/badge/Session%20Key-EIP--7702%20Ready-amber?style=for-the-badge)](web/src/engine/sessionKey.ts)
 
 ---
 
