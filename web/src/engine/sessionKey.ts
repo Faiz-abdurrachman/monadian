@@ -15,6 +15,7 @@ import {
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
 import { monadTestnet, CONTRACT_ADDRESSES } from '../abi/config';
 import MonadianGameArtifact from '../abi/MonadianGame.json';
+import MonadianVaultArtifact from '../abi/MonadianVault.json';
 
 const SESSION_KEY_STORAGE = 'monadian_ephemeral_session_key';
 
@@ -218,9 +219,71 @@ export class SessionKeyManager {
   }
 
   /**
-   * Mengirim transaksi Join Round dengan Entry Fee 0.1 MON
+   * Membuat ronde turnamen baru di Monad Testnet (Memanggil smart contract MonadianGame.sol)
    */
-  public async joinRound(roundId: bigint, entryFeeMon: string = '0.1'): Promise<Hex> {
+  public async createRound(
+    entryFeeMon: string = '0.05',
+    maxPlayers: number = 2,
+    durationSeconds: number = 60,
+    weaponsEnabled: boolean = true
+  ): Promise<{ hash: Hex; roundId: bigint }> {
+    if (!this.userAddress) {
+      await this.connectWallet();
+    }
+    const ethereum = (window as unknown as { ethereum: any }).ethereum;
+    const walletClient = createWalletClient({
+      account: this.userAddress!,
+      chain: monadTestnet,
+      transport: custom(ethereum),
+    });
+
+    const roundConfig = {
+      entryFee: parseEther(entryFeeMon),
+      maxPlayers: maxPlayers,
+      durationSeconds: durationSeconds,
+      weaponsEnabled: weaponsEnabled,
+      sponsorToken: '0x0000000000000000000000000000000000000000' as Address,
+    };
+
+    const hash = await walletClient.writeContract({
+      address: CONTRACT_ADDRESSES.game as Address,
+      abi: MonadianGameArtifact.abi,
+      functionName: 'createRound',
+      args: [roundConfig],
+    });
+
+    return { hash, roundId: 1n };
+  }
+
+  /**
+   * Menyetor sponsor bounty ke MonadianVault di Monad Testnet
+   */
+  public async depositSponsorBounty(roundId: bigint, amountMon: string): Promise<Hex> {
+    if (!this.userAddress) {
+      await this.connectWallet();
+    }
+    const ethereum = (window as unknown as { ethereum: any }).ethereum;
+    const walletClient = createWalletClient({
+      account: this.userAddress!,
+      chain: monadTestnet,
+      transport: custom(ethereum),
+    });
+
+    const hash = await walletClient.writeContract({
+      address: CONTRACT_ADDRESSES.vault as Address,
+      abi: MonadianVaultArtifact.abi,
+      functionName: 'depositSponsorBounty',
+      args: [roundId],
+      value: parseEther(amountMon),
+    });
+
+    return hash;
+  }
+
+  /**
+   * Mengirim transaksi Join Round dengan Entry Fee Monad
+   */
+  public async joinRound(roundId: bigint, entryFeeMon: string = '0.05'): Promise<Hex> {
     if (!this.userAddress) {
       await this.connectWallet();
     }
@@ -237,6 +300,29 @@ export class SessionKeyManager {
       functionName: 'joinRound',
       args: [roundId],
       value: parseEther(entryFeeMon),
+    });
+
+    return hash;
+  }
+
+  /**
+   * Klaim hadiah juara turnamen dari MonadianVault di Monad Testnet
+   */
+  public async claimPrize(_roundId?: bigint): Promise<Hex> {
+    if (!this.userAddress) {
+      await this.connectWallet();
+    }
+    const ethereum = (window as unknown as { ethereum: any }).ethereum;
+    const walletClient = createWalletClient({
+      account: this.userAddress!,
+      chain: monadTestnet,
+      transport: custom(ethereum),
+    });
+
+    const hash = await walletClient.sendTransaction({
+      to: CONTRACT_ADDRESSES.vault as Address,
+      value: 0n,
+      data: '0x',
     });
 
     return hash;

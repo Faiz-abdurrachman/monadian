@@ -7,7 +7,6 @@ import {
   Check,
   Users,
   Home,
-  Bot,
   ShieldCheck,
 } from 'lucide-react';
 import { useLanguage } from '../locales/LanguageContext';
@@ -153,7 +152,7 @@ export const HostArenaView: React.FC<HostArenaViewProps> = ({
         </button>
       </div>
 
-      {/* 4. CONTENDERS DOCK (Clean Rounded-Full Avatar Strip) */}
+      {/* 4. CONTENDERS DOCK (Clean Rounded-Full Avatar Strip - 100% Real PvP) */}
       <div className="w-full max-w-[365px] flex flex-col gap-1.5 flex-shrink-0 text-left my-1.5 p-3.5 rounded-[30px] bg-white border-2 border-[#FFD8E3] shadow-xs">
         <div className="flex items-center justify-between text-xs font-comfortaa font-bold text-[#241022] px-1">
           <span className="flex items-center gap-1.5 text-[#FF3366]">
@@ -161,7 +160,7 @@ export const HostArenaView: React.FC<HostArenaViewProps> = ({
             <span>{language === 'id' ? 'PESERTA SIAP' : 'CONTENDERS READY'}</span>
           </span>
           <span className="font-mono text-[#FF3366] bg-[#FFEBF1] border border-[#FCD2DF] px-2.5 py-0.5 rounded-full text-[10px] font-bold">
-            {joinedPlayers.length} / {config.maxPlayers}
+            {joinedPlayers.length} {language === 'id' ? 'Pemain' : 'Players'}
           </span>
         </div>
 
@@ -185,10 +184,9 @@ export const HostArenaView: React.FC<HostArenaViewProps> = ({
             </span>
           ))}
 
-          {joinedPlayers.length < config.maxPlayers && (
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-comfortaa font-bold bg-[#FFF0F4] border border-[#FCD2DF] text-[#795B6B] flex items-center gap-1">
-              <Bot className="w-3 h-3 text-[#FF3366]" />
-              <span>+ {config.maxPlayers - joinedPlayers.length} AI Auto-Fill</span>
+          {joinedPlayers.length === 1 && (
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-comfortaa font-bold bg-[#FFF0F4] border border-[#FCD2DF] text-[#795B6B] flex items-center gap-1 animate-pulse">
+              <span>⏳ {language === 'id' ? 'Menunggu Lawan Scan QR...' : 'Waiting for Challenger...'}</span>
             </span>
           )}
         </div>
@@ -204,8 +202,8 @@ export const HostArenaView: React.FC<HostArenaViewProps> = ({
           <Flame className="w-5 h-5 fill-white text-white group-hover:scale-110 transition-transform animate-bounce flex-shrink-0" />
           <span className="truncate">
             {language === 'id'
-              ? `MULAI PERTANDINGAN (${config.maxPlayers || 16}P)`
-              : `START BATTLE (${config.maxPlayers || 16}P)`}
+              ? `MULAI PERTANDINGAN (${joinedPlayers.length > 1 ? `${joinedPlayers.length}P REAL PVP` : '1V1 PVP'})`
+              : `START BATTLE (${joinedPlayers.length > 1 ? `${joinedPlayers.length}P REAL PVP` : '1V1 PVP'})`}
           </span>
         </button>
       </div>

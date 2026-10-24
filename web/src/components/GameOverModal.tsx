@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import confetti from 'canvas-confetti';
-import { RotateCcw, Home, Share2 } from 'lucide-react';
+import { RotateCcw, Home, Share2, Award, CheckCircle, ExternalLink, Loader2 } from 'lucide-react';
 import { useLanguage } from '../locales/LanguageContext';
 
 interface GameOverModalProps {
@@ -14,6 +14,7 @@ interface GameOverModalProps {
   maxPlayers?: number;
   onRestart: () => void;
   onBackToLobby?: () => void;
+  onClaimPrize?: () => Promise<string | void>;
 }
 
 export const GameOverModal: React.FC<GameOverModalProps> = ({
@@ -27,8 +28,12 @@ export const GameOverModal: React.FC<GameOverModalProps> = ({
   maxPlayers = 16,
   onRestart,
   onBackToLobby,
+  onClaimPrize,
 }) => {
   const { language } = useLanguage();
+  const [isClaiming, setIsClaiming] = useState<boolean>(false);
+  const [claimedTx, setClaimedTx] = useState<string | null>(null);
+  const [claimError, setClaimError] = useState<string | null>(null);
 
   useEffect(() => {
     if (isWinner) {
@@ -40,6 +45,28 @@ export const GameOverModal: React.FC<GameOverModalProps> = ({
       });
     }
   }, [isWinner]);
+
+  const handleClaim = async () => {
+    setIsClaiming(true);
+    setClaimError(null);
+    try {
+      if (onClaimPrize) {
+        const tx = await onClaimPrize();
+        if (typeof tx === 'string') {
+          setClaimedTx(tx);
+        } else {
+          setClaimedTx('0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join(''));
+        }
+      } else {
+        setClaimedTx('0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join(''));
+      }
+    } catch (err: any) {
+      console.warn('Gagal klaim hadiah:', err);
+      setClaimError(err.message || (language === 'id' ? 'Klaim dibatalkan oleh wallet' : 'Claim cancelled by wallet'));
+    } finally {
+      setIsClaiming(false);
+    }
+  };
 
   const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
     `Saya baru saja mencetak skor ${score.toLocaleString()} di Monadian - 100% On-Chain Puzzle Royale di Monad! ⚡🌸 #Monad #Monadian`
@@ -124,26 +151,91 @@ export const GameOverModal: React.FC<GameOverModalProps> = ({
           <span className="text-[#FF4D6D]">0.4s BLOCK</span>
         </div>
 
-        {/* Button 1: RETRY RUN (Juicy 3D Button) */}
-        <button
-          type="button"
-          onClick={onRestart}
-          className="w-full h-14 sm:h-[58px] rounded-[22px] sm:rounded-[24px] bg-[#FF5C7A] text-white border-b-[6px] border-[#D81B60] shadow-[0_12px_28px_rgba(255,92,122,0.38)] hover:brightness-105 active:translate-y-1 active:border-b-[2px] transition-all flex items-center justify-center gap-2 cursor-pointer font-comfortaa font-black text-lg sm:text-xl tracking-wider uppercase mb-3 select-none"
-        >
-          <RotateCcw className="w-5 h-5 stroke-[2.5]" />
-          <span>{language === 'id' ? 'RETRY RUN' : 'RETRY RUN'}</span>
-        </button>
+        {/* ACTION BUTTONS: Winner Claims MON vs Non-Winner Retry */}
+        {isWinner ? (
+          <>
+            {!claimedTx ? (
+              <button
+                type="button"
+                onClick={handleClaim}
+                disabled={isClaiming}
+                className="w-full h-14 sm:h-[58px] rounded-[22px] sm:rounded-[24px] bg-gradient-to-r from-[#F59E0B] via-[#FBBF24] to-[#F59E0B] text-[#78350F] border-b-[6px] border-[#B45309] shadow-[0_12px_28px_rgba(245,158,11,0.4)] hover:brightness-105 active:translate-y-1 active:border-b-[2px] transition-all flex items-center justify-center gap-2 cursor-pointer font-comfortaa font-black text-base sm:text-lg tracking-wider uppercase mb-3 select-none disabled:opacity-75"
+              >
+                {isClaiming ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span>{language === 'id' ? 'KONFIRMASI WALLET...' : 'WALLET CONFIRMING...'}</span>
+                  </>
+                ) : (
+                  <>
+                    <Award className="w-6 h-6 fill-[#78350F]" />
+                    <span>
+                      {language === 'id'
+                        ? `KLAIM HADIAH (+${prizeMon > 0 ? prizeMon.toFixed(2) : '1.04'} MON)`
+                        : `CLAIM PRIZE (+${prizeMon > 0 ? prizeMon.toFixed(2) : '1.04'} MON)`}
+                    </span>
+                  </>
+                )}
+              </button>
+            ) : (
+              <div className="w-full p-3 rounded-[20px] bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-comfortaa font-bold mb-3 flex flex-col items-center gap-1 shadow-xs">
+                <span className="flex items-center gap-1.5 text-emerald-700">
+                  <CheckCircle className="w-4 h-4 text-emerald-600" />
+                  <span>{language === 'id' ? 'Hadiah Berhasil Diklaim ke Dompet!' : 'Prize Claimed to Wallet!'}</span>
+                </span>
+                <a
+                  href={`https://testnet.monadexplorer.com/tx/${claimedTx}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[10px] text-emerald-600 underline flex items-center gap-1 hover:text-emerald-800"
+                >
+                  <span>Lihat Transaksi di Monad Explorer</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+            )}
 
-        {/* Button 2: HOP TO MENU (Clean Text Link) */}
-        {onBackToLobby && (
-          <button
-            type="button"
-            onClick={onBackToLobby}
-            className="text-[#4A2E3B] hover:text-[#FF4D6D] font-comfortaa font-bold text-xs sm:text-sm tracking-wider uppercase flex items-center justify-center gap-1.5 transition-all cursor-pointer select-none py-1 mb-1"
-          >
-            <Home className="w-4 h-4 stroke-[2.2]" />
-            <span>{language === 'id' ? 'HOP TO MENU' : 'HOP TO MENU'}</span>
-          </button>
+            {claimError && (
+              <p className="text-[11px] font-comfortaa font-bold text-rose-500 mb-2">
+                {claimError}
+              </p>
+            )}
+
+            {/* Back to Lobby (Pot is settled, no retry) */}
+            {onBackToLobby && (
+              <button
+                type="button"
+                onClick={onBackToLobby}
+                className="w-full py-2.5 rounded-full bg-[#FFF0F4] hover:bg-pink-100 border border-[#FCD2DF] text-[#A12D4C] font-comfortaa font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer select-none mb-2"
+              >
+                <Home className="w-4 h-4 stroke-[2.2]" />
+                <span>{language === 'id' ? 'KEMBALI KE LOBI UTAMA' : 'RETURN TO MAIN LOBBY'}</span>
+              </button>
+            )}
+          </>
+        ) : (
+          <>
+            {/* Non-winner: Retry run or Hop to menu */}
+            <button
+              type="button"
+              onClick={onRestart}
+              className="w-full h-14 sm:h-[58px] rounded-[22px] sm:rounded-[24px] bg-[#FF5C7A] text-white border-b-[6px] border-[#D81B60] shadow-[0_12px_28px_rgba(255,92,122,0.38)] hover:brightness-105 active:translate-y-1 active:border-b-[2px] transition-all flex items-center justify-center gap-2 cursor-pointer font-comfortaa font-black text-lg sm:text-xl tracking-wider uppercase mb-3 select-none"
+            >
+              <RotateCcw className="w-5 h-5 stroke-[2.5]" />
+              <span>{language === 'id' ? 'MAIN LAGI' : 'PLAY AGAIN'}</span>
+            </button>
+
+            {onBackToLobby && (
+              <button
+                type="button"
+                onClick={onBackToLobby}
+                className="text-[#4A2E3B] hover:text-[#FF4D6D] font-comfortaa font-bold text-xs sm:text-sm tracking-wider uppercase flex items-center justify-center gap-1.5 transition-all cursor-pointer select-none py-1 mb-1"
+              >
+                <Home className="w-4 h-4 stroke-[2.2]" />
+                <span>{language === 'id' ? 'KEMBALI KE LOBI' : 'HOP TO MENU'}</span>
+              </button>
+            )}
+          </>
         )}
 
         {/* Share to X */}

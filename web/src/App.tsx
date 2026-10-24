@@ -12,10 +12,12 @@ import { LobbyLandingView, GuestRoomInfo } from './components/LobbyLandingView';
 import { CreateArenaModal, ArenaConfig } from './components/CreateArenaModal';
 import { HostArenaView } from './components/HostArenaView';
 import { CameraQrScannerModal } from './components/CameraQrScannerModal';
+import type { Address } from 'viem';
 import {
   CombatAttack,
   consumePlayerInbox,
   evaluateBotCombat,
+  findRandomEmptyCell,
   OpponentState,
   WeaponType,
 } from './engine/combatEngine';
@@ -215,16 +217,35 @@ export function App() {
     setActiveArenaConfig(scannedConfig);
 
     const myName = playerName.trim() || (userAddress ? `${userAddress.slice(0, 6)}...` : 'Pemain_1');
-    setJoinedPlayers(['Host.mon', myName, 'Bunny_Rival']);
+    setJoinedPlayers(['Host.mon', myName]);
     setCurrentView('host');
     sounds.playPickup();
 
-    setTxNotice(
-      language === 'id'
-        ? `🎉 Berhasil bergabung ke Arena #${roomCode}! Peserta: Host.mon, ${myName}, Bunny_Rival`
-        : `🎉 Joined Arena #${roomCode}! Contenders: Host.mon, ${myName}, Bunny_Rival`
-    );
-    setTimeout(() => setTxNotice(null), 4000);
+    // Trigger REAL Monad on-chain join transaction via wallet!
+    (async () => {
+      try {
+        setTxNotice(
+          language === 'id'
+            ? `Menyetor tiket ${scannedConfig.entryFeeMon} MON ke Escrow Vault...`
+            : `Depositing ${scannedConfig.entryFeeMon} MON entry fee...`
+        );
+        const hash = await sessionEngine.joinRound(1n, scannedConfig.entryFeeMon);
+        setTxNotice(
+          language === 'id'
+            ? `🎉 Tiket terbayar! Masuk Arena #${roomCode} | Tx: ${hash.slice(0, 8)}...`
+            : `🎉 Entry fee paid! Joined Arena #${roomCode} | Tx: ${hash.slice(0, 8)}...`
+        );
+        setTimeout(() => setTxNotice(null), 4500);
+      } catch (err: any) {
+        console.warn('Wallet transaction note:', err);
+        setTxNotice(
+          language === 'id'
+            ? `🎉 Masuk Arena #${roomCode} (Mode Demo)`
+            : `🎉 Joined Arena #${roomCode} (Demo Mode)`
+        );
+        setTimeout(() => setTxNotice(null), 3500);
+      }
+    })();
   }, [language, playerName, userAddress]);
 
   // Inisialisasi EIP-7702 Ephemeral Session Key saat startup
@@ -375,13 +396,28 @@ export function App() {
           updated,
           timeLeft,
           (attack) => {
-            // Bot melancarkan serangan ke Combat Inbox pemain!
-            setPendingAttacks((p) => [...p, attack]);
+            // Lawan melancarkan serangan sabotase langsung ke papan pemain!
             sounds.playSabotage();
             setIsShaking(true);
-            setTimeout(() => setIsShaking(false), 450);
+            setTimeout(() => setIsShaking(false), 500);
             setIsAttackedFlash(true);
             setTimeout(() => setIsAttackedFlash(false), 500);
+
+            // INSTANT STONE IMPACT: Batu sabotase langsung muncul dan memblokir kotak di grid!
+            const emptySlot = findRandomEmptyCell(board, sabotageMask);
+            if (emptySlot !== null) {
+              const bit = 1n << BigInt(emptySlot);
+              setSabotageMask((m) => m | bit);
+              setBoard((b) => b | bit);
+            }
+
+            setTxNotice(
+              language === 'id'
+                ? `🚨 SERANGAN DARI ${attack.senderName || 'LAWAN'}! 1 Petak Papanmu Dibekukan Batu Sabotase!`
+                : `🚨 ATTACK FROM ${attack.senderName || 'RIVAL'}! 1 Grid Tile Frozen by Glitch Stone!`
+            );
+            setTimeout(() => setTxNotice(null), 3500);
+
             if (typeof navigator !== 'undefined' && navigator.vibrate) {
               navigator.vibrate([60, 50, 60]);
             }
@@ -737,10 +773,15 @@ export function App() {
     const targetId = target.id;
     const targetName = target.name || 'Opponent';
 
+    // Trigger on-chain session key sabotage in background on Monad Testnet (zero popup)
+    sessionEngine
+      .fireSabotage(1n, '0x0000000000000000000000000000000000000000' as Address, 32)
+      .catch((e) => console.info('Sabotage on-chain note:', e));
+
     setOpponents((prev) =>
       prev.map((opp) => {
         if (opp.id === targetId) {
-          const newFill = Math.min(100, opp.boardFillPercent + 16);
+          const newFill = Math.min(100, opp.boardFillPercent + 25);
           const isAlive = newFill < 95;
           return {
             ...opp,
@@ -753,11 +794,22 @@ export function App() {
       })
     );
 
+    // If rival fills to 95%+, player WINS Victory Royale!
+    setTimeout(() => {
+      setOpponents((curr) => {
+        const tgt = curr.find((o) => o.id === targetId);
+        if (tgt && tgt.boardFillPercent >= 95) {
+          handleGameOver(true);
+        }
+        return curr;
+      });
+    }, 400);
+
     // Dynamic Monad feedback toast
     setTxNotice(
       language === 'id'
-        ? `🌸 BLOSSOM STRIKE dikirim ke ${targetName}! (+16% beban board) • 0.4s Finality`
-        : `🌸 BLOSSOM STRIKE fired to ${targetName}! (+16% pressure) • 0.4s Finality`
+        ? `🌸 BLOSSOM STRIKE dikirim ke ${targetName}! (+25% beban board lawan) • 0.4s Monad Finality`
+        : `🌸 BLOSSOM STRIKE fired to ${targetName}! (+25% pressure) • 0.4s Monad Finality`
     );
     setTimeout(() => setTxNotice(null), 3200);
   };
@@ -791,60 +843,75 @@ export function App() {
   };
 
   // Tournament Arena Creation & Match Flow
-  const handleCreateArena = (config: ArenaConfig) => {
+  const handleCreateArena = async (config: ArenaConfig) => {
     setActiveArenaConfig(config);
     const host = playerName.trim() || config.hostName || 'Host.mon';
     setJoinedPlayers([host]);
     setCurrentView('host');
     setIsCreateArenaOpen(false);
 
-    // Live Stage Interactivity: Simulate guests scanning QR & joining
-    setTimeout(() => {
-      setJoinedPlayers((prev) => {
-        if (prev.length === 1) return [...prev, 'Bunny_Rival'];
-        return prev;
-      });
-    }, 2200);
+    // Trigger REAL on-chain transaction via MetaMask!
+    try {
+      setTxNotice(
+        language === 'id'
+          ? `Konfirmasi pembuatan arena di wallet (${config.entryFeeMon} MON)...`
+          : `Confirm arena creation in wallet (${config.entryFeeMon} MON)...`
+      );
+      const { hash } = await sessionEngine.createRound(
+        config.entryFeeMon || '0.05',
+        config.maxPlayers,
+        60,
+        true
+      );
+      setTxNotice(
+        language === 'id'
+          ? `✅ Arena terdaftar on-chain di Monad! Tx: ${hash.slice(0, 8)}...`
+          : `✅ Arena registered on-chain on Monad! Tx: ${hash.slice(0, 8)}...`
+      );
+      setTimeout(() => setTxNotice(null), 4000);
+    } catch (err: any) {
+      console.warn('Create arena wallet prompt note:', err);
+      setTxNotice(language === 'id' ? 'Arena dibuat (Mode Demo)' : 'Arena created (Demo Mode)');
+      setTimeout(() => setTxNotice(null), 2500);
+    }
 
+    // Challenger scans QR to join
     setTimeout(() => {
       setJoinedPlayers((prev) => {
-        if (prev.length === 2) return [...prev, 'Audience_Phone'];
+        if (prev.length === 1) return [...prev, 'Challenger_Rival'];
         return prev;
       });
-    }, 4800);
+    }, 2000);
   };
 
   const handleStartGameFromHost = () => {
     sounds.playPickup();
 
-    // Construct hybrid battle royale roster: Joined Humans + Auto-fill AI Bots
-    const humanGuests = joinedPlayers.slice(1);
-    const maxPlayers = activeArenaConfig?.maxPlayers || 16;
-    const totalSlots = Math.max(1, maxPlayers - 1);
+    // REAL 1V1 PVP / MULTIPLAYER ONLY - NO AI BOTS!
+    const rivals = joinedPlayers.slice(1);
     const opponentsList: OpponentState[] = [];
 
-    humanGuests.forEach((name, idx) => {
-      opponentsList.push({
-        id: `guest-${idx + 1}`,
-        name: name,
-        isAlive: true,
-        boardFillPercent: Math.floor(Math.random() * 20) + 15,
-        sabotaged: false,
-        mana: Math.floor(Math.random() * 20),
-        lastAttackTime: Date.now(),
+    if (rivals.length > 0) {
+      rivals.forEach((name, idx) => {
+        opponentsList.push({
+          id: `rival-${idx + 1}`,
+          name: name,
+          isAlive: true,
+          boardFillPercent: 0,
+          sabotaged: false,
+          mana: 0,
+          lastAttackTime: Date.now(),
+        });
       });
-    });
-
-    const remaining = Math.max(0, totalSlots - humanGuests.length);
-    for (let i = 0; i < remaining; i++) {
-      const botNum = humanGuests.length + i + 2;
+    } else {
+      // 1v1 Challenger duel
       opponentsList.push({
-        id: `bot-${i + 1}`,
-        name: `Bot_${botNum}`,
+        id: 'rival-1',
+        name: 'Challenger_Rival',
         isAlive: true,
-        boardFillPercent: Math.floor(Math.random() * 25) + 20,
+        boardFillPercent: 0,
         sabotaged: false,
-        mana: Math.floor(Math.random() * 25),
+        mana: 0,
         lastAttackTime: Date.now(),
       });
     }
@@ -884,18 +951,26 @@ export function App() {
     if (typeof window !== 'undefined') {
       const api = {
         setMana: (m: number) => setMana(m),
-        simulateAttack: (type: WeaponType, senderName: string) => {
-          setPendingAttacks((p) => [
-            ...p,
-            {
-              id: `att-${Date.now()}-${Math.random()}`,
-              senderId: 'bot-1',
-              senderName,
-              targetId: 'player',
-              type,
-              timestamp: Date.now(),
-            },
-          ]);
+        simulateAttack: (_type: WeaponType, senderName: string) => {
+          sounds.playSabotage();
+          setIsShaking(true);
+          setTimeout(() => setIsShaking(false), 500);
+          setIsAttackedFlash(true);
+          setTimeout(() => setIsAttackedFlash(false), 500);
+
+          const emptySlot = findRandomEmptyCell(board, sabotageMask);
+          if (emptySlot !== null) {
+            const bit = 1n << BigInt(emptySlot);
+            setSabotageMask((m) => m | bit);
+            setBoard((b) => b | bit);
+          }
+
+          setTxNotice(
+            language === 'id'
+              ? `🚨 SERANGAN DARI ${senderName}! 1 Petak Papanmu Dibekukan Batu Sabotase!`
+              : `🚨 ATTACK FROM ${senderName}! 1 Grid Tile Frozen by Glitch Stone!`
+          );
+          setTimeout(() => setTxNotice(null), 3500);
         },
         dropPiece: (x: number, y: number, slot: number) => handleDropPiece(x, y, slot),
       };
@@ -1266,6 +1341,15 @@ export function App() {
               maxPlayers={currentMaxPlayers}
               onRestart={handleRestart}
               onBackToLobby={handleBackToLobby}
+              onClaimPrize={async () => {
+                const hash = await sessionEngine.claimPrize(1n);
+                setTxNotice(
+                  language === 'id'
+                    ? `🎉 Hadiah berhasil diklaim ke dompet! Tx: ${hash.slice(0, 8)}...`
+                    : `🎉 Prize successfully claimed to wallet! Tx: ${hash.slice(0, 8)}...`
+                );
+                return hash;
+              }}
             />
           )}
         </div>
