@@ -1,9 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Board3D, Board3DHandle, getPieceThemeIndex, CANDY_THEMES } from './components/Board3D';
 import { HandTray } from './components/HandTray';
-import { HUD } from './components/HUD';
-import { WeaponsDock } from './components/WeaponsDock';
-import { MiniRadars } from './components/MiniRadars';
+import { GamePauseModal } from './components/GamePauseModal';
 import { GameOverModal } from './components/GameOverModal';
 import { LaserBeams, BeamInstance } from './components/LaserBeams';
 import { IncomingAttackBanner } from './components/IncomingAttackBanner';
@@ -33,9 +31,8 @@ import {
 } from './engine/bitwise';
 import { sounds } from './engine/audio';
 import { sessionEngine } from './engine/sessionKey';
-import { HelpCircle, Home } from 'lucide-react';
+import { Pause, Music } from 'lucide-react';
 import { useLanguage } from './locales/LanguageContext';
-import { LanguageToggle } from './components/LanguageToggle';
 
 const INITIAL_OPPONENTS: OpponentState[] = Array.from({ length: 15 }, (_, i) => ({
   id: `bot-${i + 1}`,
@@ -48,7 +45,7 @@ const INITIAL_OPPONENTS: OpponentState[] = Array.from({ length: 15 }, (_, i) => 
 }));
 
 export function App() {
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();
 
   // View State (Lobby Landing vs Host Screen vs Battle Arena)
   const [currentView, setCurrentView] = useState<'lobby' | 'host' | 'game'>('lobby');
@@ -74,6 +71,7 @@ export function App() {
   const [isWinner, setIsWinner] = useState<boolean>(false);
   const [rank, setRank] = useState<number>(1);
   const [isMuted, setIsMuted] = useState<boolean>(false);
+  const [isPaused, setIsPaused] = useState<boolean>(false);
 
   // Combat Inbox & Visual FX State
   const [pendingAttacks, setPendingAttacks] = useState<CombatAttack[]>([]);
@@ -285,7 +283,8 @@ export function App() {
 
   // 60-Second Round Countdown (Only active in arena game view)
   useEffect(() => {
-    if (currentView !== 'game' || isGameOver) return;
+    // Only countdown round timer in PVP Tournament Arena mode
+    if (currentView !== 'game' || isGameOver || isPaused || !activeArenaConfig) return;
     const interval = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
@@ -297,11 +296,11 @@ export function App() {
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, [currentView, isGameOver]);
+  }, [currentView, isGameOver, isPaused, activeArenaConfig]);
 
-  // Simulated Battle Royale Opponent Activity & Asynchronous Combat Inbox Loop
+  // Simulated Battle Royale Opponent Activity & Asynchronous Combat Inbox Loop (PVP only)
   useEffect(() => {
-    if (currentView !== 'game' || isGameOver) return;
+    if (currentView !== 'game' || isGameOver || isPaused || !activeArenaConfig) return;
     const interval = setInterval(() => {
       setOpponents((prev) => {
         // 1. Natural board fill fluctuation
@@ -541,6 +540,19 @@ export function App() {
       sessionEngine.makeMove(1n, slot, placedX, placedY).catch((err) => {
         console.info('On-Chain makeMove broadcast:', err.message);
       });
+    }
+  };
+
+  // Tap-to-Place alternative to Drag & Drop
+  const handleCellClick = (x: number, y: number) => {
+    if (selectedSlot !== null && !used[selectedSlot] && !isGameOver) {
+      const pieceId = pieces[selectedSlot];
+      if (canPlaceSinglePiece(board, pieceId)) {
+        const mask = getMaskAt(pieceId, x, y);
+        if (mask !== null && (board & mask) === 0n) {
+          handleDropPiece(x, y, selectedSlot);
+        }
+      }
     }
   };
 
@@ -842,13 +854,6 @@ export function App() {
     activeArenaConfig?.prizeScheme === 'winnerTakesAll' || currentMaxPlayers === 2 ? 0.95 : 0.65;
   const calculatedPrize = isWinner ? Number((displayPot * firstPlaceCut).toFixed(2)) : 0;
 
-  const alivePlayers = opponents.filter((o) => o.isAlive).length + (isGameOver ? 0 : 1);
-  const targetOpponent = opponents.find((o) => o.id === selectedTargetId);
-  const targetDisplayName = targetOpponent
-    ? targetOpponent.id.startsWith('bot-')
-      ? `${t.radars.playerPrefix}_${parseInt(targetOpponent.id.replace('bot-', '')) + 1}`
-      : targetOpponent.name || 'TARGET'
-    : 'TARGET';
   const draggedPiece = draggedSlot !== null ? PIECES[pieces[draggedSlot]] : null;
   const draggedThemeIdx = draggedSlot !== null ? getPieceThemeIndex(pieces[draggedSlot], draggedSlot) : 0;
   const draggedTheme = CANDY_THEMES[draggedThemeIdx % CANDY_THEMES.length];
@@ -885,17 +890,14 @@ export function App() {
                     height: `${boardCellSize}px`,
                     boxShadow: val === 1 ? `0 0 16px ${draggedPiece.glowColor}` : undefined,
                   }}
-                  className={`rounded-[10px] transition-all relative flex items-center justify-center ${
+                  className={`rounded-full transition-all relative flex items-center justify-center ${
                     val === 1
-                      ? `${draggedTheme.bg} ${draggedTheme.glow} border-2 border-white/90`
+                      ? `${draggedTheme.bg} ${draggedTheme.glow} border-b-2 ${draggedTheme.borderBottom}`
                       : 'opacity-0'
                   }`}
                 >
                   {val === 1 && (
-                    <>
-                      <div className="w-2 h-2 rounded-full bg-white/80 absolute top-1 right-1 shadow-xs" />
-                      <div className="w-3/5 h-2/5 rounded-[4px] bg-white/40 backdrop-blur-[0.5px] border-t border-l border-white/80 mx-auto mt-0.5" />
-                    </>
+                    <div className="w-2 h-2 rounded-full bg-white/90 absolute top-1 right-1 shadow-xs" />
                   )}
                 </div>
               ))
@@ -940,78 +942,124 @@ export function App() {
             />
           ) : (
             <>
-              {/* Clean Kawaii Top Header (In-Game: Minimal, Curved & Focused) */}
-              <header className="flex-shrink-0 w-full flex items-center justify-between py-1.5 px-3 bg-white/95 backdrop-blur-md border-2 border-pink-100 shadow-xs rounded-full my-0.5">
-                {/* Back to Lobby Button */}
+              {/* ============================================================ */}
+              {/* 1. TOP BAR (Figma Exact: Pause, Best Trophy Pill, Music)     */}
+              {/* ============================================================ */}
+              <div className="flex-shrink-0 w-full flex items-center justify-between px-1 pt-1 pb-0.5">
+                {/* Left: Pause Button */}
                 <button
-                  onClick={handleBackToLobby}
-                  className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-100 hover:bg-pink-200 text-[#FF4D6D] text-[10px] font-comfortaa font-bold transition-all shadow-xs active:scale-95 cursor-pointer"
-                  title={language === 'id' ? 'Kembali ke Lobi' : 'Back to Lobby'}
+                  type="button"
+                  onClick={() => setIsPaused(true)}
+                  className="w-11 h-11 sm:w-12 sm:h-12 rounded-[20px] bg-white border-2 border-[#FFD8E3] shadow-xs flex items-center justify-center text-[#9B1D3D] hover:bg-pink-50/60 active:scale-95 transition-all cursor-pointer"
+                  title={language === 'id' ? 'Jeda Game' : 'Pause Game'}
                 >
-                  <Home className="w-3.5 h-3.5" />
-                  <span>LOBBY</span>
+                  <Pause className="w-5 h-5 fill-[#9B1D3D]" />
                 </button>
 
-                {/* Center Title & EIP-7702 Status */}
-                <div className="flex items-center gap-1.5">
-                  <span className="font-comfortaa font-bold text-xs tracking-wider text-[#2F121A] uppercase">
-                    PUZZLE ROYALE
+                {/* Center: Best Score Trophy Pill */}
+                <div className="h-10 sm:h-11 px-4 sm:px-5 rounded-full bg-white border border-[#FFD8E3] shadow-xs flex items-center gap-1.5 select-none">
+                  <span className="text-sm sm:text-base">🏆</span>
+                  <span className="font-comfortaa font-bold text-xs uppercase tracking-wider text-[#FF5C7A]">
+                    BEST
                   </span>
-                  {isLiveTestnet && sessionAddress && (
-                    <span className="text-[8px] bg-emerald-100 text-emerald-800 border border-emerald-300 px-2 py-0.5 rounded-full font-mono font-bold">
-                      EIP-7702
-                    </span>
-                  )}
+                  <span className="font-comfortaa font-bold text-sm sm:text-base text-[#E11D48] tracking-tight">
+                    {Math.max(score, 14850).toLocaleString()}
+                  </span>
                 </div>
 
-                {/* Right Controls: Lang & Guide */}
-                <div className="flex items-center gap-1.5">
-                  <LanguageToggle />
-                  <button
-                    onClick={() => setIsHelpModalOpen(true)}
-                    className="w-7 h-7 rounded-full bg-white border border-pink-200 shadow-xs flex items-center justify-center text-[#574144] hover:text-[#FF4D6D] hover:bg-pink-50 active:scale-95 transition-all cursor-pointer"
-                    title={t.header.guideBtn}
-                  >
-                    <HelpCircle className="w-3.5 h-3.5 text-[#FF4D6D]" />
-                  </button>
+                {/* Right: Sound / Music Toggle */}
+                <button
+                  type="button"
+                  onClick={() => setIsMuted(sounds.toggleMute())}
+                  className="w-11 h-11 sm:w-12 sm:h-12 rounded-[20px] bg-white border-2 border-[#FFD8E3] shadow-xs flex items-center justify-center text-[#FF3366] hover:bg-pink-50/60 active:scale-95 transition-all cursor-pointer"
+                  title={isMuted ? 'Unmute' : 'Mute'}
+                >
+                  <Music className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* ============================================================ */}
+              {/* 2. BIG SCORE DISPLAY (Figma Exact)                           */}
+              {/* ============================================================ */}
+              <div className="flex-shrink-0 w-full text-center mt-1 mb-1 sm:mt-1.5 sm:mb-1.5 select-none">
+                <span className="font-comfortaa font-bold text-[38px] sm:text-[44px] text-[#421727] tracking-tight leading-none block">
+                  {score.toLocaleString()}
+                </span>
+              </div>
+
+              {/* ============================================================ */}
+              {/* 3. SUB-HEADER: BLOSSOM COMBO PILL (Solo) or PLAYER CHIPS (PVP) */}
+              {/* ============================================================ */}
+              {!activeArenaConfig ? (
+                /* SOLO MODE: Blossom Combo Pill (Figma Node 1225-1148 / 1225-780) */
+                <div className="flex-shrink-0 w-full flex items-center justify-center mb-1.5 sm:mb-2">
+                  <div className="h-9 sm:h-10 px-4 rounded-full bg-gradient-to-r from-[#FF5C7A] via-[#FF758F] to-[#FBBF24] shadow-[0_4px_16px_rgba(255,92,122,0.35)] flex items-center justify-between gap-3 text-white">
+                    <span className="font-comfortaa font-black text-xs sm:text-sm tracking-wide flex items-center gap-1.5 drop-shadow-xs">
+                      <span>🌸</span>
+                      <span>
+                        {comboStreak > 1 ? `BLOSSOM COMBO X${comboStreak}!` : 'BLOSSOM COMBO X1!'}
+                      </span>
+                    </span>
+                    <span className="bg-[#FEF08A] text-[#854D0E] font-comfortaa font-bold text-[11px] sm:text-xs px-2.5 py-0.5 rounded-full shadow-xs">
+                      +{comboStreak > 1 ? comboStreak * 100 : 100} ✨
+                    </span>
+                  </div>
                 </div>
-              </header>
+              ) : (
+                /* PVP BATTLE MODE: Horizontal Player Chips (Figma Node 1225-995: P1, P2 [Active], P3, P4...) */
+                <div className="flex-shrink-0 w-full overflow-x-auto scrollbar-none py-1 px-1 mb-1.5 sm:mb-2">
+                  <div className="flex items-center gap-2 w-max mx-auto px-1">
+                    {/* P1 (Me / Host) */}
+                    <div
+                      className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-comfortaa font-bold text-xs sm:text-[13px] flex-shrink-0 bg-white border-2 border-[#FFAEC0] text-[#E11D48] shadow-xs select-none"
+                      title={playerName || 'Pemain_1 (Anda)'}
+                    >
+                      P1
+                    </div>
+
+                    {/* Opponents P2, P3, P4... */}
+                    {opponents.slice(0, currentMaxPlayers - 1).map((opp, idx) => {
+                      const isSelected = selectedTargetId === opp.id;
+                      const isAlive = opp.isAlive;
+                      return (
+                        <button
+                          key={opp.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedTargetId(opp.id);
+                            sounds.playPickup();
+                            if (mana >= 90) handleFireFrostLock();
+                            else if (mana >= 60) handleFireToxicHand();
+                            else if (mana >= 30) handleFireGlitchStone();
+                          }}
+                          className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-comfortaa font-bold text-xs sm:text-[13px] flex-shrink-0 cursor-pointer transition-all ${
+                            isSelected
+                              ? 'bg-white border-2 border-[#FF3366] ring-2 ring-[#FF3366] text-[#FF3366] font-extrabold scale-105 shadow-sm'
+                              : 'bg-white border-2 border-[#FFAEC0] text-[#E11D48] shadow-xs hover:border-[#FF5C7A]'
+                          } ${!isAlive ? 'opacity-35 line-through' : ''}`}
+                          title={`${opp.name || `P${idx + 2}`} (${opp.boardFillPercent}% isi)`}
+                        >
+                          P{idx + 2}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
               {/* Status Notice (if any) */}
               {txNotice && (
-                <div className="flex-shrink-0 w-full text-center py-1 px-3 bg-pink-100 border border-pink-300 rounded-full mb-0.5 text-[9.5px] font-comfortaa font-bold text-[#FF4D6D] shadow-xs animate-pulse">
+                <div className="flex-shrink-0 w-full text-center py-1 px-3 bg-pink-100 border border-pink-300 rounded-full mb-1 text-[9.5px] font-comfortaa font-bold text-[#FF4D6D] shadow-xs animate-pulse">
                   {txNotice}
                 </div>
               )}
 
-              {/* 15 Opponent Radars */}
-              <section className="flex-shrink-0 w-full">
-                <MiniRadars
-                  opponents={opponents}
-                  selectedTargetId={selectedTargetId}
-                  onSelectTarget={setSelectedTargetId}
-                />
-              </section>
-
-              {/* Heads-Up Display (HUD) */}
-              <section className="flex-shrink-0 w-full my-0.5">
-                <HUD
-                  score={score}
-                  mana={mana}
-                  comboStreak={comboStreak}
-                  timeLeft={timeLeft}
-                  aliveCount={alivePlayers}
-                  totalPlayers={currentMaxPlayers}
-                  isMuted={isMuted}
-                  onToggleMute={() => setIsMuted(sounds.toggleMute())}
-                  incomingSabotageCount={pendingAttacks.length}
-                />
-              </section>
-
-              {/* 3D Chunky Voxel Board (Dynamic Two-Way Fitting, Zero Overlap Guaranteed) */}
+              {/* ============================================================ */}
+              {/* 4. MAIN 8x8 BOARD (Calendar/Pop-it Notepad Style)             */}
+              {/* ============================================================ */}
               <main
                 ref={mainBoardContainerRef}
-                className="flex-1 min-h-0 w-full flex items-center justify-center my-0.5 relative pt-4 pb-1"
+                className="flex-1 min-h-0 w-full flex items-center justify-center my-0.5 relative pt-3 pb-1"
               >
                 {/* HUD Peringatan Serangan Masuk dari Combat Inbox */}
                 <IncomingAttackBanner pendingAttacks={pendingAttacks} />
@@ -1023,7 +1071,7 @@ export function App() {
                     maxWidth: '100%',
                     maxHeight: 'calc(100% - 20px)',
                   }}
-                  className="relative aspect-square flex items-center justify-center drop-shadow-[0_12px_28px_rgba(255,175,190,0.4)] mt-2"
+                  className="relative aspect-square flex items-center justify-center mt-1"
                 >
                   <Board3D
                     ref={board3DRef}
@@ -1036,23 +1084,15 @@ export function App() {
                     cellColors={cellColors}
                     clearBanner={clearBanner}
                     isShaking={isShaking}
+                    onCellClick={handleCellClick}
                   />
                 </div>
               </main>
 
-              {/* Sabotage Weapons Dock */}
-              <section className="flex-shrink-0 w-full mb-0.5">
-                <WeaponsDock
-                  mana={mana}
-                  onFireGlitchStone={handleFireGlitchStone}
-                  onFireToxicHand={handleFireToxicHand}
-                  onFireFrostLock={handleFireFrostLock}
-                  targetName={targetDisplayName}
-                />
-              </section>
-
-              {/* 3 Pieces Hand Tray (STRICTLY Drag & Drop Only) */}
-              <footer className="flex-shrink-0 w-full pb-0.5 flex flex-col items-center">
+              {/* ============================================================ */}
+              {/* 5. HAND TRAY (3 Piece Slots Spawner Dock)                     */}
+              {/* ============================================================ */}
+              <footer className="flex-shrink-0 w-full pb-1 flex flex-col items-center">
                 <HandTray
                   pieces={pieces}
                   used={used}
@@ -1065,6 +1105,23 @@ export function App() {
               </footer>
             </>
           )}
+
+          {/* Game Pause Modal */}
+          <GamePauseModal
+            isOpen={isPaused}
+            score={score}
+            isMuted={isMuted}
+            onResume={() => setIsPaused(false)}
+            onRestart={() => {
+              setIsPaused(false);
+              handleRestart();
+            }}
+            onBackToLobby={() => {
+              setIsPaused(false);
+              handleBackToLobby();
+            }}
+            onToggleMute={() => setIsMuted(sounds.toggleMute())}
+          />
 
           {/* Game Over Modal */}
           {isGameOver && (

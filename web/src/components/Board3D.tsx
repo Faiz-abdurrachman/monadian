@@ -17,84 +17,72 @@ interface Board3DProps {
   cellColors?: (number | null)[];
   clearBanner?: { text: string; subtext?: string } | null;
   isShaking?: boolean;
+  onCellClick?: (x: number, y: number) => void;
 }
 
-// 6 Palet Warna Permen Block Blast Mochi Physical System (Figma 1182:885 PAKE INI)
+// 6 Palet Warna Permen Bubble Pop-it (Figma Exact Match)
 export const CANDY_THEMES = [
-  // 0: Sky Candy Blue (Line 2/3, Blue Gem)
+  // 0: Sky Candy Blue
   {
     name: 'cyan',
-    bg: 'bg-gradient-to-b from-[#BAE6FD] via-[#7DD3FC] to-[#38BDF8]',
-    borderTop: 'border-t-white/90 border-l-white/70',
-    borderBottom: 'border-b-[#0284C7] border-r-[#0284C7]',
-    glow: 'shadow-[0_4px_10px_rgba(56,189,248,0.4)]',
-    capBorder: 'border-t-white/80 border-l-white/80',
-    glint: 'bg-white/80',
+    bg: 'bg-gradient-to-b from-[#7DD3FC] via-[#38BDF8] to-[#0284C7]',
+    borderBottom: 'border-b-[#0369A1]',
+    glow: 'shadow-[0_4px_10px_rgba(56,189,248,0.45)]',
+    glint: 'bg-white/90',
   },
-  // 1: Monad Lavender Violet (Purple / Corner Gem)
+  // 1: Monad Lavender Violet
   {
     name: 'purple',
-    bg: 'bg-gradient-to-b from-[#E9D5FF] via-[#C084FC] to-[#A855F7]',
-    borderTop: 'border-t-white/90 border-l-white/70',
-    borderBottom: 'border-b-[#7E22CE] border-r-[#7E22CE]',
-    glow: 'shadow-[0_4px_10px_rgba(168,85,247,0.4)]',
-    capBorder: 'border-t-white/80 border-l-white/80',
-    glint: 'bg-white/80',
+    bg: 'bg-gradient-to-b from-[#E9D5FF] via-[#C084FC] to-[#9333EA]',
+    borderBottom: 'border-b-[#7E22CE]',
+    glow: 'shadow-[0_4px_10px_rgba(168,85,247,0.45)]',
+    glint: 'bg-white/90',
   },
-  // 2: Sunset Peach Orange (Square 3x3 Gem)
+  // 2: Sunset Peach Orange
   {
     name: 'orange',
-    bg: 'bg-gradient-to-b from-[#FED7AA] via-[#FB923C] to-[#F97316]',
-    borderTop: 'border-t-white/90 border-l-white/70',
-    borderBottom: 'border-b-[#C2410C] border-r-[#C2410C]',
+    bg: 'bg-gradient-to-b from-[#FED7AA] via-[#FB923C] to-[#EA580C]',
+    borderBottom: 'border-b-[#C2410C]',
     glow: 'shadow-[0_4px_10px_rgba(249,115,22,0.45)]',
-    capBorder: 'border-t-white/80 border-l-white/80',
-    glint: 'bg-white/80',
+    glint: 'bg-white/90',
   },
-  // 3: Sakura Blossom Cherry Pink (Red / Pink Gem)
+  // 3: Sakura Blossom Cherry Pink
   {
     name: 'rose',
-    bg: 'bg-gradient-to-b from-[#FBCFE8] via-[#F472B6] to-[#FF4D6D]',
-    borderTop: 'border-t-white/90 border-l-white/70',
-    borderBottom: 'border-b-[#C92A47] border-r-[#C92A47]',
-    glow: 'shadow-[0_4px_10px_rgba(255,77,109,0.45)]',
-    capBorder: 'border-t-white/80 border-l-white/80',
-    glint: 'bg-white/80',
+    bg: 'bg-gradient-to-b from-[#FBCFE8] via-[#FF5C7A] to-[#E11D48]',
+    borderBottom: 'border-b-[#BE123C]',
+    glow: 'shadow-[0_4px_10px_rgba(255,92,122,0.45)]',
+    glint: 'bg-white/90',
   },
-  // 4: Pastel Mint Green (Emerald / Square 2x2 Gem)
+  // 4: Pastel Mint Green
   {
     name: 'emerald',
-    bg: 'bg-gradient-to-b from-[#99F6E4] via-[#6EE7B7] to-[#2DD4BF]',
-    borderTop: 'border-t-white/90 border-l-white/70',
-    borderBottom: 'border-b-[#0F766E] border-r-[#0F766E]',
-    glow: 'shadow-[0_4px_10px_rgba(45,212,191,0.4)]',
-    capBorder: 'border-t-white/80 border-l-white/80',
-    glint: 'bg-white/80',
+    bg: 'bg-gradient-to-b from-[#99F6E4] via-[#2DD4BF] to-[#0D9488]',
+    borderBottom: 'border-b-[#0F766E]',
+    glow: 'shadow-[0_4px_10px_rgba(45,212,191,0.45)]',
+    glint: 'bg-white/90',
   },
-  // 5: Lemon Cream Honey Yellow (Sunshine Amber / Dot 1x1 Gem)
+  // 5: Lemon Cream Honey Yellow
   {
     name: 'gold',
-    bg: 'bg-gradient-to-b from-[#FEF08A] via-[#FDE047] to-[#F59E0B]',
-    borderTop: 'border-t-white/90 border-l-white/70',
-    borderBottom: 'border-b-[#D97706] border-r-[#D97706]',
-    glow: 'shadow-[0_4px_10px_rgba(245,158,11,0.4)]',
-    capBorder: 'border-t-white/80 border-l-white/80',
-    glint: 'bg-white/80',
+    bg: 'bg-gradient-to-b from-[#FEF08A] via-[#FBBF24] to-[#D97706]',
+    borderBottom: 'border-b-[#B45309]',
+    glow: 'shadow-[0_4px_10px_rgba(245,158,11,0.45)]',
+    glint: 'bg-white/90',
   },
 ];
 
 export const getPieceThemeIndex = (pieceId: number, slotIndex?: number): number => {
   if (pieceId === 10) {
-    // Square 3x3: slot 0 -> orange (2), slot 1 -> rose (3), slot 2 -> gold (5)
     if (slotIndex === 1) return 3;
     if (slotIndex === 2) return 5;
     return 2;
   }
-  if (pieceId === 9) return 4; // Square 2x2: emerald mint green
+  if (pieceId === 9) return 5; // Square 2x2: Yellow/Gold like Figma!
   if (pieceId === 0) return 5; // Dot: gold
-  if (pieceId >= 1 && pieceId <= 4) return 0; // Line 2, 3: sky candy blue
-  if (pieceId >= 5 && pieceId <= 8) return 1; // Line 4, 5: monad purple
-  if (pieceId >= 11 && pieceId <= 14) return 1; // Corner 2x2: monad purple
+  if (pieceId >= 1 && pieceId <= 4) return 4; // Line 2, 3: mint green like Figma!
+  if (pieceId >= 5 && pieceId <= 8) return 0; // Line 4, 5: cyan blue
+  if (pieceId >= 11 && pieceId <= 14) return 0; // Corner 2x2: blue like Figma!
   if (pieceId >= 15 && pieceId <= 18) return 3; // Corner 3x3: rose pink
   return (pieceId + (slotIndex || 0)) % CANDY_THEMES.length;
 };
@@ -109,6 +97,7 @@ export const Board3D = forwardRef<Board3DHandle, Board3DProps>(({
   cellColors,
   clearBanner = null,
   isShaking = false,
+  onCellClick,
 }, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -159,41 +148,32 @@ export const Board3D = forwardRef<Board3DHandle, Board3DProps>(({
   return (
     <div className="relative w-full h-full flex items-center justify-center select-none">
       {/* ==================================================================== */}
-      {/* DECORATIVE BUNNY EARS ON TOP OF BOARD (Figma #1182:885 PAKE INI)     */}
+      {/* TWO PINK CALENDAR BINDER HANGING LOOPS (Exact Figma Match)           */}
       {/* ==================================================================== */}
-      <div className="absolute -top-5 sm:-top-6 left-6 right-6 sm:left-8 sm:right-8 flex items-center justify-between pointer-events-none z-0">
-        {/* Left Bunny Ear */}
-        <div className="w-7 h-8 sm:w-8 sm:h-10 rounded-t-full bg-gradient-to-t from-[#FCE7F3] via-pink-100 to-white border-2 border-b-0 border-[#FBCFE8] shadow-sm flex items-center justify-center p-0.5 sm:p-1">
-          <div className="w-3 h-5 sm:w-3.5 sm:h-6 rounded-t-full bg-[#FF758F]/60" />
+      <div className="absolute -top-3.5 sm:-top-4 left-0 right-0 px-[22%] flex items-center justify-between pointer-events-none z-20">
+        {/* Left Loop */}
+        <div className="w-7 h-6 sm:w-8 sm:h-7 rounded-t-[10px] bg-[#FF6584] border-2 border-b-0 border-[#F43F5E] shadow-xs flex items-center justify-center pt-0.5">
+          <div className="w-2.5 h-3.5 sm:w-3 sm:h-4 rounded-full bg-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.15)]" />
         </div>
-        {/* Right Bunny Ear */}
-        <div className="w-7 h-8 sm:w-8 sm:h-10 rounded-t-full bg-gradient-to-t from-[#FCE7F3] via-pink-100 to-white border-2 border-b-0 border-[#FBCFE8] shadow-sm flex items-center justify-center p-0.5 sm:p-1">
-          <div className="w-3 h-5 sm:w-3.5 sm:h-6 rounded-t-full bg-[#FF758F]/60" />
+        {/* Right Loop */}
+        <div className="w-7 h-6 sm:w-8 sm:h-7 rounded-t-[10px] bg-[#FF6584] border-2 border-b-0 border-[#F43F5E] shadow-xs flex items-center justify-center pt-0.5">
+          <div className="w-2.5 h-3.5 sm:w-3 sm:h-4 rounded-full bg-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.15)]" />
         </div>
       </div>
 
       {/* ==================================================================== */}
-      {/* 8x8 MATRIX KAWAII BLOSSOM BOARD (Figma #1178:690 PAKE INI)           */}
+      {/* 8x8 MATRIX KAWAII BLOSSOM BOARD (Calendar Notepad Style)             */}
       {/* ==================================================================== */}
       <div
         ref={containerRef}
         id="monadian-board-2d"
-        className={`relative w-full h-full p-2 sm:p-3 bg-[#FFF8FA] rounded-[28px] sm:rounded-[36px] border-4 border-pink-200/90 shadow-[0_10px_35px_rgba(255,175,190,0.35)] flex items-center justify-center pointer-events-none select-none z-10 transition-transform ${
+        className={`relative w-full h-full p-3 sm:p-4 bg-white rounded-[34px] sm:rounded-[38px] border-2 border-[#FFD8E2] shadow-[0_16px_40px_rgba(255,180,200,0.35)] flex items-center justify-center select-none z-10 transition-transform ${
           isShaking ? 'animate-[boardShock_350ms_ease-in-out]' : ''
         }`}
       >
-        {/* Ambient Inset Glow Overlay */}
-        <div className="absolute inset-1 rounded-[28px] sm:rounded-[32px] shadow-[inset_0_3px_6px_rgba(255,255,255,0.95)] pointer-events-none" />
-
-        {/* Corner Sakura Accents (Subtle Kawaii Floral Motifs) */}
-        <span className="absolute top-2 left-2.5 text-[10px] text-pink-300/60 select-none pointer-events-none">🌸</span>
-        <span className="absolute top-2 right-2.5 text-[10px] text-pink-300/60 select-none pointer-events-none">🌸</span>
-        <span className="absolute bottom-2 left-2.5 text-[10px] text-pink-300/60 select-none pointer-events-none">🌸</span>
-        <span className="absolute bottom-2 right-2.5 text-[10px] text-pink-300/60 select-none pointer-events-none">🌸</span>
-
         {/* Floating Arcade Line Clear Banner */}
         {clearBanner && (
-          <div className="absolute top-1/2 left-1/2 z-40 pointer-events-none select-none animate-[bannerPop_500ms_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none select-none animate-[bannerPop_500ms_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]">
             <div className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#FF758F] via-[#FF4D6D] to-[#E61E4F] text-white shadow-[0_8px_30px_rgba(230,30,79,0.55),0_0_24px_rgba(255,215,0,0.7)] border-2 border-white flex flex-col items-center justify-center min-w-[170px] whitespace-nowrap">
               <div className="text-xs sm:text-sm font-comfortaa font-black tracking-wider uppercase drop-shadow-md flex items-center gap-1.5">
                 <span>{clearBanner.text}</span>
@@ -231,8 +211,8 @@ export const Board3D = forwardRef<Board3DHandle, Board3DProps>(({
           </div>
         ))}
 
-        {/* 8x8 Grid Container (Figma #1178:691) */}
-        <div className="grid grid-cols-8 grid-rows-8 gap-1 sm:gap-1.5 w-full h-full relative z-10">
+        {/* 8x8 Grid Container (Circular Pop-it Bubbles) */}
+        <div className="grid grid-cols-8 grid-rows-8 gap-1.5 sm:gap-2 w-full h-full relative z-10">
           {Array.from({ length: 64 }, (_, idx) => {
             const row = Math.floor(idx / 8);
             const col = idx % 8;
@@ -241,110 +221,90 @@ export const Board3D = forwardRef<Board3DHandle, Board3DProps>(({
             const isClearing = clearingRows.includes(row) || clearingCols.includes(col);
             const isGhost = ghostMask !== null && isBitSet(ghostMask, idx);
 
-            // Pilih varian warna balok permen (1 Bidak = 1 Warna Solid Bersih)
+            // Color variant
             const themeIndex = cellColors && cellColors[idx] !== null && cellColors[idx] !== undefined
               ? cellColors[idx]!
               : (row + col * 2) % CANDY_THEMES.length;
             const theme = CANDY_THEMES[themeIndex % CANDY_THEMES.length];
 
-            // 1. Balok Sabotase (Batu Glitch Frost / Sakura Ice Crystal)
+            // 1. Sabotage Bubble Block (Glitch Frost Crystal)
             if (isSabotage) {
               return (
                 <div
                   key={idx}
-                  className={`relative w-full h-full rounded-[7px] sm:rounded-[11px] bg-gradient-to-b from-sky-100 via-sky-300 to-slate-400 border-t-2 border-l-2 border-white/90 border-b-[3px] border-r-2 border-slate-600 shadow-[0_4px_10px_rgba(56,189,248,0.35)] flex items-center justify-center transition-transform ${
+                  className={`relative w-full h-full rounded-full bg-gradient-to-b from-sky-100 via-sky-300 to-slate-400 border border-white/80 shadow-[0_3px_8px_rgba(56,189,248,0.35)] flex items-center justify-center transition-transform ${
                     isClearing
                       ? 'animate-[blastShatter_420ms_cubic-bezier(0.2,0.8,0.2,1)_forwards] z-20 shadow-[0_0_24px_rgba(56,189,248,0.9)]'
                       : 'scale-100'
                   }`}
                 >
-                  <div className="w-2.5 h-2.5 rounded-full bg-white/70 absolute top-1 right-1" />
+                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-white/80 absolute top-1 right-1" />
                   <span className="text-[10px]">❄️</span>
-                  {isClearing && (
-                    <>
-                      <span className="absolute -top-1 -left-1 text-[11px] animate-[sparkleFloat_420ms_ease-out_forwards] pointer-events-none select-none z-30" style={{ '--tw-tx': '-20px', '--tw-ty': '-20px' } as any}>❄️</span>
-                      <span className="absolute -bottom-1 -right-1 text-[11px] animate-[sparkleFloat_420ms_ease-out_forwards] pointer-events-none select-none z-30" style={{ '--tw-tx': '20px', '--tw-ty': '20px' } as any}>✨</span>
-                    </>
-                  )}
                 </div>
               );
             }
 
-            // 2. Balok Permen Meledak Spektakuler Saat Garis Bersih (Wah Explosion!)
+            // 2. Exploding Bubble Block (Line Clear Explosion)
             if (isClearing && isOccupied) {
               return (
                 <div
                   key={idx}
-                  className="relative w-full h-full rounded-[7px] sm:rounded-[11px] flex items-center justify-center z-20"
+                  className="relative w-full h-full rounded-full flex items-center justify-center z-20"
                 >
-                  {/* Shattering Jewel Core */}
                   <div
-                    className={`absolute inset-0 rounded-[7px] sm:rounded-[11px] ${theme.bg} ${theme.glow} border-2 border-white animate-[blastShatter_420ms_cubic-bezier(0.2,0.8,0.2,1)_forwards] shadow-[0_0_26px_rgba(255,215,0,0.85)] flex items-center justify-center overflow-hidden`}
+                    className={`absolute inset-0 rounded-full ${theme.bg} ${theme.glow} border-2 border-white animate-[blastShatter_420ms_cubic-bezier(0.2,0.8,0.2,1)_forwards] shadow-[0_0_26px_rgba(255,215,0,0.85)] flex items-center justify-center overflow-hidden`}
                   >
                     <div className="w-2 h-2 rounded-full bg-white absolute top-1 right-1 animate-ping" />
-                    <div className="w-3/5 h-2/5 rounded-[4px] bg-white/60 mx-auto" />
                   </div>
-
-                  {/* Explosive Sakura Petals & Glint Particles */}
                   <span
                     className="absolute -top-1 -left-1 text-[12px] animate-[sparkleFloat_420ms_ease-out_forwards] pointer-events-none select-none z-30"
-                    style={{ '--tw-tx': '-22px', '--tw-ty': '-22px' } as any}
+                    style={{ '--tw-tx': '-20px', '--tw-ty': '-20px' } as any}
                   >
                     🌸
                   </span>
                   <span
                     className="absolute -bottom-1 -right-1 text-[11px] animate-[sparkleFloat_420ms_ease-out_forwards] pointer-events-none select-none z-30"
-                    style={{ '--tw-tx': '22px', '--tw-ty': '22px' } as any}
+                    style={{ '--tw-tx': '20px', '--tw-ty': '20px' } as any}
                   >
                     ✨
-                  </span>
-                  <span
-                    className="absolute -top-1 -right-1 text-[10px] animate-[sparkleFloat_420ms_ease-out_forwards] pointer-events-none select-none z-30"
-                    style={{ '--tw-tx': '18px', '--tw-ty': '-18px' } as any}
-                  >
-                    💥
                   </span>
                 </div>
               );
             }
 
-            // 3. Balok Permen Aktif Normal (Juicy 3D Beveled Candy Gem Block)
+            // 3. Active Placed Bubble (Shiny Spherical Candy Gem)
             if (isOccupied) {
               return (
                 <div
                   key={idx}
-                  className={`relative w-full h-full rounded-[7px] sm:rounded-[11px] ${theme.bg} ${theme.glow} border-t-2 border-l-2 ${theme.borderTop} border-b-[3px] border-r-2 ${theme.borderBottom} flex items-center justify-center transition-all duration-150 overflow-hidden scale-100`}
+                  className={`relative w-full h-full rounded-full ${theme.bg} ${theme.glow} border-b-2 ${theme.borderBottom} flex items-center justify-center transition-all duration-150 overflow-hidden scale-100`}
                 >
-                  {/* Glossy Candy Glint Reflection Dot (Figma detail) */}
+                  {/* Glossy Reflection Glint Dot (Figma detail) */}
                   <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${theme.glint} absolute top-1 right-1 shadow-xs`} />
-
-                  {/* Glossy Top Bevel Cap */}
-                  <div
-                    className={`w-3/5 h-2/5 rounded-[4px] bg-white/40 backdrop-blur-[0.5px] border-t border-l ${theme.capBorder} mx-auto mt-0.5`}
-                  />
                 </div>
               );
             }
 
-            // 4. Ghost Preview (Siluet Balok Saat Melayang di Atas Papan)
+            // 4. Ghost Preview Indicator
             if (isGhost) {
               return (
                 <div
                   key={idx}
-                  className={`relative w-full h-full rounded-[7px] sm:rounded-[11px] transition-all duration-100 ${
+                  className={`relative w-full h-full rounded-full transition-all duration-100 ${
                     isGhostValid
-                      ? 'bg-mint/45 border-2 border-mint shadow-[0_0_12px_#2dd4bf] animate-pulse'
-                      : 'bg-cherry/45 border-2 border-cherry shadow-[0_0_10px_#ff4d6d]'
+                      ? 'bg-mint/50 border-2 border-mint shadow-[0_0_12px_#2dd4bf] animate-pulse'
+                      : 'bg-cherry/50 border-2 border-cherry shadow-[0_0_10px_#ff4d6d]'
                   }`}
                 />
               );
             }
 
-            // 5. Soket Kosong (Recessed Soft Pink/Cream Pastel Socket)
+            // 5. Empty Pop-it Circular Socket
             return (
               <div
                 key={idx}
-                className="relative w-full h-full rounded-[7px] sm:rounded-[11px] bg-[#FFF5F7] border border-pink-200/60 shadow-[inset_0_2px_4px_rgba(255,182,193,0.22)] transition-colors"
+                onClick={() => onCellClick?.(col, row)}
+                className="relative w-full h-full rounded-full bg-[#FFF0F4] border border-[#FED7E2] shadow-[inset_0_2px_4px_rgba(255,182,193,0.3)] transition-colors cursor-pointer hover:bg-[#FFE6F0]"
               />
             );
           })}
