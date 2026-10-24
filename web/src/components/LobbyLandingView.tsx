@@ -28,6 +28,7 @@ interface LobbyLandingViewProps {
   onOpenPitchDeck?: () => void;
   onOpenQr?: () => void;
   onOpenQrScanner?: () => void;
+  onJoinRoom?: (codeOrUrl: string) => void;
   sessionAddress?: string | null;
   guestRoomInfo?: GuestRoomInfo | null;
   userAddress?: string | null;
@@ -41,6 +42,7 @@ export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
   onOpenCreateArena,
   onOpenGuide,
   onOpenQrScanner,
+  onJoinRoom,
   guestRoomInfo,
   userAddress,
   isConnectingWallet,
@@ -135,7 +137,13 @@ export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
             </span>
           </div>
           <button
-            onClick={handleStartArena}
+            onClick={() => {
+              if (onJoinRoom) {
+                onJoinRoom(guestRoomInfo.roomCode);
+              } else {
+                handleStartArena();
+              }
+            }}
             className="py-1 px-3 rounded-xl bg-gradient-to-r from-[#FF758F] to-[#FF4D6D] text-white text-[9px] font-comfortaa font-bold shadow-xs active:scale-95 cursor-pointer"
           >
             {language === 'id' ? 'GABUNG' : 'JOIN'}

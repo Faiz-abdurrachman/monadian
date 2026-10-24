@@ -177,6 +177,56 @@ export function App() {
   const [isConnectingWallet, setIsConnectingWallet] = useState<boolean>(false);
   const [txNotice, setTxNotice] = useState<string | null>(null);
 
+  // Join Arena via Camera QR Scan (Works on Mobile Camera & MetaMask in-app browser)
+  const handleScanQrSuccess = useCallback((scannedData: string) => {
+    let roomCode = '371';
+    let poolType: 'buyIn' | 'sponsored' = 'buyIn';
+    let potMon = '0.80';
+    let maxPlayers = 16;
+
+    try {
+      if (scannedData.includes('?') || scannedData.includes('room=')) {
+        const queryString = scannedData.includes('?')
+          ? scannedData.substring(scannedData.indexOf('?'))
+          : `?${scannedData}`;
+        const params = new URLSearchParams(queryString);
+        if (params.get('room')) roomCode = params.get('room')!;
+        if (params.get('mode') === 'sponsored') poolType = 'sponsored';
+        if (params.get('pot')) potMon = params.get('pot')!;
+        if (params.get('players')) maxPlayers = parseInt(params.get('players')!, 10) || 16;
+      } else if (scannedData.trim()) {
+        roomCode = scannedData.trim().replace(/^#/, '');
+      }
+    } catch (e) {
+      console.warn('Gagal membaca data QR:', e);
+    }
+
+    const scannedConfig: ArenaConfig = {
+      roomName: `Monad Blitz Arena #${roomCode}`,
+      roomCode,
+      poolType,
+      entryFeeMon: poolType === 'sponsored' ? '0' : (parseFloat(potMon) / maxPlayers).toFixed(2),
+      sponsorPotMon: poolType === 'sponsored' ? potMon : '0',
+      prizeScheme: 'podium',
+      maxPlayers,
+      hostName: 'Host.mon',
+    };
+
+    setActiveArenaConfig(scannedConfig);
+
+    const myName = playerName.trim() || (userAddress ? `${userAddress.slice(0, 6)}...` : 'Pemain_1');
+    setJoinedPlayers(['Host.mon', myName, 'Bunny_Rival']);
+    setCurrentView('host');
+    sounds.playPickup();
+
+    setTxNotice(
+      language === 'id'
+        ? `🎉 Berhasil bergabung ke Arena #${roomCode}! Peserta: Host.mon, ${myName}, Bunny_Rival`
+        : `🎉 Joined Arena #${roomCode}! Contenders: Host.mon, ${myName}, Bunny_Rival`
+    );
+    setTimeout(() => setTxNotice(null), 4000);
+  }, [language, playerName, userAddress]);
+
   // Inisialisasi EIP-7702 Ephemeral Session Key saat startup
   useEffect(() => {
     const s = sessionEngine.loadOrCreateSessionKey();
@@ -184,7 +234,7 @@ export function App() {
     const existingUser = sessionEngine.getUserAddress();
     if (existingUser) setUserAddress(existingUser);
 
-    // Cek parameter undangan room (?room=101&mode=sponsored&pot=1.5)
+    // Cek parameter undangan room (?room=101&mode=sponsored&pot=1.5) dari scan kamera HP
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const room = params.get('room');
@@ -196,9 +246,10 @@ export function App() {
           mode: mode === 'buyIn' ? 'buyIn' : 'sponsored',
           pot: pot || (mode === 'buyIn' ? '0.1' : '1.5'),
         });
+        handleScanQrSuccess(window.location.search);
       }
     }
-  }, []);
+  }, [handleScanQrSuccess]);
 
   // Mulai BGM arcade prosedural saat interaksi pertama user
   useEffect(() => {
@@ -763,56 +814,6 @@ export function App() {
     }, 4800);
   };
 
-  // Join Arena via Camera QR Scan (Works on Mobile Camera & MetaMask in-app browser)
-  const handleScanQrSuccess = (scannedData: string) => {
-    let roomCode = '371';
-    let poolType: 'buyIn' | 'sponsored' = 'buyIn';
-    let potMon = '0.80';
-    let maxPlayers = 16;
-
-    try {
-      if (scannedData.includes('?') || scannedData.includes('room=')) {
-        const queryString = scannedData.includes('?')
-          ? scannedData.substring(scannedData.indexOf('?'))
-          : `?${scannedData}`;
-        const params = new URLSearchParams(queryString);
-        if (params.get('room')) roomCode = params.get('room')!;
-        if (params.get('mode') === 'sponsored') poolType = 'sponsored';
-        if (params.get('pot')) potMon = params.get('pot')!;
-        if (params.get('players')) maxPlayers = parseInt(params.get('players')!, 10) || 16;
-      } else if (scannedData.trim()) {
-        roomCode = scannedData.trim().replace(/^#/, '');
-      }
-    } catch (e) {
-      console.warn('Gagal membaca data QR:', e);
-    }
-
-    const scannedConfig: ArenaConfig = {
-      roomName: `Monad Blitz Arena #${roomCode}`,
-      roomCode,
-      poolType,
-      entryFeeMon: poolType === 'sponsored' ? '0' : (parseFloat(potMon) / maxPlayers).toFixed(2),
-      sponsorPotMon: poolType === 'sponsored' ? potMon : '0',
-      prizeScheme: 'podium',
-      maxPlayers,
-      hostName: 'Host.mon',
-    };
-
-    setActiveArenaConfig(scannedConfig);
-
-    const myName = playerName.trim() || (userAddress ? `${userAddress.slice(0, 6)}...` : 'Pemain_1');
-    setJoinedPlayers(['Host.mon', myName, 'Bunny_Rival']);
-    setCurrentView('host');
-    sounds.playPickup();
-
-    setTxNotice(
-      language === 'id'
-        ? `🎉 Berhasil bergabung ke Arena #${roomCode}! Peserta: Host.mon, ${myName}, Bunny_Rival`
-        : `🎉 Joined Arena #${roomCode}! Contenders: Host.mon, ${myName}, Bunny_Rival`
-    );
-    setTimeout(() => setTxNotice(null), 4000);
-  };
-
   const handleStartGameFromHost = () => {
     sounds.playPickup();
 
@@ -988,6 +989,7 @@ export function App() {
               onOpenPitchDeck={() => setIsPitchDeckOpen(true)}
               onOpenQr={() => setIsQrModalOpen(true)}
               onOpenQrScanner={() => setIsCameraScannerOpen(true)}
+              onJoinRoom={handleScanQrSuccess}
               sessionAddress={sessionAddress}
               guestRoomInfo={guestRoomInfo}
               userAddress={userAddress}

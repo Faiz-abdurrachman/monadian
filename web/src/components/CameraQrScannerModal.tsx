@@ -45,13 +45,19 @@ export const CameraQrScannerModal: React.FC<CameraQrScannerModalProps> = ({
         );
       }
 
-      const newStream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: mode,
-          width: { ideal: 640 },
-          height: { ideal: 640 },
-        },
-      });
+      let newStream: MediaStream;
+      try {
+        newStream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: { ideal: mode },
+            width: { ideal: 640 },
+            height: { ideal: 640 },
+          },
+        });
+      } catch (fallbackErr) {
+        // Fallback untuk perangkat/laptop tanpa kamera belakang
+        newStream = await navigator.mediaDevices.getUserMedia({ video: true });
+      }
 
       setStream(newStream);
 
