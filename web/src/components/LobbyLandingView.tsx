@@ -132,8 +132,8 @@ export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
       {/* 2. MAIN CENTER STACK (Mascot + Wallet Card + Action Buttons)         */}
       {/* ==================================================================== */}
       <div className="w-full max-w-[350px] sm:max-w-[370px] flex flex-col items-center flex-1 justify-center z-10 my-auto py-1">
-        {/* Floating Best Score Pill Badge (Overlaps Bunny Ears Tips like Figma) */}
-        <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-white/95 border border-[#FBCFE8] shadow-[0_3px_12px_rgba(255,100,130,0.12)] z-30 -mb-7 sm:-mb-8">
+        {/* Floating Best Score Pill Badge (Tucked Behind Bunny Ears like Figma) */}
+        <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-white/95 border border-[#FBCFE8] shadow-[0_3px_12px_rgba(255,100,130,0.12)] z-10 -mb-7 sm:-mb-8">
           <span className="text-sm">🏆</span>
           <span className="text-[11px] font-comfortaa font-extrabold tracking-wider text-[#FF4D6D] uppercase">
             BEST
@@ -143,8 +143,8 @@ export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
           </span>
         </div>
 
-        {/* Dynamic 3D Bunny Mascot Sticker (Uncompressed 100% Native Aspect Ratio) */}
-        <div className="relative w-full flex items-center justify-center select-none pointer-events-none z-10">
+        {/* Dynamic 3D Bunny Mascot Sticker (Sits in front of the pill, behind player card) */}
+        <div className="relative w-full flex items-center justify-center select-none pointer-events-none z-20">
           {userAddress ? (
             /* UDAH CONNECT: Happy waving bunny sticker */
             <img
@@ -166,7 +166,7 @@ export const LobbyLandingView: React.FC<LobbyLandingViewProps> = ({
 
         {/* SECTION - PLAYER STATUS (Connected vs Disconnected Wallet Card) */}
         {/* Overlaps the bottom of the bunny directly like Figma */}
-        <div className={`w-full relative z-20 ${userAddress ? '-mt-24 sm:-mt-28' : '-mt-28 sm:-mt-32'}`}>
+        <div className={`w-full relative z-30 ${userAddress ? '-mt-24 sm:-mt-28' : '-mt-28 sm:-mt-32'}`}>
           <div className="w-full bg-white/95 backdrop-blur-md rounded-[28px] sm:rounded-[32px] border-2 border-[#FFD8E2] shadow-[0_8px_25px_rgba(255,182,193,0.28)] p-3.5 sm:p-4 flex flex-col items-center gap-2 sm:gap-2.5">
             {userAddress ? (
               /* ---------------- STATE A: CONNECTED TO MONAD ---------------- */

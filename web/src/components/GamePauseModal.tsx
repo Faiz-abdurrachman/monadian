@@ -32,26 +32,28 @@ export const GamePauseModal: React.FC<GamePauseModalProps> = ({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-[340px] sm:max-w-[365px] bg-white border-2 border-[#FFD8E3] rounded-[38px] sm:rounded-[42px] pt-8 pb-7 px-6 sm:pt-9 sm:pb-8 sm:px-7 shadow-[0_22px_65px_rgba(255,160,185,0.45)] flex flex-col items-center text-center text-[#241022]"
+        className="relative w-full max-w-[340px] sm:max-w-[365px] flex flex-col items-center"
       >
         {/* ================================================================ */}
-        {/* TOP BUNNY EARS (Figma Exact: uploaded_media_1792829296626.png)     */}
+        {/* TOP BUNNY EARS (Tucked cleanly behind the card like Figma)       */}
         {/* ================================================================ */}
         <div className="absolute -top-6 left-0 right-0 flex items-center justify-center gap-5 pointer-events-none z-0">
           {/* Left Bunny Ear */}
-          <div className="w-7 h-10 rounded-t-full bg-white border-2 border-b-0 border-[#FF758F] shadow-xs flex items-center justify-center pt-2">
+          <div className="w-7 h-10 rounded-t-full bg-white border-2 border-[#FF758F] shadow-xs flex items-center justify-center pt-2">
             <div className="w-3.5 h-6 rounded-t-full bg-[#FF8DA1]/50" />
           </div>
           {/* Right Bunny Ear */}
-          <div className="w-7 h-10 rounded-t-full bg-white border-2 border-b-0 border-[#FF758F] shadow-xs flex items-center justify-center pt-2">
+          <div className="w-7 h-10 rounded-t-full bg-white border-2 border-[#FF758F] shadow-xs flex items-center justify-center pt-2">
             <div className="w-3.5 h-6 rounded-t-full bg-[#FF8DA1]/50" />
           </div>
         </div>
 
-        {/* Header Title */}
-        <h2 className="font-comfortaa font-bold text-[24px] sm:text-[27px] text-[#241022] tracking-tight uppercase leading-none mb-3.5">
-          {language === 'id' ? 'GAME PAUSED' : 'GAME PAUSED'}
-        </h2>
+        {/* Main Card */}
+        <div className="relative z-10 w-full bg-white border-2 border-[#FFD8E3] rounded-[38px] sm:rounded-[42px] pt-8 pb-7 px-6 sm:pt-9 sm:pb-8 sm:px-7 shadow-[0_22px_65px_rgba(255,160,185,0.45)] flex flex-col items-center text-center text-[#241022]">
+          {/* Header Title */}
+          <h2 className="font-comfortaa font-bold text-[24px] sm:text-[27px] text-[#241022] tracking-tight uppercase leading-none mb-3.5">
+            {language === 'id' ? 'GAME PAUSED' : 'GAME PAUSED'}
+          </h2>
 
         {/* Stats Pill Row (SCORE & BEST) */}
         <div className="flex items-center justify-center gap-2 sm:gap-2.5 w-full">
@@ -108,5 +110,6 @@ export const GamePauseModal: React.FC<GamePauseModalProps> = ({
         </button>
       </div>
     </div>
+  </div>
   );
 };

@@ -47,21 +47,23 @@ export const GameOverModal: React.FC<GameOverModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-[2px] flex items-center justify-center p-4 animate-fadeIn font-quicksand select-none">
-      <div className="relative w-full max-w-[340px] sm:max-w-[365px] bg-white border-2 border-[#FFD8E3] rounded-[38px] sm:rounded-[42px] pt-8 pb-7 px-6 sm:pt-9 sm:pb-8 sm:px-7 shadow-[0_22px_65px_rgba(255,160,185,0.45)] flex flex-col items-center text-center text-[#241022]">
+      <div className="relative w-full max-w-[340px] sm:max-w-[365px] flex flex-col items-center">
         {/* ================================================================ */}
-        {/* TOP BUNNY EARS (Figma Exact Match)                                */}
+        {/* TOP BUNNY EARS (Tucked cleanly behind the card)                  */}
         {/* ================================================================ */}
         <div className="absolute -top-6 left-0 right-0 flex items-center justify-center gap-5 pointer-events-none z-0">
-          <div className="w-7 h-10 rounded-t-full bg-white border-2 border-b-0 border-[#FF758F] shadow-xs flex items-center justify-center pt-2">
+          <div className="w-7 h-10 rounded-t-full bg-white border-2 border-[#FF758F] shadow-xs flex items-center justify-center pt-2">
             <div className="w-3.5 h-6 rounded-t-full bg-[#FF8DA1]/50" />
           </div>
-          <div className="w-7 h-10 rounded-t-full bg-white border-2 border-b-0 border-[#FF758F] shadow-xs flex items-center justify-center pt-2">
+          <div className="w-7 h-10 rounded-t-full bg-white border-2 border-[#FF758F] shadow-xs flex items-center justify-center pt-2">
             <div className="w-3.5 h-6 rounded-t-full bg-[#FF8DA1]/50" />
           </div>
         </div>
 
-        {/* Header Title */}
-        <h2 className="font-comfortaa font-bold text-[24px] sm:text-[27px] text-[#241022] tracking-tight uppercase leading-none mb-1">
+        {/* Main Card */}
+        <div className="relative z-10 w-full bg-white border-2 border-[#FFD8E3] rounded-[38px] sm:rounded-[42px] pt-8 pb-7 px-6 sm:pt-9 sm:pb-8 sm:px-7 shadow-[0_22px_65px_rgba(255,160,185,0.45)] flex flex-col items-center text-center text-[#241022]">
+          {/* Header Title */}
+          <h2 className="font-comfortaa font-bold text-[24px] sm:text-[27px] text-[#241022] tracking-tight uppercase leading-none mb-1">
           {isWinner
             ? (language === 'id' ? 'VICTORY ROYALE!' : 'VICTORY ROYALE!')
             : (language === 'id' ? 'GAME OVER' : 'GAME OVER')}
@@ -156,5 +158,6 @@ export const GameOverModal: React.FC<GameOverModalProps> = ({
         </a>
       </div>
     </div>
+  </div>
   );
 };

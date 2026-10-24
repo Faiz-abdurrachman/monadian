@@ -97,6 +97,7 @@ export function App() {
   const [clearingRows, setClearingRows] = useState<number[]>([]);
   const [clearingCols, setClearingCols] = useState<number[]>([]);
   const [clearBanner, setClearBanner] = useState<{ text: string; subtext?: string } | null>(null);
+  const [comboNotification, setComboNotification] = useState<{ streak: number; bonus: number } | null>(null);
   const [isShaking, setIsShaking] = useState<boolean>(false);
 
   // 3D Board Ref for Raycasting & Layout Measurement
@@ -480,6 +481,8 @@ export function App() {
 
       const comboText = nextStreak > 1 ? `COMBO x${nextStreak} 🔥 (+${scoreGain})` : `+${scoreGain} PTS`;
       setClearBanner({ text: bannerTitle, subtext: comboText });
+      setComboNotification({ streak: nextStreak, bonus: scoreGain });
+      setTimeout(() => setComboNotification(null), 2200);
       if (linesCleared >= 2) setIsShaking(true);
 
       // CRUCIAL: Keep placedBoard active during the 420ms explosion spectacle!
@@ -997,19 +1000,26 @@ export function App() {
               {/* 3. SUB-HEADER: BLOSSOM COMBO PILL (Solo) or PLAYER CHIPS (PVP) */}
               {/* ============================================================ */}
               {!activeArenaConfig ? (
-                /* SOLO MODE: Blossom Combo Pill (Figma Node 1225-1148 / 1225-780) */
-                <div className="flex-shrink-0 w-full flex items-center justify-center mb-1.5 sm:mb-2">
-                  <div className="h-9 sm:h-10 px-4 rounded-full bg-gradient-to-r from-[#FF5C7A] via-[#FF758F] to-[#FBBF24] shadow-[0_4px_16px_rgba(255,92,122,0.35)] flex items-center justify-between gap-3 text-white">
-                    <span className="font-comfortaa font-black text-xs sm:text-sm tracking-wide flex items-center gap-1.5 drop-shadow-xs">
-                      <span>🌸</span>
-                      <span>
-                        {comboStreak > 1 ? `BLOSSOM COMBO X${comboStreak}!` : 'BLOSSOM COMBO X1!'}
+                /* SOLO MODE: Dynamic Blossom Combo Toast (Only pops up on active line blast / combo) */
+                <div className="flex-shrink-0 w-full h-9 sm:h-10 flex items-center justify-center mb-1 select-none">
+                  {comboNotification ? (
+                    <div className="h-9 sm:h-10 px-4 rounded-full bg-gradient-to-r from-[#FF5C7A] via-[#FF758F] to-[#FBBF24] shadow-[0_4px_16px_rgba(255,92,122,0.35)] flex items-center justify-between gap-3 text-white animate-bounce">
+                      <span className="font-comfortaa font-black text-xs sm:text-sm tracking-wide flex items-center gap-1.5 drop-shadow-xs">
+                        <span>🌸</span>
+                        <span>
+                          {comboNotification.streak > 1
+                            ? `BLOSSOM COMBO X${comboNotification.streak}!`
+                            : 'BLOSSOM BLAST!'}
+                        </span>
                       </span>
-                    </span>
-                    <span className="bg-[#FEF08A] text-[#854D0E] font-comfortaa font-bold text-[11px] sm:text-xs px-2.5 py-0.5 rounded-full shadow-xs">
-                      +{comboStreak > 1 ? comboStreak * 100 : 100} ✨
-                    </span>
-                  </div>
+                      <span className="bg-[#FEF08A] text-[#854D0E] font-comfortaa font-bold text-[11px] sm:text-xs px-2.5 py-0.5 rounded-full shadow-xs">
+                        +{comboNotification.bonus} ✨
+                      </span>
+                    </div>
+                  ) : (
+                    /* Subtle minimal spacer keeping the board layout stable without clutter */
+                    <div className="h-1.5 w-12 rounded-full bg-[#FFD8E3]/40" />
+                  )}
                 </div>
               ) : (
                 /* PVP BATTLE MODE: Horizontal Player Chips (Figma Node 1225-995: P1, P2 [Active], P3, P4...) + 1-Skill Attack */
@@ -1075,31 +1085,37 @@ export function App() {
                         data-single-attack-btn
                         type="button"
                         onClick={handleSingleAttack}
-                        className="w-full max-w-[340px] h-9 sm:h-10 rounded-[18px] bg-[#FF5C7A] text-white border-b-[4px] border-[#D81B60] shadow-[0_4px_16px_rgba(255,92,122,0.38)] hover:brightness-105 active:translate-y-0.5 active:border-b-[1px] transition-all flex items-center justify-center gap-2 cursor-pointer font-comfortaa font-black text-xs sm:text-sm tracking-wider uppercase select-none animate-bounce"
+                        className="w-full max-w-[340px] h-10 sm:h-11 rounded-[20px] bg-gradient-to-r from-[#FF5C7A] via-[#FF3366] to-[#E11D48] text-white border-b-[5px] border-[#9F1239] shadow-[0_6px_22px_rgba(255,51,102,0.45)] hover:brightness-105 active:translate-y-1 active:border-b-[1px] transition-all flex items-center justify-center gap-2 cursor-pointer font-comfortaa font-black text-xs sm:text-sm tracking-wider uppercase select-none animate-bounce"
                       >
                         <span className="text-base">🌸</span>
                         <span>
                           {language === 'id'
-                            ? `SERANG [${opponents.find((o) => o.id === selectedTargetId)?.name || 'P2'}] ⚡ (30 MANA)`
-                            : `STRIKE [${opponents.find((o) => o.id === selectedTargetId)?.name || 'P2'}] ⚡ (30 MANA)`}
+                            ? `TEMBAK [${opponents.find((o) => o.id === selectedTargetId)?.name || 'P2'}] ⚡ (KLIK UNTUK SERANG)`
+                            : `STRIKE [${opponents.find((o) => o.id === selectedTargetId)?.name || 'P2'}] ⚡ (CLICK TO FIRE)`}
                         </span>
                       </button>
                     ) : (
-                      <div className="w-full max-w-[340px] h-8 sm:h-9 rounded-[16px] bg-white border border-[#FFD8E3] shadow-xs px-3 flex items-center justify-between relative overflow-hidden select-none">
-                        {/* Background Energy Fill Bar */}
+                      <div className="w-full max-w-[340px] h-9 sm:h-10 rounded-[18px] bg-[#FFF0F4] border-2 border-[#FFD8E3] shadow-xs px-3.5 flex items-center justify-between relative overflow-hidden select-none">
+                        {/* Background Energy Fill Bar with subtle shimmer */}
                         <div
-                          className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-pink-200/50 to-pink-300/40 transition-all duration-300"
+                          className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-[#FF8DA1]/40 via-[#FF5C7A]/50 to-[#FF3366]/60 transition-all duration-300"
                           style={{ width: `${Math.min(100, (mana / 30) * 100)}%` }}
                         />
-                        <span className="relative z-10 font-comfortaa font-bold text-[10.5px] sm:text-[11px] text-[#795B6B] flex items-center gap-1.5">
-                          <span>⚡</span>
-                          <span>
-                            {language === 'id' ? `MANA: ${mana} / 30` : `MANA: ${mana} / 30`}
+                        <div className="relative z-10 flex items-center gap-1.5 font-comfortaa font-bold text-[11px] sm:text-xs text-[#241022]">
+                          <span className="text-[#E11D48]">⚡</span>
+                          <span className="font-extrabold text-[#E11D48]">
+                            MANA: {mana} / 30
                           </span>
-                        </span>
-                        <span className="relative z-10 font-comfortaa font-medium text-[9.5px] text-[#FF5C7A]">
-                          {language === 'id' ? 'Pasang balok untuk isi mana' : 'Place blocks to charge'}
-                        </span>
+                        </div>
+                        <div className="relative z-10 flex items-center gap-1 font-comfortaa font-bold text-[10px] text-[#795B6B]">
+                          <span>
+                            {mana < 10
+                              ? (language === 'id' ? '⚪⚪⚪ Pasang 3 balok' : '⚪⚪⚪ Place 3 blocks')
+                              : mana < 20
+                              ? (language === 'id' ? '🌸⚪⚪ Pasang 2 balok' : '🌸⚪⚪ Place 2 blocks')
+                              : (language === 'id' ? '🌸🌸⚪ Pasang 1 balok!' : '🌸🌸⚪ 1 more block!')}
+                          </span>
+                        </div>
                       </div>
                     )}
                   </div>
